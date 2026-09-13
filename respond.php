@@ -64,9 +64,10 @@ require_once __DIR__ . '/includes/header.php';
                 ];
 
                 // Process Action if clicked
+                $nowStr = date('Y-m-d H:i:s');
                 if ($action === 'agree' && $response['status'] !== 'agreed'):
-                    $upd = $pdo->prepare("UPDATE donor_responses SET status = 'agreed', responded_at = NOW() WHERE id = ?");
-                    $upd->execute([$response['id']]);
+                    $upd = $pdo->prepare("UPDATE donor_responses SET status = 'agreed', responded_at = ? WHERE id = ?");
+                    $upd->execute([$nowStr, $response['id']]);
 
                     // Update blood request status
                     $pdo->prepare("UPDATE blood_requests SET status = 'matched' WHERE id = ?")->execute([$response['req_id']]);
@@ -76,8 +77,8 @@ require_once __DIR__ . '/includes/header.php';
                     $notifier->sendMutualContactSharing($donorData, $requestData);
                     $response['status'] = 'agreed';
                 elseif ($action === 'decline' && $response['status'] === 'notified'):
-                    $upd = $pdo->prepare("UPDATE donor_responses SET status = 'declined', responded_at = NOW() WHERE id = ?");
-                    $upd->execute([$response['id']]);
+                    $upd = $pdo->prepare("UPDATE donor_responses SET status = 'declined', responded_at = ? WHERE id = ?");
+                    $upd->execute([$nowStr, $response['id']]);
                     $response['status'] = 'declined';
                 endif;
             ?>

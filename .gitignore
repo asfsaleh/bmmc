@@ -5,6 +5,10 @@
 config/.env
 config/database_credentials.php
 
+# Database files
+database/*.sqlite
+database/*.db
+
 # Server & Application Logs
 *.log
 cron/cron.log

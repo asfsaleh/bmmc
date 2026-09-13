@@ -82,12 +82,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'verify_otp') {
     $identifier = sanitize($_POST['identifier'] ?? '');
     $code = trim($_POST['otp'] ?? '');
 
+    $nowStr = date('Y-m-d H:i:s');
     $stmt = $pdo->prepare("
         SELECT * FROM otp_codes 
-        WHERE identifier = ? AND code = ? AND is_used = 0 AND expires_at >= NOW() 
+        WHERE identifier = ? AND code = ? AND is_used = 0 AND expires_at >= ? 
         ORDER BY id DESC LIMIT 1
     ");
-    $stmt->execute([$identifier, $code]);
+    $stmt->execute([$identifier, $code, $nowStr]);
     $otpRecord = $stmt->fetch();
 
     if ($otpRecord) {

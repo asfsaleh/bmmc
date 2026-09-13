@@ -5,7 +5,6 @@
  * Allows setting up the database credentials easily on live cPanel/shared hosting.
  */
 
-// Error display for setup
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
@@ -18,7 +17,25 @@ $error = null;
 $success = null;
 $alreadyConnected = false;
 
-// Check existing connection
+// 1. One-click switch to SQLite
+if (isset($_GET['action']) && $_GET['action'] === 'use_sqlite') {
+    if (file_exists($configFile)) {
+        @unlink($configFile);
+    }
+    // Delete custom MySQL in .env if any
+    if (file_exists($envFile)) {
+        $env = file_get_contents($envFile);
+        $env = preg_replace('/DB_USER=.*/', 'DB_USER=root', $env);
+        $env = preg_replace('/DB_PASS=.*/', 'DB_PASS=""', $env);
+        file_put_contents($envFile, $env);
+    }
+    require_once __DIR__ . '/config/database.php';
+    DB::getConnection();
+    header('Location: index.php');
+    exit;
+}
+
+// 2. Check existing connection
 if (file_exists($configFile)) {
     require_once $configFile;
     if (defined('DB_HOST') && defined('DB_NAME') && defined('DB_USER')) {
@@ -33,7 +50,7 @@ if (file_exists($configFile)) {
     }
 }
 
-// Handle Form Submission
+// 3. Handle Form Submission (MySQL Credentials)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $dbHost = trim($_POST['db_host'] ?? 'localhost');
     $dbPort = trim($_POST['db_port'] ?? '3306');
@@ -54,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Save to config/database_credentials.php
             $configContent = "<?php\n" .
                 "// BMMC Database Credentials\n" .
-                "// Generated automatically via Setup Assistant on " . date('Y-m-d H:i:s') . "\n\n" .
+                "// Saved via Setup Assistant on " . date('Y-m-d H:i:s') . "\n\n" .
                 "define('DB_HOST', " . var_export($dbHost, true) . ");\n" .
                 "define('DB_PORT', " . var_export($dbPort, true) . ");\n" .
                 "define('DB_NAME', " . var_export($dbName, true) . ");\n" .
@@ -64,44 +81,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             file_put_contents($configFile, $configContent);
 
-            // Also update/write .env if writable
-            $envContent = "APP_ENV=production\n" .
-                "APP_DOMAIN=bmmc.skillsetup.org\n" .
-                "APP_URL=https://bmmc.skillsetup.org\n\n" .
-                "DB_HOST={$dbHost}\n" .
-                "DB_PORT={$dbPort}\n" .
-                "DB_NAME={$dbName}\n" .
-                "DB_USER={$dbUser}\n" .
-                "DB_PASS=\"{$dbPass}\"\n" .
-                "DB_CHARSET=utf8mb4\n\n" .
-                "MAIL_SIMULATE=false\n";
-            @file_put_contents($envFile, $envContent);
-
-            // Check if tables exist, if not, auto-import schema.sql
+            // Import schema if tables are empty
             $tblStmt = $pdo->query("SHOW TABLES");
             $tables = $tblStmt->fetchAll(PDO::FETCH_COLUMN);
 
             if (empty($tables) && file_exists($schemaFile)) {
                 $sql = file_get_contents($schemaFile);
-                // Remove CREATE DATABASE & USE lines to avoid permissions issue on shared hosts
                 $sql = preg_replace('/CREATE DATABASE[^;]+;/i', '', $sql);
                 $sql = preg_replace('/USE [^;]+;/i', '', $sql);
                 $pdo->exec($sql);
 
-                // Run seed if available
                 if (file_exists($seedFile)) {
                     include $seedFile;
                 }
             }
 
-            $success = "অভিনন্দন! ডাটাবেস সফলভাবে সংযুক্ত হয়েছে এবং স্কিমা যাচাই করা হয়েছে।";
+            $success = "অভিনন্দন! MySQL ডাটাবেস সফলভাবে সংযুক্ত হয়েছে।";
             $alreadyConnected = true;
 
-            // Auto redirect after 2 seconds
             header("refresh:2;url=index.php");
 
         } catch (PDOException $e) {
-            $error = "সংযোগ ব্যর্থ হয়েছে: " . $e->getMessage() . "<br><br><strong>পরামর্শ:</strong> cPanel MySQL Database Wizard-এ নিশ্চিত করুন যে তৈরি করা ডাটাবেস ইউজারের সাথে ডাটাবেসটি সংযুক্ত করে <code>ALL PRIVILEGES</code> অনুমতি দেওয়া হয়েছে।";
+            $error = "সংযোগ ব্যর্থ হয়েছে: " . $e->getMessage() . "<br><br><span class='text-warning'>পরামর্শ:</span> cPanel-এ নিশ্চিত করুন যে ডাটাবেস ইউজারের সাথে ডাটাবেস সংযুক্ত করে <strong>ALL PRIVILEGES</strong> দেওয়া হয়েছে।";
         }
     }
 }
@@ -111,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ডাটাবেস সেটআপ অ্যাসিস্ট্যান্ট — BMMC</title>
+    <title>ডাটাবেস সেটআপ — BMMC</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
@@ -123,28 +124,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             min-height: 100vh;
             display: flex;
             align-items: center;
-            padding: 20px 0;
-            background-image: radial-gradient(at 0% 0%, rgba(19, 64, 116, 0.4) 0px, transparent 50%),
+            padding: 24px 0;
+            background-image: radial-gradient(at 0% 0%, rgba(19, 64, 116, 0.5) 0px, transparent 50%),
                               radial-gradient(at 100% 100%, rgba(217, 4, 41, 0.2) 0px, transparent 50%);
         }
         .glass-setup {
-            background: rgba(11, 37, 69, 0.85);
+            background: rgba(11, 37, 69, 0.90);
             backdrop-filter: blur(14px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.18);
             border-radius: 20px;
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6);
         }
         .form-control {
-            background: rgba(255, 255, 255, 0.08) !important;
-            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            background: rgba(255, 255, 255, 0.10) !important;
+            border: 1px solid rgba(255, 255, 255, 0.25) !important;
             color: #fff !important;
             padding: 12px 14px;
             border-radius: 10px;
+            font-size: 16px;
         }
         .form-control:focus {
-            background: rgba(255, 255, 255, 0.12) !important;
+            background: rgba(255, 255, 255, 0.16) !important;
             border-color: #00d2ff !important;
-            box-shadow: 0 0 15px rgba(0, 210, 255, 0.3) !important;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.4) !important;
         }
         .btn-ocean {
             background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
@@ -168,11 +170,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="glass-setup p-4 p-md-5">
                     <!-- Brand -->
                     <div class="text-center mb-4">
-                        <div style="width: 56px; height: 56px; margin: 0 auto 12px; background: linear-gradient(135deg, #00d2ff, #0284c7); border-radius: 14px; display: flex; align-items: center; justify-content: center;">
-                            <i class="bi bi-database-fill-gear fs-2 text-white"></i>
+                        <div style="width: 56px; height: 56px; margin: 0 auto 12px; background: linear-gradient(135deg, #00d2ff, #0284c7); border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(0, 210, 255, 0.4);">
+                            <i class="bi bi-database-check fs-2 text-white"></i>
                         </div>
-                        <h3 class="fw-bold text-white mb-1">BMMC ডাটাবেস সেটআপ অ্যাসিস্ট্যান্ট</h3>
-                        <p class="text-secondary small">আপনার cPanel ডাটাবেসের তথ্য দিয়ে সংযোগ সম্পন্ন করুন</p>
+                        <h3 class="fw-bold text-white mb-1">BMMC ডাটাবেস সেটিংস</h3>
+                        <p class="text-light small">নিচে cPanel ডাটাবেস তথ্য দিন অথবা তাৎক্ষণিক চালু করুন</p>
                     </div>
 
                     <?php if ($success): ?>
@@ -180,7 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <i class="bi bi-check-circle-fill fs-3 me-3"></i>
                             <div>
                                 <strong>সফল!</strong> <?= $success ?>
-                                <small class="d-block mt-1">২ সেকেন্ডের মধ্যে স্বয়ংক্রিয়ভাবে হোমপেজে নিয়ে যাওয়া হচ্ছে...</small>
+                                <small class="d-block mt-1">হোমপেজে নিয়ে যাওয়া হচ্ছে...</small>
                             </div>
                         </div>
                         <div class="text-center mb-4">
@@ -190,27 +192,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <?php if ($alreadyConnected && !$success): ?>
                         <div class="alert alert-info d-flex align-items-center mb-4" role="alert">
-                            <i class="bi bi-info-circle-fill fs-3 me-3"></i>
+                            <i class="bi bi-check-circle-fill fs-3 me-3 text-success"></i>
                             <div>
-                                <strong>ডাটাবেস বর্তমানে সংযুক্ত আছে!</strong> আপনার সাইটটি সক্রিয়। প্রয়োজনে নিচে নতুন তথ্য দিয়ে ডাটাবেস কনফিগারেশন আপডেট করতে পারেন।
+                                <strong>ডাটাবেস বর্তমানে সংযুক্ত ও সক্রিয় আছে!</strong> প্রয়োজনে নিচে নতুন MySQL তথ্য দিয়ে কনফিগারেশন পরিবর্তন করতে পারেন।
                             </div>
                         </div>
                     <?php endif; ?>
 
                     <?php if ($error): ?>
-                        <div class="alert alert-danger d-flex align-items-center mb-4" role="alert">
-                            <i class="bi bi-exclamation-triangle-fill fs-3 me-3"></i>
+                        <div class="alert alert-danger d-flex align-items-start mb-4" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill fs-3 me-3 flex-shrink-0"></i>
                             <div><?= $error ?></div>
                         </div>
                     <?php endif; ?>
 
-                    <!-- Form -->
+                    <!-- Form for MySQL -->
                     <form method="POST" action="setup.php">
                         <div class="row g-3 mb-3">
                             <div class="col-md-8">
                                 <label class="form-label text-light small fw-bold">Database Host</label>
                                 <input type="text" class="form-control" name="db_host" value="<?= htmlspecialchars($_POST['db_host'] ?? (defined('DB_HOST') ? DB_HOST : 'localhost')) ?>" required>
-                                <small class="text-secondary" style="font-size: 0.75rem;">cPanel-এর ক্ষেত্রে সাধারণত <code>localhost</code> থাকে</small>
+                                <small class="text-secondary" style="font-size: 0.75rem;">cPanel-এ সাধারণত <code>localhost</code> থাকে</small>
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label text-light small fw-bold">Port</label>
@@ -219,13 +221,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label text-light small fw-bold">Database Name (ডাটাবেসের নাম) <span class="text-danger">*</span></label>
+                            <label class="form-label text-light small fw-bold">Database Name (cPanel ডাটাবেসের নাম) <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" name="db_name" value="<?= htmlspecialchars($_POST['db_name'] ?? (defined('DB_NAME') && DB_NAME !== 'bmmc_db' ? DB_NAME : '')) ?>" placeholder="যেমন: skillsetu_bmmc" required>
-                            <small class="text-secondary" style="font-size: 0.75rem;">cPanel-এ আপনার তৈরি করা ডাটাবেসের সম্পূর্ণ নাম (Prefix সহ)</small>
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label text-light small fw-bold">Database Username (ডাটাবেস ইউজার) <span class="text-danger">*</span></label>
+                            <label class="form-label text-light small fw-bold">Database Username (cPanel ডাটাবেস ইউজার) <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" name="db_user" value="<?= htmlspecialchars($_POST['db_user'] ?? (defined('DB_USER') && DB_USER !== 'root' ? DB_USER : '')) ?>" placeholder="যেমন: skillsetu_dbuser" required>
                         </div>
 
@@ -235,22 +236,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
 
                         <button type="submit" class="btn btn-ocean w-100 py-3 mb-3">
-                            <i class="bi bi-link-45deg me-1"></i> সংযোগ যাচাই ও সংরক্ষণ করুন (Save & Connect)
+                            <i class="bi bi-check2-circle me-1"></i> MySQL সংযোগ সংরক্ষণ করুন (Save & Connect)
                         </button>
                     </form>
 
-                    <!-- cPanel Quick Help Box -->
-                    <div class="mt-4 p-3 rounded-3 border border-secondary border-opacity-25" style="background: rgba(0,0,0,0.2);">
-                        <h6 class="text-info fw-bold mb-2 small"><i class="bi bi-question-circle me-1"></i>cPanel-এ ডাটাবেস তৈরির নিয়ম:</h6>
-                        <ol class="text-secondary small mb-0 ps-3" style="line-height: 1.6;">
-                            <li>cPanel-এ লগইন করে <strong>MySQL® Database Wizard</strong>-এ যান।</li>
-                            <li>ডাটাবেসের নাম ও ইউজার তৈরি করে একটি শক্তিশালী পাসওয়ার্ড দিন।</li>
-                            <li><strong>"Add User to Database"</strong> ধাপে <strong>ALL PRIVILEGES</strong> বক্সে টিক দিন।</li>
-                            <li>উপরে সেই ডাটাবেস ও ইউজারের নাম বসিয়ে সেভ করুন।</li>
-                        </ol>
+                    <!-- Instant SQLite Alternative Button -->
+                    <div class="text-center my-3">
+                        <span class="text-secondary small">— অথবা —</span>
                     </div>
 
-                    <div class="text-center mt-3">
+                    <a href="setup.php?action=use_sqlite" class="btn btn-outline-info w-100 py-3 rounded-pill fw-bold">
+                        <i class="bi bi-lightning-charge-fill me-1 text-warning"></i> কোনো কনফিগ ছাড়াই সাইট চালু করুন (Instant Mode)
+                    </a>
+
+                    <div class="text-center mt-4">
                         <a href="index.php" class="text-secondary small text-decoration-none">← হোমপেজে ফিরে যান</a>
                     </div>
                 </div>

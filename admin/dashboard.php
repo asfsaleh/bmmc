@@ -8,8 +8,10 @@ $pdo = DB::getConnection();
 
 // Core Counts
 $totalDonors = $pdo->query("SELECT COUNT(*) FROM donors")->fetchColumn() ?: 0;
-$marinerDonors = $pdo->query("SELECT COUNT(*) FROM donors d JOIN users u ON d.user_id = u.id WHERE u.user_type = 'mariner'")->fetchColumn() ?: 0;
-$restingDonors = $pdo->query("SELECT COUNT(*) FROM donors WHERE is_available = 0 AND next_available_date > CURDATE()")->fetchColumn() ?: 0;
+$today = date('Y-m-d');
+$stmtResting = $pdo->prepare("SELECT COUNT(*) FROM donors WHERE is_available = 0 AND next_available_date > ?");
+$stmtResting->execute([$today]);
+$restingDonors = $stmtResting->fetchColumn() ?: 0;
 $activeDonors = $pdo->query("SELECT COUNT(*) FROM donors WHERE is_available = 1")->fetchColumn() ?: 0;
 
 $totalRequests = $pdo->query("SELECT COUNT(*) FROM blood_requests")->fetchColumn() ?: 0;
