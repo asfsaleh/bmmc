@@ -1,6 +1,6 @@
 <?php
-$pageTitle = 'আবেদনের বিস্তারিত ও অগ্রগতি — BMMC';
-require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/config/config.php';
+require_once __DIR__ . '/config/database.php';
 require_once __DIR__ . '/includes/functions.php';
 
 $pdo = DB::getConnection();
@@ -15,6 +15,12 @@ if (!$request) {
     header('Location: ' . BASE_URL . '/index.php');
     exit;
 }
+
+$pageTitle = "জরুরি {$request['blood_group']} রক্ত প্রয়োজন — {$request['patient_name']}";
+$ogTitle = "🚨 জরুরি {$request['blood_group']} রক্ত প্রয়োজন — {$request['hospital']}";
+$ogDescription = "রোগী: {$request['patient_name']} | রক্তের গ্রুপ: {$request['blood_group']} | প্রয়োজন: {$request['bags_needed']} ব্যাগ | অবস্থান: {$request['area']}, {$request['district']}। মেরিনার্স কমিউনিটির রক্তদাতাদের দৃষ্টি আকর্ষণ করছি।";
+
+require_once __DIR__ . '/includes/header.php';
 
 // Fetch responses & agreed donors
 $respStmt = $pdo->prepare("
