@@ -11,6 +11,132 @@ require_once __DIR__ . '/../classes/NotificationService.php';
 $action = $_GET['action'] ?? '';
 $pdo = DB::getConnection();
 
+// 0. Test 1-Click Login for Demo & Testing (All Roles)
+if ($action === 'test_login') {
+    $roleKey = sanitize($_POST['role'] ?? $_GET['role'] ?? '');
+
+    $testProfiles = [
+        'admin' => [
+            'email' => 'admin@bmmc.org',
+            'phone' => '01711000000',
+            'name' => 'ক্যাপ্টেন শফিকুর রহমান (অ্যাডমিন)',
+            'role' => 'admin',
+            'user_type' => 'mariner',
+            'cdc_sid_no' => 'C/O/08452',
+            'mariner_rank' => 'Master Mariner / Captain',
+            'blood_group' => 'O+',
+            'district' => 'Chattogram',
+            'area' => 'আগ্রাবাদ সি/এ',
+            'is_available' => 1,
+            'title' => 'কমিউনিটি অ্যাডমিন (ক্যাপ্টেন শফিকুর রহমান)',
+            'redirect' => '/admin/dashboard.php'
+        ],
+        'mariner_active' => [
+            'email' => 'mahfuz.marine@gmail.com',
+            'phone' => '01812345678',
+            'name' => 'চিফ ইঞ্জিনিয়ার মাহফুজুর আলম',
+            'role' => 'donor',
+            'user_type' => 'mariner',
+            'cdc_sid_no' => 'C/E/04112',
+            'mariner_rank' => 'Chief Engineer',
+            'blood_group' => 'A+',
+            'district' => 'Chattogram',
+            'area' => 'জিইসি মোড়',
+            'is_available' => 1,
+            'title' => 'মেরিনার রক্তদাতা - প্রস্তুত (চিফ ইঞ্জিনিয়ার মাহফুজুর আলম)',
+            'redirect' => '/donor_dashboard.php'
+        ],
+        'mariner_resting' => [
+            'email' => 'rashed.marine@gmail.com',
+            'phone' => '01612345678',
+            'name' => 'ইঞ্জিনিয়ার রাশেদুল ইসলাম',
+            'role' => 'donor',
+            'user_type' => 'mariner',
+            'cdc_sid_no' => '3/E/12840',
+            'mariner_rank' => 'Third Engineer',
+            'blood_group' => 'O+',
+            'district' => 'Chattogram',
+            'area' => 'হালিশহর',
+            'is_available' => 0,
+            'last_donation_date' => date('Y-m-d', strtotime('-40 days')),
+            'next_available_date' => date('Y-m-d', strtotime('+80 days')),
+            'title' => 'মেরিনার রক্তদাতা - বিশ্রামে আছেন (ইঞ্জিনিয়ার রাশেদুল ইসলাম)',
+            'redirect' => '/donor_dashboard.php'
+        ],
+        'general_donor' => [
+            'email' => 'najmul.huda@gmail.com',
+            'phone' => '01512345678',
+            'name' => 'নাজমুল হুদা',
+            'role' => 'donor',
+            'user_type' => 'general',
+            'cdc_sid_no' => null,
+            'mariner_rank' => null,
+            'blood_group' => 'O-',
+            'district' => 'Khulna',
+            'area' => 'খালিশপুর',
+            'is_available' => 1,
+            'title' => 'সাধারণ নাগরিক রক্তদাতা (নাজমুল হুদা)',
+            'redirect' => '/donor_dashboard.php'
+        ]
+    ];
+
+    if (!isset($testProfiles[$roleKey])) {
+        set_flash('danger', 'অবৈধ টেস্ট ভূমিকা নির্বাচন করা হয়েছে।');
+        header('Location: ' . BASE_URL . '/login.php');
+        exit;
+    }
+
+    $profile = $testProfiles[$roleKey];
+
+    // Find or create user
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
+    $stmt->execute([$profile['email']]);
+    $user = $stmt->fetch();
+
+    if (!$user) {
+        $passHash = password_hash(($roleKey === 'admin') ? 'admin123' : 'donor123', PASSWORD_BCRYPT);
+        $ins = $pdo->prepare("
+            INSERT INTO users (name, email, phone, password_hash, role, user_type, cdc_sid_no, mariner_rank)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        ");
+        $ins->execute([
+            $profile['name'], $profile['email'], $profile['phone'],
+            $passHash, $profile['role'], $profile['user_type'],
+            $profile['cdc_sid_no'], $profile['mariner_rank']
+        ]);
+        $userId = (int)$pdo->lastInsertId();
+
+        $dStmt = $pdo->prepare("
+            INSERT INTO donors (user_id, blood_group, district, area, whatsapp, is_available, last_donation_date, next_available_date, total_donations)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ");
+        $dStmt->execute([
+            $userId, $profile['blood_group'], $profile['district'], $profile['area'],
+            $profile['phone'], $profile['is_available'],
+            $profile['last_donation_date'] ?? '2026-01-10',
+            $profile['next_available_date'] ?? null,
+            ($roleKey === 'admin' ? 5 : ($roleKey === 'mariner_resting' ? 6 : 3))
+        ]);
+    } else {
+        $userId = $user['id'];
+        if ($roleKey === 'mariner_resting') {
+            $nextDate = date('Y-m-d', strtotime('+80 days'));
+            $lastDate = date('Y-m-d', strtotime('-40 days'));
+            $pdo->prepare("UPDATE donors SET is_available = 0, next_available_date = ?, last_donation_date = ? WHERE user_id = ?")
+                ->execute([$nextDate, $lastDate, $userId]);
+        } elseif ($roleKey === 'mariner_active' || $roleKey === 'general_donor') {
+            $pdo->prepare("UPDATE donors SET is_available = 1, next_available_date = NULL WHERE user_id = ?")
+                ->execute([$userId]);
+        }
+    }
+
+    // Set session
+    $_SESSION['user_id'] = $userId;
+    set_flash('success', "⚡ টেস্ট মোডে সফলভাবে লগইন সম্পন্ন হয়েছে: <strong>{$profile['title']}</strong>");
+    header('Location: ' . BASE_URL . $profile['redirect']);
+    exit;
+}
+
 // 1. Password Login
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'login') {
     if (!validate_csrf()) {

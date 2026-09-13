@@ -201,17 +201,18 @@ class DB {
             VALUES (?, 'O+', 'Chattogram', 'আগ্রাবাদ সি/এ', '01711000000', 1, '2026-01-15', 5)
         ")->execute([$adminId]);
 
-        // Sample Mariner Donors
+        // Sample Mariner & General Donors
         $donorPass = password_hash('donor123', PASSWORD_BCRYPT);
-        $mariners = [
-            ['চিফ ইঞ্জিনিয়ার মাহফুজুর আলম', 'mahfuz.marine@gmail.com', '01812345678', 'A+', 'Chattogram', 'জিইসি মোড়', 'C/E/04112', 'Chief Engineer', 1, 4],
-            ['২য় অফিসার তানভীর আহমেদ', 'tanvir.officer@gmail.com', '01912345678', 'B+', 'Dhaka', 'উত্তরা সেক্টর ৭', '2/O/09931', 'Second Officer', 1, 2],
-            ['ইঞ্জিনিয়ার রাশেদুল ইসলাম', 'rashed.marine@gmail.com', '01612345678', 'O+', 'Chattogram', 'হালিশহর', '3/E/12840', 'Third Engineer', 0, 6],
+        $sampleDonors = [
+            ['চিফ ইঞ্জিনিয়ার মাহফুজুর আলম', 'mahfuz.marine@gmail.com', '01812345678', 'A+', 'Chattogram', 'জিইসি মোড়', 'C/E/04112', 'Chief Engineer', 1, 4, 'mariner'],
+            ['২য় অফিসার তানভীর আহমেদ', 'tanvir.officer@gmail.com', '01912345678', 'B+', 'Dhaka', 'উত্তরা সেক্টর ৭', '2/O/09931', 'Second Officer', 1, 2, 'mariner'],
+            ['ইঞ্জিনিয়ার রাশেদুল ইসলাম', 'rashed.marine@gmail.com', '01612345678', 'O+', 'Chattogram', 'হালিশহর', '3/E/12840', 'Third Engineer', 0, 6, 'mariner'],
+            ['নাজমুল হুদা', 'najmul.huda@gmail.com', '01512345678', 'O-', 'Khulna', 'খালিশপুর', null, null, 1, 3, 'general'],
         ];
 
-        foreach ($mariners as $m) {
-            $uStmt = $pdo->prepare("INSERT INTO users (name, email, phone, password_hash, role, user_type, cdc_sid_no, mariner_rank) VALUES (?, ?, ?, ?, 'donor', 'mariner', ?, ?)");
-            $uStmt->execute([$m[0], $m[1], $m[2], $donorPass, $m[6], $m[7]]);
+        foreach ($sampleDonors as $m) {
+            $uStmt = $pdo->prepare("INSERT INTO users (name, email, phone, password_hash, role, user_type, cdc_sid_no, mariner_rank) VALUES (?, ?, ?, ?, 'donor', ?, ?, ?)");
+            $uStmt->execute([$m[0], $m[1], $m[2], $donorPass, $m[10], $m[6], $m[7]]);
             $uid = (int)$pdo->lastInsertId();
 
             $nextDate = ($m[8] == 0) ? date('Y-m-d', strtotime('+80 days')) : null;

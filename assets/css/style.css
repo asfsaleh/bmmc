@@ -403,3 +403,55 @@ footer {
         font-size: 0.72rem !important;
     }
 }
+
+/* -------------------------------------------------------------
+   Test Login & Role Switcher Styles
+------------------------------------------------------------- */
+.test-role-card {
+    background: rgba(13, 38, 77, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    padding: 16px;
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.test-role-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: transparent;
+    transition: background 0.25s ease;
+}
+
+.test-role-card:hover {
+    background: rgba(19, 64, 116, 0.65);
+    border-color: rgba(0, 210, 255, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.test-role-card.role-admin::before { background: #ef233c; }
+.test-role-card.role-mariner-active::before { background: #10b981; }
+.test-role-card.role-mariner-resting::before { background: #f59e0b; }
+.test-role-card.role-general::before { background: #00d2ff; }
+
+.test-role-card:hover.role-admin { border-color: rgba(239, 35, 60, 0.55); }
+.test-role-card:hover.role-mariner-active { border-color: rgba(16, 185, 129, 0.55); }
+.test-role-card:hover.role-mariner-resting { border-color: rgba(245, 158, 11, 0.55); }
+.test-role-card:hover.role-general { border-color: rgba(0, 210, 255, 0.55); }
+
+.role-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
