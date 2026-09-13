@@ -34,7 +34,7 @@ $currentUser = current_user();
                         <label class="form-label d-block text-info fw-bold mb-2">
                             <i class="bi bi-person-badge me-1"></i> আপনার পরিচয় <span class="text-danger">*</span>
                         </label>
-                        <div class="d-flex gap-4">
+                        <div class="d-flex flex-column flex-sm-row gap-3 gap-sm-4">
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="user_type" id="v_type_mariner" value="mariner" checked>
                                 <label class="form-check-label text-white fw-semibold" for="v_type_mariner">

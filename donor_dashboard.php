@@ -59,7 +59,7 @@ $notifiedRequests = $reqStmt->fetchAll();
                     <?= htmlspecialchars($donor['blood_group']) ?>
                 </div>
                 <div>
-                    <h3 class="fw-bold text-white mb-1 d-flex align-items-center gap-2">
+                    <h3 class="fw-bold text-white mb-1 d-flex flex-wrap align-items-center gap-2 fs-4">
                         <?= htmlspecialchars($user['name']) ?>
                         <?php if ($user['user_type'] === 'mariner'): ?>
                             <span class="mariner-badge">

@@ -65,7 +65,7 @@ $currentUser = current_user();
                         <label class="form-label d-block text-white fw-bold mb-2">
                             <i class="bi bi-exclamation-triangle-fill text-warning me-1"></i> জরুরিতার মাত্রা (Urgency Level) <span class="text-danger">*</span>
                         </label>
-                        <div class="d-flex flex-wrap gap-4">
+                        <div class="d-flex flex-column flex-sm-row flex-wrap gap-2 gap-sm-3">
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="urgency" id="urg_emergency" value="emergency" checked>
                                 <label class="form-check-label text-danger fw-bold" for="urg_emergency">

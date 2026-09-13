@@ -14,7 +14,12 @@ if (session_status() === PHP_SESSION_NONE) {
 
 define('ROOT_PATH', dirname(__DIR__));
 
-// Load .env file if present
+// 1. Check for dedicated database credentials file (e.g. created on cPanel or by setup wizard)
+if (file_exists(__DIR__ . '/database_credentials.php')) {
+    require_once __DIR__ . '/database_credentials.php';
+}
+
+// 2. Load .env file if present
 function loadEnv(string $path): void {
     if (!file_exists($path)) return;
     $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
@@ -69,13 +74,14 @@ if (!empty($_ENV['APP_URL'])) {
 // Blood donation resting period in days (4 months = ~120 days)
 define('RESTING_PERIOD_DAYS', (int)($_ENV['RESTING_PERIOD_DAYS'] ?? 120));
 
-// Database Configuration (Loaded from .env on live server, defaults for local dev)
-define('DB_HOST', $_ENV['DB_HOST'] ?? 'localhost');
-define('DB_PORT', $_ENV['DB_PORT'] ?? '3306');
-define('DB_NAME', $_ENV['DB_NAME'] ?? 'bmmc_db');
-define('DB_USER', $_ENV['DB_USER'] ?? 'root');
-define('DB_PASS', $_ENV['DB_PASS'] ?? '');
-define('DB_CHARSET', $_ENV['DB_CHARSET'] ?? 'utf8mb4');
+// Database Configuration
+// Checks: 1) constants in database_credentials.php, 2) $_ENV, 3) fallback defaults
+if (!defined('DB_HOST')) define('DB_HOST', $_ENV['DB_HOST'] ?? 'localhost');
+if (!defined('DB_PORT')) define('DB_PORT', $_ENV['DB_PORT'] ?? '3306');
+if (!defined('DB_NAME')) define('DB_NAME', $_ENV['DB_NAME'] ?? 'bmmc_db');
+if (!defined('DB_USER')) define('DB_USER', $_ENV['DB_USER'] ?? 'root');
+if (!defined('DB_PASS')) define('DB_PASS', $_ENV['DB_PASS'] ?? '');
+if (!defined('DB_CHARSET')) define('DB_CHARSET', $_ENV['DB_CHARSET'] ?? 'utf8mb4');
 
 // Email & SMTP Configuration
 define('MAIL_SIMULATE', filter_var($_ENV['MAIL_SIMULATE'] ?? 'true', FILTER_VALIDATE_BOOLEAN));

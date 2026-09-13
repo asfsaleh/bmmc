@@ -1,6 +1,7 @@
 /* ==========================================================
    BMMC - Bangladesh Merchant Mariners Community
    Theme: Maritime Deep Ocean & Blood Red Glassmorphism
+   Mobile-First Responsive Stylesheet
    ========================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap');
@@ -24,7 +25,7 @@
     
     /* Glassmorphism Constants */
     --glass-bg: rgba(11, 37, 69, 0.65);
-    --glass-bg-card: rgba(13, 38, 77, 0.72);
+    --glass-bg-card: rgba(13, 38, 77, 0.75);
     --glass-bg-blood: rgba(128, 15, 47, 0.55);
     --glass-border: rgba(255, 255, 255, 0.12);
     --glass-border-glow: rgba(0, 210, 255, 0.35);
@@ -36,6 +37,11 @@
     --text-main: #f8fafc;
     --text-muted: #94a3b8;
     --text-highlight: #38bdf8;
+}
+
+html, body {
+    overflow-x: hidden;
+    width: 100%;
 }
 
 body {
@@ -85,25 +91,27 @@ body {
 }
 
 .glass-nav {
-    background: rgba(6, 20, 38, 0.85);
+    background: rgba(6, 20, 38, 0.90);
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
     border-bottom: 1px solid var(--glass-border);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
 }
 
+/* Form inputs (Prevent iOS auto-zoom with min 16px font-size) */
 .glass-input, .form-control, .form-select {
-    background: rgba(255, 255, 255, 0.07) !important;
+    background: rgba(255, 255, 255, 0.08) !important;
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
     color: #ffffff !important;
     border-radius: 10px;
-    padding: 10px 14px;
+    padding: 12px 14px;
+    font-size: 16px !important;
     backdrop-filter: blur(8px);
     transition: all 0.2s ease;
 }
 
 .glass-input:focus, .form-control:focus, .form-select:focus {
-    background: rgba(255, 255, 255, 0.12) !important;
+    background: rgba(255, 255, 255, 0.14) !important;
     border-color: var(--ocean-cyan) !important;
     box-shadow: 0 0 15px rgba(0, 210, 255, 0.3) !important;
     color: #ffffff !important;
@@ -116,18 +124,23 @@ body {
 
 .form-label {
     color: #cbd5e1;
-    font-weight: 500;
+    font-weight: 600;
     margin-bottom: 6px;
+    font-size: 0.95rem;
 }
 
-/* Custom Buttons */
+/* Custom Buttons with Thumb-Friendly Sizing */
 .btn-ocean {
     background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
     color: #ffffff;
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 30px;
     font-weight: 600;
-    padding: 10px 24px;
+    padding: 12px 24px;
+    min-height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     box-shadow: 0 4px 15px rgba(2, 132, 199, 0.35);
     transition: all 0.25s ease;
 }
@@ -145,7 +158,11 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.25);
     border-radius: 30px;
     font-weight: 600;
-    padding: 10px 24px;
+    padding: 12px 24px;
+    min-height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     box-shadow: 0 4px 15px rgba(239, 35, 60, 0.4);
     transition: all 0.25s ease;
 }
@@ -160,7 +177,7 @@ body {
 /* Hero Section */
 .hero-banner {
     position: relative;
-    padding: 80px 0 60px;
+    padding: 70px 0 50px;
     overflow: hidden;
 }
 
@@ -204,6 +221,7 @@ body {
 .blood-pill {
     width: 48px;
     height: 48px;
+    min-width: 48px;
     border-radius: 50%;
     display: inline-flex;
     align-items: center;
@@ -257,4 +275,131 @@ footer {
 
 .emergency-pulse {
     animation: pulse-emergency 2s infinite;
+}
+
+/* ==========================================================
+   MOBILE RESPONSIVE RULES (@media queries)
+   ========================================================== */
+
+/* Tablet & Mobile (Below 992px) */
+@media (max-width: 991.98px) {
+    .mobile-nav-collapse {
+        background: rgba(8, 26, 50, 0.98);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 16px;
+        padding: 16px;
+        margin-top: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .nav-link-mobile:hover, .nav-link-mobile:focus {
+        background: rgba(0, 210, 255, 0.12);
+        color: #00d2ff !important;
+    }
+
+    .hero-banner {
+        padding: 40px 0 25px;
+    }
+
+    .hero-banner h1 {
+        font-size: clamp(1.85rem, 5vw, 2.5rem) !important;
+        line-height: 1.35 !important;
+    }
+
+    .hero-banner p.lead {
+        font-size: 1.05rem !important;
+        margin-bottom: 30px !important;
+    }
+
+    .glass-card, .glass-blood-card {
+        border-radius: 14px;
+    }
+}
+
+/* Mobile Phones (Below 768px) */
+@media (max-width: 767.98px) {
+    .container {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .hero-banner {
+        padding: 30px 0 20px;
+    }
+
+    .hero-banner h1 {
+        font-size: 1.85rem !important;
+    }
+
+    /* Stack hero CTA buttons full-width */
+    .hero-banner .d-flex.flex-wrap.justify-content-center {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        width: 100%;
+    }
+
+    .hero-banner .btn {
+        width: 100% !important;
+        padding: 14px 20px !important;
+        font-size: 1.05rem !important;
+    }
+
+    /* Stat Counter adjustments */
+    .stat-counter {
+        font-size: 1.85rem !important;
+    }
+
+    .glass-card.p-4, .glass-card.p-5,
+    .glass-blood-card.p-4, .glass-blood-card.p-5 {
+        padding: 18px !important;
+    }
+
+    /* Blood card header layout on phone */
+    .glass-blood-card .d-flex.justify-content-between {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .glass-blood-card .blood-pill {
+        width: 44px;
+        height: 44px;
+        font-size: 1rem;
+    }
+
+    /* Form radio option cards */
+    .form-check {
+        padding-left: 2rem;
+        margin-bottom: 8px;
+    }
+
+    /* Make responsive tables smooth with horizontal scroll hint */
+    .table-responsive {
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .table {
+        min-width: 580px; /* enables horizontal swipe cleanly */
+    }
+
+    /* Modals on mobile */
+    .modal-dialog {
+        margin: 12px;
+    }
+}
+
+/* Small Phones (Below 420px) */
+@media (max-width: 419.98px) {
+    .hero-banner h1 {
+        font-size: 1.65rem !important;
+    }
+
+    .stat-counter {
+        font-size: 1.6rem !important;
+    }
+
+    .badge {
+        font-size: 0.72rem !important;
+    }
 }

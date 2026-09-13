@@ -3,6 +3,7 @@
 .env.local
 .env.*.local
 config/.env
+config/database_credentials.php
 
 # Server & Application Logs
 *.log
