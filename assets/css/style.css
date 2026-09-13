@@ -455,3 +455,36 @@ footer {
     flex-shrink: 0;
 }
 
+/* Minimal Demo Role Button (Screenshot Match) */
+.demo-role-btn {
+    background: #ffffff;
+    color: #0f172a;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 6px 13px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+    user-select: none;
+    text-decoration: none;
+}
+
+.demo-role-btn:hover {
+    background: #f8fafc;
+    color: #0284c7;
+    border-color: #00d2ff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 210, 255, 0.25);
+}
+
+.demo-role-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+
