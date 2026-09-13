@@ -1,0 +1,20 @@
+# Environment Files (Do NOT commit real database credentials)
+.env
+.env.local
+.env.*.local
+config/.env
+
+# Server & Application Logs
+*.log
+cron/cron.log
+error_log
+
+# OS & Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Temp / Cache
+*.tmp
+*.bak

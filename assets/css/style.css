@@ -1,0 +1,260 @@
+/* ==========================================================
+   BMMC - Bangladesh Merchant Mariners Community
+   Theme: Maritime Deep Ocean & Blood Red Glassmorphism
+   ========================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --font-primary: 'Hind Siliguri', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    
+    /* Ocean Maritime Palette */
+    --ocean-deep: #061426;
+    --ocean-navy: #0b2545;
+    --ocean-blue: #134074;
+    --ocean-cyan: #00d2ff;
+    --ocean-teal: #0891b2;
+    --ocean-light: #e0f2fe;
+    
+    /* Blood Red Emergency Palette */
+    --blood-red: #d90429;
+    --blood-crimson: #ef233c;
+    --blood-dark: #800f2f;
+    --blood-glow: rgba(239, 35, 60, 0.4);
+    
+    /* Glassmorphism Constants */
+    --glass-bg: rgba(11, 37, 69, 0.65);
+    --glass-bg-card: rgba(13, 38, 77, 0.72);
+    --glass-bg-blood: rgba(128, 15, 47, 0.55);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --glass-border-glow: rgba(0, 210, 255, 0.35);
+    --glass-border-blood: rgba(239, 35, 60, 0.45);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    --glass-blur: blur(14px);
+    
+    /* Text colors */
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --text-highlight: #38bdf8;
+}
+
+body {
+    font-family: var(--font-primary);
+    background-color: var(--ocean-deep);
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(19, 64, 116, 0.4) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(217, 4, 41, 0.15) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(6, 20, 38, 0.8) 0px, transparent 100%),
+        radial-gradient(at 100% 100%, rgba(8, 145, 178, 0.2) 0px, transparent 50%);
+    background-attachment: fixed;
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Glassmorphic Components */
+.glass-card {
+    background: var(--glass-bg-card);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    box-shadow: var(--glass-shadow);
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.glass-card:hover {
+    border-color: var(--glass-border-glow);
+    box-shadow: 0 12px 40px 0 rgba(0, 210, 255, 0.15);
+}
+
+.glass-blood-card {
+    background: var(--glass-bg-blood);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border-blood);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px 0 rgba(128, 15, 47, 0.4);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.glass-blood-card:hover {
+    box-shadow: 0 12px 40px 0 var(--blood-glow);
+    transform: translateY(-3px);
+}
+
+.glass-nav {
+    background: rgba(6, 20, 38, 0.85);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border-bottom: 1px solid var(--glass-border);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.glass-input, .form-control, .form-select {
+    background: rgba(255, 255, 255, 0.07) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+    border-radius: 10px;
+    padding: 10px 14px;
+    backdrop-filter: blur(8px);
+    transition: all 0.2s ease;
+}
+
+.glass-input:focus, .form-control:focus, .form-select:focus {
+    background: rgba(255, 255, 255, 0.12) !important;
+    border-color: var(--ocean-cyan) !important;
+    box-shadow: 0 0 15px rgba(0, 210, 255, 0.3) !important;
+    color: #ffffff !important;
+}
+
+.form-select option {
+    background: var(--ocean-navy);
+    color: #ffffff;
+}
+
+.form-label {
+    color: #cbd5e1;
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+/* Custom Buttons */
+.btn-ocean {
+    background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 30px;
+    font-weight: 600;
+    padding: 10px 24px;
+    box-shadow: 0 4px 15px rgba(2, 132, 199, 0.35);
+    transition: all 0.25s ease;
+}
+
+.btn-ocean:hover {
+    background: linear-gradient(135deg, #00d2ff 0%, #0284c7 100%);
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 210, 255, 0.5);
+}
+
+.btn-blood {
+    background: linear-gradient(135deg, #ef233c 0%, #d90429 100%);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 30px;
+    font-weight: 600;
+    padding: 10px 24px;
+    box-shadow: 0 4px 15px rgba(239, 35, 60, 0.4);
+    transition: all 0.25s ease;
+}
+
+.btn-blood:hover {
+    background: linear-gradient(135deg, #ff4d6d 0%, #ef233c 100%);
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(239, 35, 60, 0.6);
+}
+
+/* Hero Section */
+.hero-banner {
+    position: relative;
+    padding: 80px 0 60px;
+    overflow: hidden;
+}
+
+.hero-glow {
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    border-radius: 50%;
+    filter: blur(90px);
+    z-index: 0;
+    pointer-events: none;
+}
+
+.glow-blue {
+    top: -50px;
+    left: -50px;
+    background: rgba(0, 210, 255, 0.25);
+}
+
+.glow-red {
+    bottom: -50px;
+    right: -50px;
+    background: rgba(239, 35, 60, 0.2);
+}
+
+/* Mariner Badge */
+.mariner-badge {
+    background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    color: #38bdf8;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Blood Group Badges */
+.blood-pill {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+    background: linear-gradient(135deg, #ef233c, #9d0208);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(239, 35, 60, 0.5);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Counters */
+.stat-counter {
+    font-size: 2.6rem;
+    font-weight: 700;
+    color: #00d2ff;
+    text-shadow: 0 0 20px rgba(0, 210, 255, 0.5);
+}
+
+/* Resting Status Banner */
+.resting-banner {
+    background: rgba(245, 158, 11, 0.15);
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    border-radius: 12px;
+    padding: 16px 20px;
+    color: #fde68a;
+}
+
+.available-banner {
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    border-radius: 12px;
+    padding: 16px 20px;
+    color: #a7f3d0;
+}
+
+/* Footer */
+footer {
+    margin-top: auto;
+    background: rgba(6, 20, 38, 0.95);
+    border-top: 1px solid var(--glass-border);
+}
+
+/* Pulse animation for emergency */
+@keyframes pulse-emergency {
+    0% { box-shadow: 0 0 0 0 rgba(239, 35, 60, 0.7); }
+    70% { box-shadow: 0 0 0 15px rgba(239, 35, 60, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(239, 35, 60, 0); }
+}
+
+.emergency-pulse {
+    animation: pulse-emergency 2s infinite;
+}

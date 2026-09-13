@@ -1,0 +1,7 @@
+{
+    "name": "bmmc/website",
+    "description": "Bangladesh Merchant Mariners Community Website",
+    "require": {
+        "phpmailer/phpmailer": "^7.1"
+    }
+}
