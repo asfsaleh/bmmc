@@ -74,6 +74,36 @@ if (!empty($_ENV['APP_URL'])) {
 // Blood donation resting period in days (4 months = ~120 days)
 define('RESTING_PERIOD_DAYS', (int)($_ENV['RESTING_PERIOD_DAYS'] ?? 120));
 
+// Check Maintenance Mode (Serves Mechanical Maintenance Screen if enabled)
+$maintenanceConfigFile = __DIR__ . '/maintenance.json';
+if (file_exists($maintenanceConfigFile)) {
+    $mState = json_decode(file_get_contents($maintenanceConfigFile), true);
+    if (!empty($mState['enabled'])) {
+        $reqUri = $_SERVER['REQUEST_URI'] ?? '';
+        $reqScript = $_SERVER['SCRIPT_NAME'] ?? '';
+        
+        // Exemptions: /m, /m.php, /assets/, setup.php, maintenance.php, and admin bypass session
+        $isMaintenanceExempt = (
+            str_contains($reqUri, '/m.php') ||
+            str_contains($reqScript, 'm.php') ||
+            preg_match('#^/m(/|\?|$)#', $reqUri) ||
+            preg_match('#/m(/|\?|$)#', $reqScript) ||
+            str_contains($reqUri, 'maintenance.php') ||
+            str_contains($reqUri, 'setup.php') ||
+            str_starts_with($reqUri, '/assets/') ||
+            !empty($_SESSION['maintenance_bypass'])
+        );
+
+        if (!$isMaintenanceExempt) {
+            http_response_code(503);
+            header('Retry-After: 3600');
+            require_once ROOT_PATH . '/maintenance.php';
+            exit;
+        }
+    }
+}
+
+
 // Database Configuration
 // Checks: 1) constants in database_credentials.php, 2) $_ENV, 3) fallback defaults
 if (!defined('DB_HOST')) define('DB_HOST', $_ENV['DB_HOST'] ?? 'localhost');
