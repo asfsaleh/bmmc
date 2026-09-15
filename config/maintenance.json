@@ -1,10 +1,10 @@
 {
     "enabled": true,
-    "title": "সাইটের যান্ত্রিক রক্ষণাবেক্ষণ চলছে — BMMC",
-    "headline": "সাইটের সিস্টেম আপগ্রেড ও যান্ত্রিক রক্ষণাবেক্ষণ চলছে",
-    "message": "সম্মানিত মেরিনার ও ভিজিটরবৃন্দ, বাংলাদেশ মার্চেন্ট মেরিনার্স কমিউনিটি (BMMC) পোর্টালটির ইঞ্জিন ও ডাটাবেস সিস্টেম আপগ্রেডের কাজ চলছে। উন্নত সেবা ও নির্ভরযোগ্য রক্তদান নেটওয়ার্ক নিশ্চিত করতে সাইটটি সাময়িকভাবে রক্ষণাবেক্ষণ মোডে রয়েছে।",
-    "estimated_time": "খুব শীঘ্রই আমরা পুনরায় লাইভে আসছি",
+    "title": "System Under Maintenance — BMMC",
+    "headline": "WE ARE CURRENTLY UNDER MAINTENANCE",
+    "message": "The Bangladesh Merchant Mariners Community (BMMC) portal is currently undergoing scheduled engineering maintenance and core performance upgrades. We will be back online shortly.",
+    "estimated_time": "Returning Online Shortly",
     "contact_phone": "+8801711000000",
     "contact_email": "admin@bmmc.org",
-    "updated_at": "2026-09-15 20:23:51"
+    "updated_at": "2026-09-15 20:38:00"
 }
