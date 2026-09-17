@@ -36,7 +36,7 @@ $footerPillars = get_bmmc_pillars();
                 <ul class="list-unstyled small">
                     <li class="mb-2"><a href="<?= BASE_URL ?>/blood.php" class="text-light text-decoration-none"><i class="bi bi-droplet-fill me-1 text-danger"></i>রক্তদান নেটওয়ার্ক (Live)</a></li>
                     <li class="mb-2"><a href="<?= BASE_URL ?>/service.php?slug=emergency-team" class="text-secondary text-decoration-none"><i class="bi bi-shield-exclamation me-1 text-danger"></i>ইমার্জেন্সি রেসপন্স টিম</a></li>
-                    <li class="mb-2"><a href="<?= BASE_URL ?>/service.php?slug=legal-support" class="text-secondary text-decoration-none"><i class="bi bi-balance-scale me-1 text-warning"></i>আইনি সহায়তা ও ITF</a></li>
+                    <li class="mb-2"><a href="<?= BASE_URL ?>/service.php?slug=legal-support" class="text-secondary text-decoration-none"><i class="bi bi-hammer me-1 text-warning"></i>আইনি সহায়তা ও ITF</a></li>
                     <li class="mb-2"><a href="<?= BASE_URL ?>/service.php?slug=cadet-programme" class="text-secondary text-decoration-none"><i class="bi bi-mortarboard me-1 text-info"></i>ফ্রেশ ক্যাডেট ট্রেইনিং</a></li>
                     <li class="mb-2"><a href="<?= BASE_URL ?>/service.php?slug=seatime-calculator" class="text-secondary text-decoration-none"><i class="bi bi-calculator me-1 text-warning"></i>সি-টাইম ক্যালকুলেটর</a></li>
                     <li class="mb-2"><a href="<?= BASE_URL ?>/index.php#services-section" class="text-info text-decoration-none fw-semibold"><i class="bi bi-arrow-right-circle me-1"></i>সমস্ত ২১টি সেবাসমূহ →</a></li>

@@ -114,7 +114,7 @@ function get_bmmc_services(): array {
             'title_en' => 'Legal Support Cell & ITF Guidance',
             'status' => 'coming_soon',
             'badge' => 'শীঘ্রই উন্মুক্ত হচ্ছে (Coming Soon)',
-            'icon' => 'bi-balance-scale',
+            'icon' => 'bi-hammer',
             'color' => '#f59e0b',
             'summary' => 'সাধারণ চুক্তিপত্র (SEA), ওয়াচ-কিপিং সময় বা অন-বোর্ড রাইটস সুরক্ষায় অভিজ্ঞ মাস্টার মেরিনার ও মেরিটাইম আইনজীবীদের পরামর্শ।',
             'description' => 'নাবিকদের কর্মসংস্থান চুক্তি (Seafarers Employment Agreement - SEA), নিরাপদ কর্মঘণ্টা, বেতন বকেয়া এবং অন-বোর্ড মানবাধিকার সুরক্ষায় আন্তর্জাতিক মেরিটাইম আইন (MLC 2006, STCW, IMO) বিশেষজ্ঞ ও অভিজ্ঞ আইনি পরামর্শকদের তত্ত্বাবধানে পরিচালিত লিগ্যাল সেল।',
