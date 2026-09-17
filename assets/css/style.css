@@ -852,4 +852,83 @@ footer {
     font-weight: 600;
 }
 
+/* =============================================================
+   Mobile Horizontal Scroll (1.5 Column View) for Service Cards
+============================================================= */
+@media (max-width: 767.98px) {
+    #servicesGrid {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        gap: 14px !important;
+        margin-left: -12px !important;
+        margin-right: -12px !important;
+        padding: 6px 16px 22px 16px !important;
+        margin-top: 0 !important;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(0, 210, 255, 0.45) rgba(255, 255, 255, 0.04);
+    }
+
+    #servicesGrid::-webkit-scrollbar {
+        height: 5px;
+    }
+
+    #servicesGrid::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 10px;
+        margin: 0 16px;
+    }
+
+    #servicesGrid::-webkit-scrollbar-thumb {
+        background: rgba(0, 210, 255, 0.45);
+        border-radius: 10px;
+    }
+
+    #servicesGrid > .service-item {
+        flex: 0 0 72% !important;
+        max-width: 72% !important;
+        min-width: 72% !important;
+        width: 72% !important;
+        scroll-snap-align: start;
+        scroll-snap-stop: normal;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        margin-top: 0 !important;
+        display: flex;
+        flex-direction: column;
+    }
+
+    #servicesGrid .service-showcase-card {
+        padding: 20px 16px !important;
+        border-radius: 18px !important;
+        height: 100% !important;
+    }
+
+    #servicesGrid .service-card-icon {
+        width: 42px !important;
+        height: 42px !important;
+        font-size: 1.25rem !important;
+        margin-bottom: 12px !important;
+    }
+
+    #servicesGrid h5 {
+        font-size: 1.05rem !important;
+    }
+
+    #servicesGrid p {
+        font-size: 0.82rem !important;
+        margin-bottom: 1rem !important;
+        line-height: 1.55 !important;
+    }
+
+    .service-filter-btn {
+        font-size: 0.8rem;
+        padding: 6px 14px;
+    }
+}
+
+
 

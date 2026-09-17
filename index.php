@@ -241,7 +241,17 @@ $services = get_bmmc_services();
             </button>
         </div>
 
-        <!-- Services 21 Cards Grid -->
+        <!-- Mobile Horizontal Scroll Hint (Visible only on mobile) -->
+        <div class="d-flex d-md-none justify-content-between align-items-center mb-3 px-1 text-secondary small">
+            <span class="d-inline-flex align-items-center gap-1 text-info fw-semibold">
+                <i class="bi bi-arrow-left-right"></i> ডানে-বামে সোয়াইপ করুন
+            </span>
+            <span class="badge bg-dark bg-opacity-75 border border-secondary border-opacity-40 text-secondary rounded-pill px-2 py-1" id="serviceFilterCountBadge">
+                ২১টি সেবা
+            </span>
+        </div>
+
+        <!-- Services 21 Cards Grid (Horizontal scroll on mobile, responsive grid on desktop) -->
         <div class="row g-4" id="servicesGrid">
             <?php foreach ($services as $s): 
                 $isLive = ($s['status'] === 'live');
@@ -386,15 +396,29 @@ function filterServices(pillarId, btn) {
     if (btn) btn.classList.add('active');
 
     // Filter cards
+    let visibleCount = 0;
     const items = document.querySelectorAll('.service-item');
     items.forEach(item => {
         const itemPillar = item.getAttribute('data-pillar');
         if (pillarId === 'all' || itemPillar === pillarId) {
-            item.style.display = 'block';
+            item.style.display = '';
+            visibleCount++;
         } else {
             item.style.display = 'none';
         }
     });
+
+    // Update count badge if present
+    const countBadge = document.getElementById('serviceFilterCountBadge');
+    if (countBadge) {
+        countBadge.textContent = visibleCount + 'টি সেবা';
+    }
+
+    // Smoothly rewind horizontal container to the beginning
+    const grid = document.getElementById('servicesGrid');
+    if (grid) {
+        grid.scrollTo({ left: 0, behavior: 'smooth' });
+    }
 }
 </script>
 
