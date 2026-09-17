@@ -37,8 +37,8 @@ $services = get_bmmc_services();
                     </a>
                 </li>
 
-                <!-- Our Services (Mega Dropdown on Desktop, Collapsible on Mobile) -->
-                <li class="nav-item dropdown dropdown-mega">
+                <!-- Desktop "Our Services" Mega Dropdown (Visible on Desktop: d-none d-lg-block) -->
+                <li class="nav-item dropdown dropdown-mega d-none d-lg-block">
                     <a class="nav-link dropdown-toggle text-white py-2 px-3 rounded-pill nav-link-mobile nav-pill-btn" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                         <i class="bi bi-grid-fill me-1 text-info"></i> আমাদের সেবাসমূহ
                     </a>
@@ -106,32 +106,47 @@ $services = get_bmmc_services();
                             </a>
                         </div>
                     </div>
+                </li>
 
-                    <!-- Mobile Accordion Menu inside Dropdown -->
-                    <div class="dropdown-menu dropdown-menu-dark d-lg-none glass-card border-secondary w-100 p-2 mt-2">
-                        <div class="mobile-services-accordion accordion accordion-flush" id="mobileServicesAcc">
+                <!-- Mobile Multi-Level Services Accordion (Visible on Mobile only: d-lg-none) -->
+                <li class="nav-item d-lg-none w-100">
+                    <a class="nav-link text-white py-2 px-3 rounded-3 nav-pill-btn d-flex align-items-center justify-content-between" data-bs-toggle="collapse" href="#mobileServicesCollapse" role="button" aria-expanded="false" aria-controls="mobileServicesCollapse" id="mobileServicesToggle" style="background: rgba(255, 255, 255, 0.04);">
+                        <span><i class="bi bi-grid-fill me-2 text-info"></i>আমাদের সেবাসমূহ</span>
+                        <i class="bi bi-chevron-down toggle-icon transition-transform"></i>
+                    </a>
+
+                    <!-- Level 1 Submenu: সেবার ধরন গুলো (5 Pillars) -->
+                    <div class="collapse mt-2 ps-1" id="mobileServicesCollapse">
+                        <div class="accordion accordion-flush mobile-pillars-accordion my-1" id="mobilePillarsAcc">
                             <?php foreach ($pillars as $pId => $pillar): 
                                 $pServices = get_services_by_pillar($pId);
                             ?>
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="heading_<?= $pId ?>">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_<?= $pId ?>">
-                                        <i class="bi <?= htmlspecialchars($pillar['icon']) ?> me-2" style="color: <?= htmlspecialchars($pillar['color']) ?>;"></i>
-                                        <?= htmlspecialchars($pillar['title']) ?>
+                            <div class="accordion-item mb-2 rounded-3 overflow-hidden" style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08);">
+                                <h2 class="accordion-header" id="heading_mob_<?= $pId ?>">
+                                    <button class="accordion-button collapsed py-2 px-3 text-white d-flex align-items-center gap-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_mob_<?= $pId ?>" aria-expanded="false" aria-controls="collapse_mob_<?= $pId ?>" style="background: rgba(255, 255, 255, 0.03); font-size: 0.88rem; font-weight: 600;">
+                                        <i class="bi <?= htmlspecialchars($pillar['icon']) ?>" style="color: <?= htmlspecialchars($pillar['color']) ?>; font-size: 1rem;"></i>
+                                        <span class="flex-grow-1 text-truncate"><?= htmlspecialchars($pillar['title']) ?></span>
+                                        <span class="badge bg-secondary bg-opacity-50 text-white-50 rounded-pill px-2 py-0" style="font-size: 0.65rem;"><?= count($pServices) ?>টি</span>
                                     </button>
                                 </h2>
-                                <div id="collapse_<?= $pId ?>" class="accordion-collapse collapse" data-bs-parent="#mobileServicesAcc">
-                                    <div class="accordion-body">
+                                <!-- Level 2 Submenu: সেবা গুলো (Services list under this pillar) -->
+                                <div id="collapse_mob_<?= $pId ?>" class="accordion-collapse collapse" data-bs-parent="#mobilePillarsAcc">
+                                    <div class="accordion-body p-2 pt-1">
                                         <?php foreach ($pServices as $s): ?>
-                                        <a href="<?= BASE_URL ?>/<?= htmlspecialchars($s['link']) ?>" class="d-flex align-items-center justify-content-between py-2 px-2 text-light text-decoration-none rounded hover-bg">
-                                            <div class="d-flex align-items-center gap-2">
-                                                <i class="bi <?= htmlspecialchars($s['icon']) ?>" style="color: <?= htmlspecialchars($s['color']) ?>;"></i>
-                                                <span class="small"><?= htmlspecialchars($s['title']) ?></span>
+                                        <a href="<?= BASE_URL ?>/<?= htmlspecialchars($s['link']) ?>" class="d-flex align-items-center justify-content-between p-2 text-decoration-none rounded-2 mb-1 mobile-service-item" style="background: rgba(0, 0, 0, 0.25); border-left: 3px solid <?= htmlspecialchars($s['color']) ?>;">
+                                            <div class="d-flex align-items-center gap-2 overflow-hidden">
+                                                <div style="width: 26px; height: 26px; border-radius: 6px; background: rgba(255, 255, 255, 0.08); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: <?= htmlspecialchars($s['color']) ?>;">
+                                                    <i class="bi <?= htmlspecialchars($s['icon']) ?>" style="font-size: 0.85rem;"></i>
+                                                </div>
+                                                <div class="text-truncate">
+                                                    <div class="text-white small fw-semibold text-truncate"><?= htmlspecialchars($s['title']) ?></div>
+                                                    <div class="text-secondary text-truncate" style="font-size: 0.68rem;"><?= htmlspecialchars($s['title_en']) ?></div>
+                                                </div>
                                             </div>
                                             <?php if ($s['status'] === 'live'): ?>
-                                                <span class="badge-live-pulse">LIVE</span>
+                                                <span class="badge-live-pulse flex-shrink-0 ms-2">LIVE</span>
                                             <?php else: ?>
-                                                <span class="badge-soon">Soon</span>
+                                                <span class="badge-soon flex-shrink-0 ms-2">Soon</span>
                                             <?php endif; ?>
                                         </a>
                                         <?php endforeach; ?>
@@ -140,8 +155,9 @@ $services = get_bmmc_services();
                             </div>
                             <?php endforeach; ?>
                         </div>
+
                         <div class="p-2 border-top border-secondary border-opacity-25 mt-2 text-center">
-                            <a href="<?= BASE_URL ?>/index.php#services-section" class="btn btn-outline-info btn-sm rounded-pill w-100">
+                            <a href="<?= BASE_URL ?>/index.php#services-section" class="btn btn-outline-info btn-sm rounded-pill w-100 py-1" style="font-size: 0.82rem;">
                                 <i class="bi bi-grid-fill me-1"></i> সমস্ত সেবাসমূহ দেখুন
                             </a>
                         </div>
