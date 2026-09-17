@@ -4,6 +4,7 @@
 .env.*.local
 config/.env
 config/database_credentials.php
+config/maintenance.json
 
 # Database files
 database/*.sqlite

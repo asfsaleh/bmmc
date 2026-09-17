@@ -11,7 +11,7 @@ $maintenanceFile = __DIR__ . '/config/maintenance.json';
 
 // Default config
 $defaultConfig = [
-    'enabled' => true,
+    'enabled' => false,
     'title' => 'System Under Maintenance — BMMC',
     'headline' => 'SYSTEM UNDER MAINTENANCE',
     'message' => 'The Bangladesh Merchant Mariners Community (BMMC) portal is currently undergoing scheduled engineering maintenance and core performance upgrades. We will be back online shortly.',

@@ -38,12 +38,12 @@ $services = get_bmmc_services();
 
                 <!-- Our Services (Mega Dropdown on Desktop, Collapsible on Mobile) -->
                 <li class="nav-item dropdown dropdown-mega">
-                    <a class="nav-link dropdown-toggle text-white py-2 px-3 rounded-2 nav-link-mobile" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown" data-bs-display="static" data-bs-auto-close="outside" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle text-white py-2 px-3 rounded-2 nav-link-mobile" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                         <i class="bi bi-grid-fill me-1 text-info"></i> আমাদের সেবাসমূহ
                     </a>
 
                     <!-- Desktop Mega Menu -->
-                    <div class="dropdown-menu dropdown-menu-dark dropdown-mega-menu d-none d-lg-block border-0 shadow-lg" aria-labelledby="servicesDropdown" style="background: rgba(6, 18, 36, 0.98) !important; background-color: #061426 !important; color: #ffffff !important;">
+                    <div class="dropdown-menu dropdown-menu-dark dropdown-mega-menu border-0 shadow-lg" id="desktopServicesMenu" aria-labelledby="servicesDropdown" style="background: rgba(6, 18, 36, 0.98) !important; background-color: #061426 !important; color: #ffffff !important;">
                         <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary border-opacity-25">
                             <div>
                                 <h6 class="text-white fw-bold mb-0 d-flex align-items-center gap-2">
@@ -52,10 +52,13 @@ $services = get_bmmc_services();
                                 </h6>
                                 <small class="text-secondary" style="font-size: 0.78rem;">সমগ্র বিশ্বের বাংলাদেশি নাবিক ও পরিবারের কল্যাণ ও অধিকার সুরক্ষায় নিবেদিত ২১টি সেবা</small>
                             </div>
-                            <div>
+                            <div class="d-flex align-items-center gap-2">
                                 <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 px-3 py-1 rounded-pill small">
                                     <i class="bi bi-check-circle-fill me-1"></i> ১টি সেবা সক্রিয় (Live) • ২০টি নির্মাণাধীন
                                 </span>
+                                <button type="button" class="btn btn-outline-secondary btn-sm rounded-circle p-0 text-white-50 border-0" id="closeMegaMenuBtn" title="মেনু বন্ধ করুন" style="width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.08); cursor: pointer;">
+                                    <i class="bi bi-x-lg text-white" style="font-size: 0.85rem;"></i>
+                                </button>
                             </div>
                         </div>
 
@@ -97,7 +100,7 @@ $services = get_bmmc_services();
                             <div class="small text-secondary">
                                 <i class="bi bi-info-circle me-1 text-info"></i> প্রতিটি সেবার বিস্তারিত ও রোডম্যাপ দেখতে যেকোনো সেবায় ক্লিক করুন।
                             </div>
-                            <a href="<?= BASE_URL ?>/index.php#services-section" class="btn btn-outline-info btn-sm rounded-pill px-3 py-1">
+                            <a href="<?= BASE_URL ?>/index.php#services-section" class="btn btn-outline-info btn-sm rounded-pill px-3 py-1 close-mega-on-click">
                                 সমস্ত সেবার গ্রিড ভিউ <i class="bi bi-arrow-right ms-1"></i>
                             </a>
                         </div>
@@ -202,3 +205,56 @@ $services = get_bmmc_services();
         </div>
     </div>
 </nav>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var servicesDropdown = document.getElementById('servicesDropdown');
+    var desktopMenu = document.getElementById('desktopServicesMenu');
+    var closeBtn = document.getElementById('closeMegaMenuBtn');
+
+    function closeDesktopMega() {
+        if (!servicesDropdown || !desktopMenu) return;
+        desktopMenu.classList.remove('show');
+        servicesDropdown.classList.remove('show');
+        servicesDropdown.setAttribute('aria-expanded', 'false');
+        if (window.bootstrap) {
+            var bsDropdown = bootstrap.Dropdown.getInstance(servicesDropdown);
+            if (bsDropdown) {
+                bsDropdown.hide();
+            }
+        }
+    }
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            closeDesktopMega();
+        });
+    }
+
+    // Close when clicking hash links like #services-section
+    var closeLinks = document.querySelectorAll('.close-mega-on-click');
+    closeLinks.forEach(function (link) {
+        link.addEventListener('click', function () {
+            closeDesktopMega();
+        });
+    });
+
+    // Close when clicking outside on desktop
+    document.addEventListener('click', function (e) {
+        if (desktopMenu && desktopMenu.classList.contains('show')) {
+            if (!desktopMenu.contains(e.target) && !servicesDropdown.contains(e.target)) {
+                closeDesktopMega();
+            }
+        }
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && desktopMenu && desktopMenu.classList.contains('show')) {
+            closeDesktopMega();
+        }
+    });
+});
+</script>

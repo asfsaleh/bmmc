@@ -1,10 +1,10 @@
-{
-    "enabled": true,
+﻿{
+    "enabled": false,
     "title": "System Under Maintenance — BMMC",
     "headline": "WE ARE CURRENTLY UNDER MAINTENANCE",
     "message": "The Bangladesh Merchant Mariners Community (BMMC) portal is currently undergoing scheduled engineering maintenance and core performance upgrades. We will be back online shortly.",
     "estimated_time": "Returning Online Shortly",
     "contact_phone": "+8801711000000",
     "contact_email": "admin@bmmc.org",
-    "updated_at": "2026-09-15 20:38:00"
+    "updated_at": "2026-09-17 00:00:00"
 }
