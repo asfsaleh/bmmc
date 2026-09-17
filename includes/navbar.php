@@ -28,17 +28,18 @@ $services = get_bmmc_services();
 
         <!-- Navbar Links & Mobile Collapsible Drawer -->
         <div class="collapse navbar-collapse mobile-nav-collapse" id="navbarMain">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-2 pt-3 pt-lg-0 align-items-lg-center">
+            <!-- Centered Nav Links: Home, Our Services, Blood Portal -->
+            <ul class="navbar-nav mx-lg-auto mb-2 mb-lg-0 pt-3 pt-lg-0 align-items-lg-center gap-1 gap-lg-2">
                 <!-- Home -->
                 <li class="nav-item">
-                    <a class="nav-link text-white py-2 px-3 rounded-2 nav-link-mobile" href="<?= BASE_URL ?>/index.php">
+                    <a class="nav-link text-white py-2 px-3 rounded-pill nav-link-mobile nav-pill-btn" href="<?= BASE_URL ?>/index.php">
                         <i class="bi bi-house-door me-1 text-info"></i> হোম
                     </a>
                 </li>
 
                 <!-- Our Services (Mega Dropdown on Desktop, Collapsible on Mobile) -->
                 <li class="nav-item dropdown dropdown-mega">
-                    <a class="nav-link dropdown-toggle text-white py-2 px-3 rounded-2 nav-link-mobile" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle text-white py-2 px-3 rounded-pill nav-link-mobile nav-pill-btn" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                         <i class="bi bi-grid-fill me-1 text-info"></i> আমাদের সেবাসমূহ
                     </a>
 
@@ -149,7 +150,7 @@ $services = get_bmmc_services();
 
                 <!-- Dedicated Blood Portal Direct Button -->
                 <li class="nav-item">
-                    <a class="nav-link text-white py-2 px-3 rounded-2 nav-link-mobile d-flex align-items-center gap-1" href="<?= BASE_URL ?>/blood.php">
+                    <a class="nav-link text-white py-2 px-3 rounded-pill nav-link-mobile nav-pill-btn d-flex align-items-center gap-1" href="<?= BASE_URL ?>/blood.php">
                         <i class="bi bi-droplet-fill text-danger"></i>
                         <span>রক্তদান পোর্টাল</span>
                         <span class="badge-live-pulse ms-1">LIVE</span>
@@ -159,19 +160,19 @@ $services = get_bmmc_services();
                 <!-- Admin Dashboard Link -->
                 <?php if ($isAdmin): ?>
                 <li class="nav-item">
-                    <a class="nav-link text-warning fw-bold py-2 px-3 rounded-2 nav-link-mobile" href="<?= BASE_URL ?>/admin/dashboard.php">
+                    <a class="nav-link text-warning fw-bold py-2 px-3 rounded-pill nav-link-mobile nav-pill-btn" href="<?= BASE_URL ?>/admin/dashboard.php">
                         <i class="bi bi-shield-lock-fill me-1"></i> অ্যাডমিন
                     </a>
                 </li>
                 <?php endif; ?>
             </ul>
 
-            <!-- Mobile & Desktop Action Area -->
-            <div class="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center gap-2 mt-3 mt-lg-0 pt-3 pt-lg-0 border-top border-lg-0 border-secondary border-opacity-25 ms-lg-auto">
+            <!-- Mobile & Desktop Action Area (Right Side) -->
+            <div class="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center gap-2 mt-3 mt-lg-0 pt-3 pt-lg-0 border-top border-lg-0 border-secondary border-opacity-25 flex-shrink-0">
                 
                 <!-- User Login / Profile Dropdown -->
                 <?php if ($currentUser): ?>
-                    <div class="dropdown w-100 w-lg-auto">
+                    <div class="dropdown nav-action-btn flex-shrink-0">
                         <button class="btn btn-outline-info dropdown-toggle rounded-pill px-3 py-2 py-lg-1 btn-sm w-100 text-center text-nowrap" type="button" data-bs-toggle="dropdown">
                             <i class="bi bi-person-circle me-1"></i> <?= htmlspecialchars($currentUser['name']) ?>
                             <?php if ($currentUser['user_type'] === 'mariner'): ?>
@@ -188,7 +189,7 @@ $services = get_bmmc_services();
                         </ul>
                     </div>
                 <?php else: ?>
-                    <a href="<?= BASE_URL ?>/login.php" class="btn btn-outline-light btn-sm rounded-pill px-3 py-2 py-lg-1 text-center w-100 w-lg-auto text-nowrap flex-shrink-0">
+                    <a href="<?= BASE_URL ?>/login.php" class="btn btn-outline-light btn-sm rounded-pill px-3 py-2 py-lg-1 text-center text-nowrap flex-shrink-0 nav-action-btn">
                         <i class="bi bi-box-arrow-in-right me-1"></i> লগইন
                     </a>
                 <?php endif; ?>
@@ -196,7 +197,7 @@ $services = get_bmmc_services();
                 <!-- ==============================================================
                      HIGHLIGHTED FAR-RIGHT BUTTON: "BECOME A BMMC VOLUNTEER"
                 =============================================================== -->
-                <a href="<?= BASE_URL ?>/volunteer_register.php" class="btn-volunteer-highlight text-nowrap flex-shrink-0" title="বিএমএমসি ভলান্টিয়ার টিমে যুক্ত হোন">
+                <a href="<?= BASE_URL ?>/volunteer_register.php" class="btn-volunteer-highlight text-nowrap flex-shrink-0 nav-action-btn" title="বিএমএমসি ভলান্টিয়ার টিমে যুক্ত হোন">
                     <i class="bi bi-person-heart"></i>
                     <span>Become a BMMC Volunteer</span>
                 </a>

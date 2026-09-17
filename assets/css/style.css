@@ -540,6 +540,38 @@ footer {
 }
 
 /* =============================================================
+   Navbar Navigation Pill Links & Action Buttons Responsive
+============================================================= */
+.nav-pill-btn {
+    transition: all 0.25s ease;
+    border: 1px solid transparent;
+    font-weight: 500;
+    font-size: 0.92rem;
+}
+
+.nav-pill-btn:hover,
+.nav-pill-btn:focus,
+.nav-pill-btn.show,
+.nav-pill-btn.active {
+    background: rgba(0, 210, 255, 0.12) !important;
+    border-color: rgba(0, 210, 255, 0.3) !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 14px rgba(0, 210, 255, 0.25);
+}
+
+@media (max-width: 991.98px) {
+    .nav-action-btn {
+        width: 100% !important;
+    }
+}
+
+@media (min-width: 992px) {
+    .nav-action-btn {
+        width: auto !important;
+    }
+}
+
+/* =============================================================
    Desktop Mega Menu Dropdown for "Our Services"
 ============================================================= */
 @media (max-width: 991.98px) {
