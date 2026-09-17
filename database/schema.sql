@@ -123,7 +123,11 @@ CREATE TABLE IF NOT EXISTS volunteers (
     is_mariner TINYINT(1) DEFAULT 0,
     cdc_sid_no VARCHAR(50) NULL,
     rank_designation VARCHAR(100) NULL,
+    port_city VARCHAR(100) NULL,
     interest_area VARCHAR(255) NULL,
+    agree_blood_donation TINYINT(1) DEFAULT 0,
+    blood_group VARCHAR(10) NULL,
+    last_donation_date DATE NULL,
     message TEXT NULL,
     status ENUM('pending', 'approved', 'active') DEFAULT 'pending',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP

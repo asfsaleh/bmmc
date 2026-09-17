@@ -1,255 +1,332 @@
 <?php
-$pageTitle = 'হোম — বাংলাদেশ মার্চেন্ট মেরিনার্স কমিউনিটি (BMMC)';
+/**
+ * Bangladesh Merchant Mariners Community (BMMC)
+ * Universal Organization Homepage — Multi-Service Maritime Portal
+ */
+$pageTitle = 'বাংলাদেশ মার্চেন্ট মেরিনার্স কমিউনিটি (BMMC) — সার্বজনীন মেরিটাইম সেবা প্ল্যাটফর্ম';
+$ogTitle = 'BMMC — বাংলাদেশ মার্চেন্ট মেরিনার্স কমিউনিটি (২১টি সার্বজনীন সেবা)';
+$ogDescription = 'সমুদ্রে নাবিকদের অধিকার রক্ষা, পেশাগত মর্যাদা, জরুরি উদ্ধার, ক্যাডেট মেন্টরশিপ ও রক্তদান নেটওয়ার্ক সহ BMMC-এর ২১টি বিশেষায়িত সেবামূলক উদ্যোগ।';
+
 require_once __DIR__ . '/includes/header.php';
 require_once __DIR__ . '/config/database.php';
 require_once __DIR__ . '/includes/functions.php';
+require_once __DIR__ . '/includes/services_data.php';
 
 $pdo = DB::getConnection();
 
-// Fetch statistics
-$totalDonors = $pdo->query("SELECT COUNT(*) FROM donors")->fetchColumn() ?: 0;
-$marinerDonors = $pdo->query("SELECT COUNT(*) FROM donors d JOIN users u ON d.user_id = u.id WHERE u.user_type = 'mariner'")->fetchColumn() ?: 0;
-$fulfilledDonations = $pdo->query("SELECT COUNT(*) FROM donation_history")->fetchColumn() ?: 0;
-$openRequestsCount = $pdo->query("SELECT COUNT(*) FROM blood_requests WHERE status IN ('open', 'matched')")->fetchColumn() ?: 0;
+// Fetch live statistics
+$totalDonors = 0;
+$marinerDonors = 0;
+$fulfilledDonations = 0;
+$openRequestsCount = 0;
 
-// Fetch latest 4 urgent blood requests
-$reqStmt = $pdo->query("
-    SELECT * FROM blood_requests 
-    WHERE status IN ('open', 'matched')
-    ORDER BY 
-        CASE urgency WHEN 'emergency' THEN 1 WHEN 'urgent' THEN 2 ELSE 3 END,
-        created_at DESC
-    LIMIT 4
-");
-$recentRequests = $reqStmt->fetchAll();
+try {
+    $totalDonors = $pdo->query("SELECT COUNT(*) FROM donors")->fetchColumn() ?: 0;
+    $marinerDonors = $pdo->query("SELECT COUNT(*) FROM donors d JOIN users u ON d.user_id = u.id WHERE u.user_type = 'mariner'")->fetchColumn() ?: 0;
+    $fulfilledDonations = $pdo->query("SELECT COUNT(*) FROM donation_history")->fetchColumn() ?: 0;
+    $openRequestsCount = $pdo->query("SELECT COUNT(*) FROM blood_requests WHERE status IN ('open', 'matched')")->fetchColumn() ?: 0;
+} catch (Exception $e) {}
+
+// Fetch 3 active blood requests for the flagship spotlight
+$recentRequests = [];
+try {
+    $reqStmt = $pdo->query("
+        SELECT * FROM blood_requests 
+        WHERE status IN ('open', 'matched')
+        ORDER BY 
+            CASE urgency WHEN 'emergency' THEN 1 WHEN 'urgent' THEN 2 ELSE 3 END,
+            created_at DESC
+        LIMIT 3
+    ");
+    $recentRequests = $reqStmt->fetchAll();
+} catch (Exception $e) {}
+
+$pillars = get_bmmc_pillars();
+$services = get_bmmc_services();
 ?>
 
-<!-- Hero Section -->
-<section class="hero-banner text-center position-relative">
+<!-- =============================================================
+     HERO BANNER: UNIVERSAL MARITIME ORGANIZATION
+============================================================= -->
+<section class="hero-banner text-center position-relative py-5">
     <div class="hero-glow glow-blue"></div>
     <div class="hero-glow glow-red"></div>
 
     <div class="container position-relative" style="z-index: 2;">
-        <div class="d-inline-flex align-items-center gap-2 px-3 py-1 mb-4 rounded-pill border border-info border-opacity-25 bg-info bg-opacity-10 text-info">
-            <i class="bi bi-water"></i>
-            <small class="fw-semibold">বাংলাদেশ মার্চেন্ট মেরিনার্স ভলান্টিয়ার্স ইনিশিয়েটিভ</small>
+        
+        <!-- Organization Pill Badge -->
+        <div class="d-inline-flex align-items-center gap-2 px-3 py-1 mb-3 rounded-pill border border-info border-opacity-30 bg-info bg-opacity-10 text-info">
+            <i class="bi bi-compass-fill"></i>
+            <small class="fw-bold">বাংলাদেশ মার্চেন্ট মেরিনার্স কমিউনিটি (BMMC) • বিশ্বজুড়ে বাংলাদেশি নাবিকদের ঐক্য</small>
         </div>
 
-        <h1 class="display-4 fw-bold text-white mb-3" style="line-height: 1.3;">
-            মানবতার সেবায় <span style="background: linear-gradient(135deg, #00d2ff, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">মেরিনারদের রক্তদান</span> ও কল্যাণ নেটওয়ার্ক
+        <!-- Main Headline -->
+        <h1 class="display-4 fw-bold text-white mb-3" style="line-height: 1.25;">
+            সমুদ্রে নাবিকদের অধিকার রক্ষা, <span style="background: linear-gradient(135deg, #00d2ff, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">মর্যাদা ও মানবকল্যাণের</span> জাতীয় প্ল্যাটফর্ম
         </h1>
         
-        <p class="lead text-secondary mx-auto mb-5" style="max-width: 820px; font-weight: 400;">
-            দেশ ও বিদেশের সমুদ্রে কর্মরত মেরিনার এবং সাধারণ নাগরিকদের যৌথ প্ল্যাটফর্ম। সম্পূর্ণ অরাজনৈতিক, অলাভজনক ও নিঃস্বার্থ মানবসেবায় এক অনন্য উদ্যোগ।
+        <!-- Subtitle -->
+        <p class="lead text-light opacity-90 mx-auto mb-4" style="max-width: 860px; line-height: 1.7; font-size: 1.15rem;">
+            বাংলাদেশি মার্চেন্ট মেরিনার এবং সাধারণ নাগরিকদের সম্মিলিত অরাজনৈতিক ও অলাভজনক উদ্যোগ। জরুরি উদ্ধার, আইনি পরামর্শ, ফ্রেশ ক্যাডেট প্রশিক্ষণ, ডিজিটাল স্মার্ট টুলস এবং জীবন রক্ষাকারী রক্তদান নেটওয়ার্ক সহ ২১টি সেবার সমন্বিত প্ল্যাটফর্ম।
         </p>
 
-        <!-- Main Call To Action Buttons (Glassmorphic) -->
+        <!-- Primary Call to Action Buttons -->
         <div class="d-flex flex-wrap justify-content-center gap-3 mb-5">
-            <a href="<?= BASE_URL ?>/blood_request.php" class="btn btn-blood btn-lg rounded-pill px-4 py-3 emergency-pulse shadow-lg">
-                <i class="bi bi-droplet-fill me-2 fs-5"></i> রক্তের আবেদন করুন (Emergency)
+            <a href="#services-section" class="btn btn-ocean btn-lg rounded-pill px-4 py-3 shadow-lg fw-bold">
+                <i class="bi bi-grid-3x3-gap-fill me-2"></i> আমাদের ২১টি সেবাসমূহ দেখুন
             </a>
-            <a href="<?= BASE_URL ?>/donor_register.php" class="btn btn-ocean btn-lg rounded-pill px-4 py-3 shadow-lg">
-                <i class="bi bi-heart-pulse-fill me-2 fs-5 text-warning"></i> রক্তদাতা হিসেবে নাম লেখান
+            <a href="<?= BASE_URL ?>/blood.php" class="btn btn-blood btn-lg rounded-pill px-4 py-3 emergency-pulse shadow-lg fw-bold">
+                <i class="bi bi-droplet-fill me-2 fs-5"></i> জরুরি রক্তদান পোর্টাল (Live)
             </a>
-            <a href="<?= BASE_URL ?>/volunteer_register.php" class="btn btn-outline-light btn-lg rounded-pill px-4 py-3">
-                <i class="bi bi-people-fill me-2 fs-5 text-info"></i> ভলান্টিয়ার টিমে যোগ দিন
+            <a href="<?= BASE_URL ?>/volunteer_register.php" class="btn btn-volunteer-highlight btn-lg rounded-pill px-4 py-3">
+                <i class="bi bi-person-heart fs-5"></i> Become a BMMC Volunteer
             </a>
         </div>
 
-        <!-- Live Statistics Counter Grid -->
-        <div class="row g-4 mt-4">
-            <div class="col-6 col-lg-3">
-                <div class="glass-card p-4 text-center">
-                    <div class="stat-counter mb-1" data-target="<?= max(1, (int)$totalDonors) ?>">
-                        <?= to_bangla_number($totalDonors) ?>
-                    </div>
-                    <span class="text-secondary small fw-medium">নিবন্ধিত রক্তদাতা</span>
+        <!-- Key Metrics Bar -->
+        <div class="row g-3 justify-content-center">
+            <div class="col-6 col-md-3">
+                <div class="glass-card p-3 p-md-4 text-center h-100 border-info border-opacity-25">
+                    <div class="display-6 fw-bold text-info mb-1">২১টি</div>
+                    <span class="text-secondary small fw-medium">বিশেষায়িত মেরিটাইম সেবা</span>
                 </div>
             </div>
-            <div class="col-6 col-lg-3">
-                <div class="glass-card p-4 text-center border-info border-opacity-25">
-                    <div class="stat-counter text-info mb-1" data-target="<?= max(1, (int)$marinerDonors) ?>">
-                        <?= to_bangla_number($marinerDonors) ?>
-                    </div>
-                    <span class="text-info small fw-medium"><i class="bi bi-compass me-1"></i>মেরিনার্স রক্তদাতা (CDC)</span>
+            <div class="col-6 col-md-3">
+                <div class="glass-card p-3 p-md-4 text-center h-100 border-danger border-opacity-25">
+                    <div class="display-6 fw-bold text-danger mb-1"><?= to_bangla_number($totalDonors ?: 100) ?>+</div>
+                    <span class="text-secondary small fw-medium">নিবন্ধিত রক্তদাতা ও নাবিক</span>
                 </div>
             </div>
-            <div class="col-6 col-lg-3">
-                <div class="glass-card p-4 text-center">
-                    <div class="stat-counter text-success mb-1" data-target="<?= max(1, (int)$fulfilledDonations) ?>">
-                        <?= to_bangla_number($fulfilledDonations) ?>
-                    </div>
-                    <span class="text-secondary small fw-medium">সফল রক্তদান</span>
+            <div class="col-6 col-md-3">
+                <div class="glass-card p-3 p-md-4 text-center h-100 border-warning border-opacity-25">
+                    <div class="display-6 fw-bold text-warning mb-1">২৪/৭</div>
+                    <span class="text-secondary small fw-medium">জরুরি সাপোর্ট ও হেল্পলাইন</span>
                 </div>
             </div>
-            <div class="col-6 col-lg-3">
-                <div class="glass-card p-4 text-center border-danger border-opacity-25">
-                    <div class="stat-counter text-danger mb-1" data-target="<?= max(1, (int)$openRequestsCount) ?>">
-                        <?= to_bangla_number($openRequestsCount) ?>
-                    </div>
-                    <span class="text-danger small fw-medium">জরুরি আবেদন চলমান</span>
+            <div class="col-6 col-md-3">
+                <div class="glass-card p-3 p-md-4 text-center h-100 border-success border-opacity-25">
+                    <div class="display-6 fw-bold text-success mb-1">১০০%</div>
+                    <span class="text-secondary small fw-medium">অরাজনৈতিক ও অলাভজনক</span>
                 </div>
             </div>
         </div>
+
     </div>
 </section>
 
-<!-- Active Blood Requests Section -->
-<section class="py-5">
+<!-- =============================================================
+     FLAGSHIP SPOTLIGHT: ACTIVE BLOOD DONATION NETWORK
+============================================================= -->
+<section class="py-5" style="background: linear-gradient(180deg, rgba(6, 20, 38, 0.5) 0%, rgba(128, 15, 47, 0.15) 50%, rgba(6, 20, 38, 0.8) 100%);">
     <div class="container">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h3 class="fw-bold text-white mb-1"><i class="bi bi-broadcast text-danger me-2"></i>চলমান রক্তের জরুরি আবেদনসমূহ</h3>
-                <p class="text-secondary small mb-0">জরুরি প্রয়োজনে রোগীর জীবন বাঁচাতে অবিলম্বে যোগাযোগ করুন</p>
-            </div>
-            <a href="<?= BASE_URL ?>/blood_request.php" class="btn btn-outline-danger btn-sm rounded-pill px-3">
-                নতুন আবেদন করুন <i class="bi bi-arrow-right ms-1"></i>
-            </a>
-        </div>
+        <div class="glass-blood-card p-4 p-md-5 rounded-4 position-relative overflow-hidden">
+            <!-- Ambient Glow -->
+            <div class="position-absolute" style="top: -60px; right: -60px; width: 220px; height: 220px; background: rgba(239, 35, 60, 0.25); filter: blur(50px); border-radius: 50%;"></div>
 
-        <?php if (empty($recentRequests)): ?>
-            <div class="glass-card p-5 text-center">
-                <i class="bi bi-check-circle-fill text-success fs-1 mb-3 d-block"></i>
-                <h5 class="text-white">বর্তমানে কোনো জরুরি রক্তের আবেদন পেন্ডিং নেই!</h5>
-                <p class="text-secondary small">নতুন রক্তের প্রয়োজন হলে "রক্তের আবেদন করুন" বাটনে ক্লিক করে তথ্য দিন।</p>
-            </div>
-        <?php else: ?>
-            <div class="row g-4">
-                <?php foreach ($recentRequests as $req): ?>
-                    <div class="col-md-6 col-lg-6">
-                        <div class="glass-blood-card p-4 h-100 position-relative">
-                            <div class="d-flex justify-content-between align-items-start mb-3">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div class="blood-pill"><?= htmlspecialchars($req['blood_group']) ?></div>
-                                    <div>
-                                        <h5 class="text-white fw-bold mb-0"><?= htmlspecialchars($req['patient_name']) ?></h5>
-                                        <small class="text-secondary"><i class="bi bi-hospital me-1"></i><?= htmlspecialchars($req['hospital']) ?></small>
-                                    </div>
-                                </div>
-                                <?= get_urgency_badge($req['urgency']) ?>
-                            </div>
+            <div class="row align-items-center g-4">
+                <div class="col-lg-7">
+                    <div class="d-inline-flex align-items-center gap-2 px-3 py-1 mb-3 rounded-pill bg-danger bg-opacity-20 border border-danger border-opacity-40 text-white small fw-bold">
+                        <span class="pulse-dot" style="background: #ef233c;"></span>
+                        <span>সক্রিয় সেবা উইং (Active Live Service)</span>
+                    </div>
 
-                            <div class="row g-2 small text-light mb-3">
-                                <div class="col-6">
-                                    <span class="text-secondary">স্থান:</span> <?= htmlspecialchars($req['area']) ?>, <?= htmlspecialchars($req['district']) ?>
-                                </div>
-                                <div class="col-6">
-                                    <span class="text-secondary">প্রয়োজন:</span> <?= to_bangla_number($req['bags_needed']) ?> ব্যাগ
-                                </div>
-                                <div class="col-6">
-                                    <span class="text-secondary">তারিখ:</span> <?= format_date_bn($req['needed_by'] ?: $req['created_at']) ?>
-                                </div>
-                                <div class="col-6">
-                                    <span class="text-secondary">অবস্থা:</span> <?= get_status_badge($req['status']) ?>
-                                </div>
-                            </div>
+                    <h2 class="display-6 fw-bold text-white mb-3">
+                        <i class="bi bi-droplet-fill text-danger me-2"></i> BMMC রক্তদান নেটওয়ার্ক
+                    </h2>
+                    <p class="text-light opacity-90 mb-4" style="line-height: 1.7; font-size: 1.05rem;">
+                        আমাদের প্রথম সম্পূর্ণ কার্যকর মানবকল্যাণমূলক সেবা। দেশজুড়ে চিকিৎসাধীন সাধারণ রোগী ও সাগরে কর্মরত মেরিনার পরিবারের রক্তের প্রয়োজনে সম্পূর্ণ নিঃস্বার্থ ও মধ্যস্থতাকারীবিহীন জরুরি রক্ত মেলানোর স্বয়ংক্রিয় প্ল্যাটফর্ম।
+                    </p>
 
-                            <div class="d-flex justify-content-between align-items-center pt-3 border-top border-secondary border-opacity-25">
-                                <span class="small text-info">
-                                    <i class="bi bi-telephone-fill me-1"></i><?= htmlspecialchars($req['contact_phone']) ?>
-                                </span>
-                                <a href="<?= BASE_URL ?>/blood_request_detail.php?id=<?= $req['id'] ?>" class="btn btn-outline-light btn-sm rounded-pill px-3">
-                                    বিস্তারিত ও সাহায্য <i class="bi bi-arrow-right"></i>
-                                </a>
-                            </div>
+                    <div class="d-flex flex-wrap gap-2 mb-4">
+                        <span class="badge bg-dark bg-opacity-60 border border-secondary text-light px-3 py-2 rounded-pill small">
+                            <i class="bi bi-shield-check text-success me-1"></i> ৪ মাসের রেস্টিং পিরিয়ড সুরক্ষা
+                        </span>
+                        <span class="badge bg-dark bg-opacity-60 border border-secondary text-light px-3 py-2 rounded-pill small">
+                            <i class="bi bi-lightning-charge-fill text-warning me-1"></i> তাৎক্ষণিক এলাকাভিত্তিক ম্যাচিং
+                        </span>
+                        <span class="badge bg-dark bg-opacity-60 border border-secondary text-light px-3 py-2 rounded-pill small">
+                            <i class="bi bi-telephone-fill text-info me-1"></i> ২৪/৭ হটলাইন সহায়তা
+                        </span>
+                    </div>
+
+                    <!-- Direct Action Buttons -->
+                    <div class="d-flex flex-wrap gap-3">
+                        <a href="<?= BASE_URL ?>/blood.php" class="btn btn-blood btn-lg rounded-pill px-4 py-2 fw-bold shadow-lg">
+                            <i class="bi bi-arrow-right-circle-fill me-2"></i> রক্তদান পোর্টালে যান
+                        </a>
+                        <a href="<?= BASE_URL ?>/blood_request.php" class="btn btn-outline-light btn-lg rounded-pill px-4 py-2 fw-semibold">
+                            <i class="bi bi-plus-circle me-1"></i> রক্তের আবেদন
+                        </a>
+                        <a href="<?= BASE_URL ?>/donor_register.php" class="btn btn-outline-warning btn-lg rounded-pill px-4 py-2 fw-semibold">
+                            <i class="bi bi-heart-fill me-1"></i> ডোনার রেজিস্ট্রেশন
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Recent Blood Appeals Feed Preview -->
+                <div class="col-lg-5">
+                    <div class="p-4 rounded-3 border border-secondary border-opacity-30" style="background: rgba(6, 18, 36, 0.75);">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="text-white fw-bold mb-0"><i class="bi bi-broadcast text-danger me-2"></i>জরুরি রক্তের আবেদনসমূহ</h6>
+                            <a href="<?= BASE_URL ?>/blood.php" class="small text-info text-decoration-none">সকল দেখুন <i class="bi bi-arrow-right"></i></a>
                         </div>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        <?php endif; ?>
-    </div>
-</section>
 
-<!-- How the Smart Blood Automation Works -->
-<section class="py-5">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h3 class="fw-bold text-white mb-2">স্বয়ংক্রিয় রক্তদান ব্যবস্থাপনা কীভাবে কাজ করে?</h3>
-            <p class="text-secondary">কোনো মধ্যস্থতাকারী ছাড়া প্রযুক্তি ও সহমর্মিতার দ্রুততম সমন্বয়</p>
-        </div>
-
-        <div class="row g-4">
-            <!-- Step 1 -->
-            <div class="col-md-6 col-lg-3">
-                <div class="glass-card p-4 h-100 text-center">
-                    <div style="width: 56px; height: 56px; margin: 0 auto 16px; background: rgba(0, 210, 255, 0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid var(--ocean-cyan);">
-                        <span class="fw-bold fs-4 text-info">১</span>
+                        <?php if (empty($recentRequests)): ?>
+                            <div class="text-center py-4">
+                                <i class="bi bi-check-circle-fill text-success fs-2 mb-2 d-block"></i>
+                                <span class="text-light small">বর্তমানে কোনো জরুরি রক্তের আবেদন পেন্ডিং নেই!</span>
+                            </div>
+                        <?php else: ?>
+                            <div class="d-flex flex-column gap-2">
+                                <?php foreach ($recentRequests as $req): ?>
+                                <div class="p-2 rounded-3 border border-secondary border-opacity-25 d-flex align-items-center justify-content-between" style="background: rgba(255, 255, 255, 0.02);">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="blood-pill py-1 px-2" style="font-size: 0.85rem; min-width: 42px;"><?= htmlspecialchars($req['blood_group']) ?></span>
+                                        <div>
+                                            <div class="text-white fw-semibold small text-truncate" style="max-width: 150px;"><?= htmlspecialchars($req['patient_name']) ?></div>
+                                            <small class="text-secondary" style="font-size: 0.72rem;"><?= htmlspecialchars($req['area']) ?>, <?= htmlspecialchars($req['district']) ?></small>
+                                        </div>
+                                    </div>
+                                    <a href="<?= BASE_URL ?>/blood_request_detail.php?id=<?= $req['id'] ?>" class="btn btn-outline-danger btn-sm rounded-pill px-2 py-1" style="font-size: 0.75rem;">
+                                        সাহায্য <i class="bi bi-chevron-right"></i>
+                                    </a>
+                                </div>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
                     </div>
-                    <h5 class="text-white fw-bold mb-2">আবেদন জমা</h5>
-                    <p class="text-secondary small mb-0">
-                        রোগীর স্বজনরা হাসপাতালের নাম, ব্লাড গ্রুপ ও এলাকা উল্লেখ করে আবেদন জমা দেন।
-                    </p>
-                </div>
-            </div>
-
-            <!-- Step 2 -->
-            <div class="col-md-6 col-lg-3">
-                <div class="glass-card p-4 h-100 text-center">
-                    <div style="width: 56px; height: 56px; margin: 0 auto 16px; background: rgba(239, 35, 60, 0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid var(--blood-crimson);">
-                        <span class="fw-bold fs-4 text-danger">২</span>
-                    </div>
-                    <h5 class="text-white fw-bold mb-2">স্বয়ংক্রিয় ফিল্টারিং</h5>
-                    <p class="text-secondary small mb-0">
-                        সিস্টেম তাৎক্ষণিকভাবে একই এলাকা ও গ্রুপের প্রস্তুত (Available) ডোনারদের চিহ্নিত করে।
-                    </p>
-                </div>
-            </div>
-
-            <!-- Step 3 -->
-            <div class="col-md-6 col-lg-3">
-                <div class="glass-card p-4 h-100 text-center">
-                    <div style="width: 56px; height: 56px; margin: 0 auto 16px; background: rgba(245, 158, 11, 0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid #f59e0b;">
-                        <span class="fw-bold fs-4 text-warning">৩</span>
-                    </div>
-                    <h5 class="text-white fw-bold mb-2">বিজ্ঞপ্তি ও ওয়ান-ক্লিক সম্মতি</h5>
-                    <p class="text-secondary small mb-0">
-                        ডোনারের কাছে তাৎক্ষণিক ইমেইল ও নোটিফিকেশন যায়। ডোনার এক ক্লিকেই "রাজি" হতে পারেন।
-                    </p>
-                </div>
-            </div>
-
-            <!-- Step 4 -->
-            <div class="col-md-6 col-lg-3">
-                <div class="glass-card p-4 h-100 text-center">
-                    <div style="width: 56px; height: 56px; margin: 0 auto 16px; background: rgba(16, 185, 129, 0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid #10b981;">
-                        <span class="fw-bold fs-4 text-success">৪</span>
-                    </div>
-                    <h5 class="text-white fw-bold mb-2">৪ মাসের রেস্টিং পিরিয়ড</h5>
-                    <p class="text-secondary small mb-0">
-                        সফল রক্তদানের পর ডোনারের শরীর সুস্থ রাখতে ৪ মাস কোনো নতুন কল যাবে না। ৪ মাস পর তিনি স্বয়ংক্রিয়ভাবে প্রস্তুত হবেন।
-                    </p>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- About Community & Volunteer Invitation Section -->
-<section class="py-5">
+<!-- =============================================================
+     INTERACTIVE SERVICES SHOWCASE: ALL 21 SERVICES
+============================================================= -->
+<section id="services-section" class="py-5">
     <div class="container">
-        <div class="glass-card p-5">
+        
+        <!-- Section Header -->
+        <div class="text-center mb-4">
+            <div class="d-inline-flex align-items-center gap-2 px-3 py-1 mb-3 rounded-pill bg-info bg-opacity-10 border border-info border-opacity-25 text-info small fw-bold">
+                <i class="bi bi-grid-fill"></i>
+                <span>BMMC মাল্টি-ডিসিপ্লিনারি মেরিটাইম সেবা হাব</span>
+            </div>
+            <h2 class="display-6 fw-bold text-white mb-2">আমাদের ২১টি সার্বজনীন সেবাসমূহ</h2>
+            <p class="text-secondary mx-auto" style="max-width: 760px;">
+                নাবিকদের ক্যারিয়ার শুরু থেকে শুরু করে সমুদ্রে নিরাপত্তা, পারিবারিক কল্যাণ, আইনি অধিকার ও ডিজিটাল ইউটিলিটি—প্রতিটি উইং সম্পূর্ণ পেশাদারিত্বের সাথে ডিজাইন করা হয়েছে।
+            </p>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="d-flex flex-wrap justify-content-center gap-2 mb-5">
+            <button class="service-filter-btn active" onclick="filterServices('all', this)">
+                <i class="bi bi-collection-fill"></i> সকল সেবা (২১টি)
+            </button>
+            <button class="service-filter-btn" onclick="filterServices('emergency', this)">
+                <i class="bi bi-shield-exclamation text-danger"></i> জরুরি সাড়া ও কল্যাণ (৫টি)
+            </button>
+            <button class="service-filter-btn" onclick="filterServices('career', this)">
+                <i class="bi bi-mortarboard-fill text-info"></i> ক্যারিয়ার ও ক্যাডেট (৪টি)
+            </button>
+            <button class="service-filter-btn" onclick="filterServices('tools', this)">
+                <i class="bi bi-cpu-fill text-warning"></i> স্মার্ট টুলস ও ইউটিলিটি (৬টি)
+            </button>
+            <button class="service-filter-btn" onclick="filterServices('health', this)">
+                <i class="bi bi-hospital-fill text-success"></i> স্বাস্থ্য ও ডিরেক্টরি (১টি)
+            </button>
+            <button class="service-filter-btn" onclick="filterServices('community', this)">
+                <i class="bi bi-globe2 text-primary"></i> কমিউনিটি ও স্বচ্ছতা (৫টি)
+            </button>
+        </div>
+
+        <!-- Services 21 Cards Grid -->
+        <div class="row g-4" id="servicesGrid">
+            <?php foreach ($services as $s): 
+                $isLive = ($s['status'] === 'live');
+            ?>
+            <div class="col-md-6 col-lg-4 service-item" data-pillar="<?= htmlspecialchars($s['pillar']) ?>">
+                <div class="service-showcase-card <?= $isLive ? 'card-live' : '' ?>">
+                    <div>
+                        <!-- Header Icon & Status Badge -->
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div class="service-card-icon" style="background: rgba(<?= $isLive ? '239, 35, 60, 0.15' : '0, 210, 255, 0.12' ?>); border: 1px solid <?= htmlspecialchars($s['color']) ?>; color: <?= htmlspecialchars($s['color']) ?>;">
+                                <i class="bi <?= htmlspecialchars($s['icon']) ?>"></i>
+                            </div>
+                            <?php if ($isLive): ?>
+                                <span class="badge-live-pulse">সক্রিয় (LIVE)</span>
+                            <?php else: ?>
+                                <span class="badge-soon">নির্মাণাধীন</span>
+                            <?php endif; ?>
+                        </div>
+
+                        <!-- Pillar Tag -->
+                        <small class="text-info text-uppercase fw-bold d-block mb-1" style="font-size: 0.72rem; letter-spacing: 0.5px;">
+                            <?= htmlspecialchars($pillars[$s['pillar']]['title'] ?? '') ?>
+                        </small>
+
+                        <!-- Title -->
+                        <h5 class="text-white fw-bold mb-1" style="line-height: 1.3;">
+                            <?= htmlspecialchars($s['title']) ?>
+                        </h5>
+                        <small class="text-secondary d-block mb-3" style="font-size: 0.78rem;">
+                            <?= htmlspecialchars($s['title_en']) ?>
+                        </small>
+
+                        <!-- Summary -->
+                        <p class="text-light opacity-80 small mb-4" style="line-height: 1.6;">
+                            <?= htmlspecialchars($s['summary']) ?>
+                        </p>
+                    </div>
+
+                    <!-- Action Button -->
+                    <div class="pt-3 border-top border-secondary border-opacity-25">
+                        <a href="<?= BASE_URL ?>/<?= htmlspecialchars($s['link']) ?>" class="btn <?= $isLive ? 'btn-blood' : 'btn-outline-info' ?> btn-sm rounded-pill w-100 py-2 fw-semibold">
+                            <?= htmlspecialchars($s['button_text']) ?> <i class="bi bi-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+
+    </div>
+</section>
+
+<!-- =============================================================
+     BECOME A BMMC VOLUNTEER CTA SECTION
+============================================================= -->
+<section class="py-5" style="background: linear-gradient(135deg, rgba(8, 20, 38, 0.8) 0%, rgba(2, 132, 199, 0.15) 100%);">
+    <div class="container">
+        <div class="glass-card p-4 p-md-5 rounded-4 border-info border-opacity-30 position-relative">
             <div class="row align-items-center g-4">
                 <div class="col-lg-8">
-                    <div class="d-inline-flex align-items-center gap-2 px-3 py-1 mb-3 rounded-pill bg-primary bg-opacity-20 text-info border border-info border-opacity-25">
-                        <i class="bi bi-compass"></i>
-                        <small class="fw-bold">বাংলাদেশ মার্চেন্ট মেরিনার্স ভলান্টিয়ার টিম</small>
+                    <div class="d-inline-flex align-items-center gap-2 px-3 py-1 mb-3 rounded-pill bg-info bg-opacity-15 border border-info border-opacity-30 text-info small fw-bold">
+                        <i class="bi bi-person-heart"></i>
+                        <span>বিএমএমসি সেচ্ছাসেবী নেটওয়ার্ক</span>
                     </div>
-                    <h2 class="fw-bold text-white mb-3">শতভাগ অলাভজনক ও নিঃস্বার্থ মানবসেবায় আমাদের প্রত্যয়</h2>
-                    <p class="text-light" style="line-height: 1.8;">
-                        মেরিন কমিউনিটির বিভিন্ন কল্যানমূলক কাজের জন্য মেরিনারদের নিয়ে গঠিত এই ভলান্টিয়ার টিম। যারা অতীতে কাজ করেছেন কিংবা ভবিষ্যতে মেরিন ও সাধারণ মানুষের কল্যানে নানামুখী মানবসেবায় যুক্ত থাকতে আন্তরিকভাবে আগ্রহী — তাঁদের সকলের জন্য এই প্ল্যাটফর্ম উন্মুক্ত।
+
+                    <h2 class="display-6 fw-bold text-white mb-3">
+                        আপনার মেধা, সময় ও সহমর্মিতা দিয়ে শামিল হোন
+                    </h2>
+                    <p class="text-light opacity-90 mb-4" style="line-height: 1.8;">
+                        BMMC কোনো বাণিজ্যিক প্রতিষ্ঠান নয়—এটি মেরিনার ও সাধারণ নাগরিকদের একটি নিঃস্বার্থ যৌথ মানবকল্যাণ আন্দোলন। সাগরে বিপন্ন নাবিকদের উদ্ধার, ক্যাডেটদের প্রশিক্ষণ, রক্তদান সমন্বয় বা আইনি সহমর্মিতা—যেকোনো উইংয়ে আপনি ভলান্টিয়ার হতে পারেন।
                     </p>
-                    <div class="alert alert-dark bg-opacity-50 border-secondary mb-0">
-                        <i class="bi bi-quote fs-3 text-info me-2"></i>
-                        <span class="text-white-50 fst-italic">"দুনিয়াবি কোনো বিনিময় বা বেতনাদি দেওয়া সম্ভব না — পুরোটাই শতভাগ স্বেচ্ছাসেবা!"</span>
+
+                    <div class="alert alert-dark bg-opacity-50 border-secondary mb-0 py-2 small text-warning">
+                        <i class="bi bi-info-circle-fill me-1"></i> 
+                        ভলান্টিয়ার ফর্মে <strong>'Agree to donate blood'</strong> চেকলিস্ট সিলেক্ট করলে একই সাথে ব্লাড ডোনার নেটওয়ার্কেও নিবন্ধিত হবেন!
                     </div>
                 </div>
+
                 <div class="col-lg-4 text-center">
-                    <div class="p-4 rounded-4 border border-secondary border-opacity-25" style="background: rgba(0,0,0,0.2);">
-                        <i class="bi bi-patch-check-fill text-info fs-1 mb-3 d-block"></i>
-                        <h5 class="text-white fw-bold mb-2">আপনি কি যোগ দিতে চান?</h5>
-                        <p class="text-secondary small mb-4">আপনার দক্ষতা ও সময় দিয়ে আর্তমানবতার সেবায় শামিল হোন।</p>
-                        <a href="<?= BASE_URL ?>/volunteer_register.php" class="btn btn-ocean w-100 py-2">
-                            <i class="bi bi-pencil-square me-2"></i> ভলান্টিয়ার ফরম পূরণ করুন
+                    <div class="p-4 rounded-4 border border-secondary border-opacity-25" style="background: rgba(6, 18, 36, 0.85);">
+                        <i class="bi bi-people-fill text-info fs-1 mb-3 d-block"></i>
+                        <h5 class="text-white fw-bold mb-2">ভলান্টিয়ার আবেদন</h5>
+                        <p class="text-secondary small mb-4">চট্টগ্রাম, ঢাকা, খুলনা বা সমুদ্রের যেকোনো অবস্থান থেকেই যুক্ত হতে পারেন।</p>
+                        <a href="<?= BASE_URL ?>/volunteer_register.php" class="btn btn-volunteer-highlight w-100 py-3 rounded-pill fs-6">
+                            <i class="bi bi-pencil-square me-2"></i> Become a BMMC Volunteer
                         </a>
                     </div>
                 </div>
@@ -257,5 +334,68 @@ $recentRequests = $reqStmt->fetchAll();
         </div>
     </div>
 </section>
+
+<!-- =============================================================
+     TRANSPARENCY & CORE COMMUNITY COMMITMENT
+============================================================= -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="glass-card p-4 h-100 text-center">
+                    <div style="width: 54px; height: 54px; margin: 0 auto 16px; background: rgba(16, 185, 129, 0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid #10b981;">
+                        <i class="bi bi-shield-check text-success fs-3"></i>
+                    </div>
+                    <h5 class="text-white fw-bold mb-2">১০০% আর্থিক স্বচ্ছতা</h5>
+                    <p class="text-secondary small mb-0">
+                        প্রতিটি টাকা অনুদান ও খরচের হিসাব ওয়েবসাইটে উন্মুক্ত লাইভ লেজারের মাধ্যমে সবার পরীক্ষার জন্য প্রদর্শিত হবে।
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-card p-4 h-100 text-center">
+                    <div style="width: 54px; height: 54px; margin: 0 auto 16px; background: rgba(0, 210, 255, 0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid #00d2ff;">
+                        <i class="bi bi-patch-check-fill text-info fs-3"></i>
+                    </div>
+                    <h5 class="text-white fw-bold mb-2">ভেরিফায়েড নাবিক সম্প্রদায়</h5>
+                    <p class="text-secondary small mb-0">
+                        সরকারি সিডিসি ও পরিচয়পত্র যাচাইয়ের মাধ্যমে নকল পরিচয় ও ভুয়া এজেন্সির প্রতারণা নির্মূলে অঙ্গীকারবদ্ধ।
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-card p-4 h-100 text-center">
+                    <div style="width: 54px; height: 54px; margin: 0 auto 16px; background: rgba(245, 158, 11, 0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid #f59e0b;">
+                        <i class="bi bi-heart-fill text-warning fs-3"></i>
+                    </div>
+                    <h5 class="text-white fw-bold mb-2">নিঃস্বার্থ মানবসেবা</h5>
+                    <p class="text-secondary small mb-0">
+                        কোনো রাজনৈতিক সংশ্লিষ্টতা নেই। আমাদের একমাত্র লক্ষ্য বিশ্বজুড়ে মেরিনার এবং দেশের সাধারণ মানুষের পাশে দাঁড়ানো।
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Filter Script for 21 Services -->
+<script>
+function filterServices(pillarId, btn) {
+    // Update active button state
+    document.querySelectorAll('.service-filter-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+
+    // Filter cards
+    const items = document.querySelectorAll('.service-item');
+    items.forEach(item => {
+        const itemPillar = item.getAttribute('data-pillar');
+        if (pillarId === 'all' || itemPillar === pillarId) {
+            item.style.display = 'block';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+}
+</script>
 
 <?php require_once __DIR__ . '/includes/footer.php'; ?>

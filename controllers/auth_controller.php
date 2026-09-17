@@ -248,7 +248,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'verify_otp') {
     }
 }
 
-// 4. Volunteer Form Submission
+// 4. Volunteer Form Submission with Blood Donation Opt-in
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'volunteer_register') {
     if (!validate_csrf()) {
         set_flash('danger', 'নিরাপত্তা টোকেন সঠিক নয়।');
@@ -263,21 +263,89 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'volunteer_register') {
     $isMariner = ($userType === 'mariner') ? 1 : 0;
     $cdcSid = $isMariner ? sanitize($_POST['cdc_sid_no'] ?? '') : null;
     $rank = $isMariner ? sanitize($_POST['mariner_rank'] ?? '') : null;
+    $portCity = sanitize($_POST['port_city'] ?? '');
     $interest = isset($_POST['interest']) ? implode(', ', array_map('sanitize', $_POST['interest'])) : '';
+    $agreeBlood = !empty($_POST['agree_blood_donation']) ? 1 : 0;
+    $bloodGroup = $agreeBlood ? sanitize($_POST['blood_group'] ?? '') : null;
+    $lastDonation = (!empty($_POST['last_donation_date'])) ? $_POST['last_donation_date'] : null;
     $message = sanitize($_POST['message'] ?? '');
+
+    if (empty($name) || empty($phone) || !$email) {
+        set_flash('danger', 'অনুগ্রহ করে আপনার নাম, সচল মোবাইল নম্বর ও সঠিক ইমেইল প্রদান করুন।');
+        header('Location: ' . BASE_URL . '/volunteer_register.php');
+        exit;
+    }
 
     try {
         $ins = $pdo->prepare("
-            INSERT INTO volunteers (name, email, phone, is_mariner, cdc_sid_no, rank_designation, interest_area, message)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO volunteers (name, email, phone, is_mariner, cdc_sid_no, rank_designation, port_city, interest_area, agree_blood_donation, blood_group, last_donation_date, message)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ");
-        $ins->execute([$name, $email, $phone, $isMariner, $cdcSid, $rank, $interest, $message]);
+        $ins->execute([$name, $email, $phone, $isMariner, $cdcSid, $rank, $portCity, $interest, $agreeBlood, $bloodGroup, $lastDonation, $message]);
 
-        set_flash('success', 'ধন্যবাদ! BMMC ভলান্টিয়ার হিসেবে আপনার আবেদন সফলভাবে গৃহীত হয়েছে। আমাদের সমন্বয়ক টিম আপনার সাথে দ্রুত যোগাযোগ করবে।');
-        header('Location: ' . BASE_URL . '/index.php');
+        // If user agreed to donate blood, automatically enroll into BMMC Blood Donor Database!
+        $bloodEnrolled = false;
+        if ($agreeBlood && !empty($bloodGroup)) {
+            // 1. Check if user already exists in users table
+            $uStmt = $pdo->prepare("SELECT * FROM users WHERE email = ? OR phone = ?");
+            $uStmt->execute([$email, $phone]);
+            $existingUser = $uStmt->fetch();
+
+            if ($existingUser) {
+                $userId = (int)$existingUser['id'];
+                // Update user type if mariner
+                if ($isMariner && $existingUser['user_type'] !== 'mariner') {
+                    $pdo->prepare("UPDATE users SET user_type = 'mariner', cdc_sid_no = ?, mariner_rank = ? WHERE id = ?")
+                        ->execute([$cdcSid, $rank, $userId]);
+                }
+            } else {
+                // Create user account
+                $tempPass = password_hash(bin2hex(random_bytes(6)), PASSWORD_DEFAULT);
+                $insUser = $pdo->prepare("
+                    INSERT INTO users (name, email, phone, password_hash, user_type, cdc_sid_no, mariner_rank, role)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, 'donor')
+                ");
+                $insUser->execute([$name, $email, $phone, $tempPass, $userType, $cdcSid, $rank]);
+                $userId = (int)$pdo->lastInsertId();
+            }
+
+            // 2. Check if donor profile exists in donors table
+            $dStmt = $pdo->prepare("SELECT * FROM donors WHERE user_id = ?");
+            $dStmt->execute([$userId]);
+            $existingDonor = $dStmt->fetch();
+
+            $district = !empty($portCity) ? $portCity : 'Chattogram';
+            $area = !empty($portCity) ? $portCity : 'Chattogram Port Area';
+
+            if ($existingDonor) {
+                $pdo->prepare("
+                    UPDATE donors 
+                    SET blood_group = ?, district = ?, area = ?, is_available = 1, last_donation_date = COALESCE(?, last_donation_date)
+                    WHERE user_id = ?
+                ")->execute([$bloodGroup, $district, $area, $lastDonation, $userId]);
+            } else {
+                $pdo->prepare("
+                    INSERT INTO donors (user_id, blood_group, district, area, whatsapp, is_available, last_donation_date)
+                    VALUES (?, ?, ?, ?, ?, 1, ?)
+                ")->execute([$userId, $bloodGroup, $district, $area, $phone, $lastDonation]);
+            }
+
+            $bloodEnrolled = true;
+            if (empty($_SESSION['user_id'])) {
+                $_SESSION['user_id'] = $userId;
+            }
+        }
+
+        if ($bloodEnrolled) {
+            set_flash('success', "🎉 <strong>অভিনন্দন, {$name}!</strong> BMMC ভলান্টিয়ার টিমে আপনার নিবন্ধন সফল হয়েছে এবং রক্তদানে সম্মতি দেওয়ায় আপনার প্রোফাইলটি <strong>BMMC ব্লাড ডোনার নেটওয়ার্কেও</strong> সরাসরি অন্তর্ভুক্ত হয়েছে!");
+            header('Location: ' . BASE_URL . '/blood.php');
+        } else {
+            set_flash('success', "🎉 <strong>ধন্যবাদ, {$name}!</strong> BMMC ভলান্টিয়ার হিসেবে আপনার আবেদন সফলভাবে গৃহীত হয়েছে। আমাদের সমন্বয়ক টিম খুব শীঘ্রই আপনার সাথে যোগাযোগ করবে।");
+            header('Location: ' . BASE_URL . '/index.php');
+        }
         exit;
     } catch (Exception $e) {
-        set_flash('danger', 'আবেদন সংরক্ষণে ত্রুটি: ' . $e->getMessage());
+        set_flash('danger', 'আবেদন সংরক্ষণে ত্রুটি দেখা দিয়েছে: ' . $e->getMessage());
         header('Location: ' . BASE_URL . '/volunteer_register.php');
         exit;
     }

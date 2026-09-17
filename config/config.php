@@ -82,8 +82,9 @@ if (file_exists($maintenanceConfigFile)) {
         $reqUri = $_SERVER['REQUEST_URI'] ?? '';
         $reqScript = $_SERVER['SCRIPT_NAME'] ?? '';
         
-        // Exemptions: /m, /m.php, /assets/, setup.php, maintenance.php, and admin bypass session
+        // Exemptions: CLI scripts, /m, /m.php, /assets/, setup.php, maintenance.php, and admin bypass session
         $isMaintenanceExempt = (
+            php_sapi_name() === 'cli' ||
             str_contains($reqUri, '/m.php') ||
             str_contains($reqScript, 'm.php') ||
             preg_match('#^/m(/|\?|$)#', $reqUri) ||
