@@ -251,9 +251,9 @@ $recentRequests = $reqStmt->fetchAll();
         <div class="glass-card p-4 p-md-5">
             <div class="row align-items-center g-4">
                 <div class="col-lg-8">
-                    <div class="d-inline-flex align-items-center gap-2 px-3 py-1 mb-3 rounded-pill bg-primary bg-opacity-20 text-info border border-info border-opacity-25">
+                    <div class="service-roadmap-badge mb-3">
                         <i class="bi bi-compass"></i>
-                        <small class="fw-bold"><?= __('blood_callout_badge') ?></small>
+                        <span><?= __('blood_callout_badge') ?></span>
                     </div>
                     <h2 class="fw-bold text-white mb-3"><?= __('blood_callout_title') ?></h2>
                     <p class="text-light" style="line-height: 1.8;">

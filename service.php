@@ -97,12 +97,12 @@ $relatedServices = array_filter(get_services_by_pillar($service['pillar']), func
                     </p>
 
                     <!-- Status Indicator Pill -->
-                    <div class="d-inline-flex align-items-center gap-3 px-3 py-2 rounded-3 border border-warning border-opacity-30 bg-warning bg-opacity-10 text-warning">
+                    <div class="service-status-pill d-inline-flex align-items-center gap-3 px-3 py-2 rounded-3">
                         <div class="spinner-grow spinner-grow-sm text-warning" role="status">
                             <span class="visually-hidden">Loading...</span>
                         </div>
                         <div class="small fw-semibold">
-                            <?= __('blood_status_label') ?> <span class="text-white"><?= htmlspecialchars($service['badge']) ?></span>
+                            <?= __('blood_status_label') ?> <span class="service-status-value"><?= htmlspecialchars($service['badge']) ?></span>
                         </div>
                     </div>
                 </div>
@@ -113,19 +113,19 @@ $relatedServices = array_filter(get_services_by_pillar($service['pillar']), func
                         <div style="width: 80px; height: 80px; margin: 0 auto 16px; background: rgba(0, 210, 255, 0.15); border-radius: 20px; display: flex; align-items: center; justify-content: center; border: 2px solid #00d2ff; box-shadow: 0 0 25px rgba(0, 210, 255, 0.3);">
                             <i class="bi <?= htmlspecialchars($service['icon']) ?> fs-1 text-info"></i>
                         </div>
-                        <h6 class="text-white fw-bold mb-1"><?= __('service_wing_title') ?></h6>
-                        <small class="text-secondary d-block mb-3"><?= __('service_wing_sub') ?></small>
+                        <h4 class="text-white fw-bold mb-1"><?= htmlspecialchars($service['title']) ?></h4>
+                        <div class="text-info small fw-medium mb-3"><?= htmlspecialchars($service['title_en']) ?></div>
                         
-                        <a href="<?= BASE_URL ?>/volunteer_register.php?wing=<?= urlencode($service['title']) ?>" class="btn btn-ocean w-100 py-2 rounded-pill fw-semibold shadow-sm">
-                            <i class="bi bi-people-fill me-2"></i> <?= __('service_btn_volunteer_wing') ?>
-                        </a>
+                        <div class="d-inline-block px-3 py-1 rounded-pill small fw-semibold" style="background: rgba(255, 255, 255, 0.08); color: #cbd5e1; border: 1px solid rgba(255, 255, 255, 0.15);">
+                            <i class="bi bi-tag-fill me-1 text-info"></i> ID: #<?= htmlspecialchars($service['id']) ?>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Official "Under Development / Coming Soon" Notice Box -->
-        <div class="glass-card p-4 p-md-5 mb-5 border-warning border-opacity-30" style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.08) 0%, rgba(6, 18, 36, 0.85) 100%);">
+        <div class="glass-card service-under-dev-card p-4 p-md-5 mb-5 border-warning border-opacity-30">
             <div class="row align-items-center g-4">
                 <div class="col-md-2 text-center">
                     <div style="width: 70px; height: 70px; margin: 0 auto; background: rgba(245, 158, 11, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid #f59e0b; box-shadow: 0 0 20px rgba(245, 158, 11, 0.35);">
@@ -133,8 +133,9 @@ $relatedServices = array_filter(get_services_by_pillar($service['pillar']), func
                     </div>
                 </div>
                 <div class="col-md-7">
-                    <div class="d-inline-block px-3 py-1 mb-2 rounded-pill bg-warning bg-opacity-20 text-warning border border-warning border-opacity-40 small fw-bold">
-                        <i class="bi bi-tools me-1"></i> <?= __('service_under_dev_pill') ?>
+                    <div class="service-dev-badge mb-2">
+                        <i class="bi bi-tools me-1"></i>
+                        <span><?= __('service_under_dev_pill') ?></span>
                     </div>
                     <h4 class="text-white fw-bold mb-2"><?= __('service_under_dev_title') ?></h4>
                     <p class="text-light opacity-75 mb-0" style="line-height: 1.6;">
@@ -186,7 +187,7 @@ $relatedServices = array_filter(get_services_by_pillar($service['pillar']), func
         <?php if (!empty($service['features'])): ?>
         <div class="glass-card p-4 p-md-5 mb-5">
             <div class="text-center mb-4">
-                <div class="d-inline-flex align-items-center gap-2 px-3 py-1 mb-2 rounded-pill bg-primary bg-opacity-20 text-info border border-info border-opacity-30 small fw-bold">
+                <div class="service-roadmap-badge mb-2">
                     <i class="bi bi-stars"></i>
                     <span><?= __('service_roadmap_pill') ?></span>
                 </div>

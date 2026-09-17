@@ -64,21 +64,21 @@ $services = get_bmmc_services();
                     </a>
 
                     <!-- Desktop Mega Menu -->
-                    <div class="dropdown-menu dropdown-menu-dark dropdown-mega-menu border-0 shadow-lg" id="desktopServicesMenu" aria-labelledby="servicesDropdown" style="background: rgba(6, 18, 36, 0.98) !important; background-color: #061426 !important; color: #ffffff !important;">
-                        <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary border-opacity-25">
+                    <div class="dropdown-menu dropdown-mega-menu border-0 shadow-lg" id="desktopServicesMenu" aria-labelledby="servicesDropdown">
+                        <div class="d-flex justify-content-between align-items-center mb-3 pb-2 mega-header-border">
                             <div>
-                                <h6 class="text-white fw-bold mb-0 d-flex align-items-center gap-2">
+                                <h6 class="mega-header-title fw-bold mb-0 d-flex align-items-center gap-2">
                                     <i class="bi bi-compass text-info fs-5"></i>
                                     <span><?= __('nav_mega_title') ?></span>
                                 </h6>
-                                <small class="text-secondary" style="font-size: 0.78rem;"><?= __('nav_mega_subtitle') ?></small>
+                                <small class="mega-header-subtitle" style="font-size: 0.78rem;"><?= __('nav_mega_subtitle') ?></small>
                             </div>
                             <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 px-3 py-1 rounded-pill small">
+                                <span class="badge mega-status-badge px-3 py-1 rounded-pill small">
                                     <i class="bi bi-check-circle-fill me-1"></i> <?= __('nav_mega_status') ?>
                                 </span>
-                                <button type="button" class="btn btn-outline-secondary btn-sm rounded-circle p-0 text-white-50 border-0" id="closeMegaMenuBtn" title="মেনু বন্ধ করুন" style="width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.08); cursor: pointer;">
-                                    <i class="bi bi-x-lg text-white" style="font-size: 0.85rem;"></i>
+                                <button type="button" class="btn mega-close-btn btn-sm rounded-circle p-0 border-0" id="closeMegaMenuBtn" title="<?= __('btn_close', 'Close') ?>">
+                                    <i class="bi bi-x-lg" style="font-size: 0.85rem;"></i>
                                 </button>
                             </div>
                         </div>
@@ -117,11 +117,11 @@ $services = get_bmmc_services();
                             <?php endforeach; ?>
                         </div>
 
-                        <div class="mt-3 pt-3 border-top border-secondary border-opacity-25 d-flex justify-content-between align-items-center">
-                            <div class="small text-secondary">
+                        <div class="mt-3 pt-3 mega-footer-border d-flex justify-content-between align-items-center">
+                            <div class="small mega-footer-hint">
                                 <i class="bi bi-info-circle me-1 text-info"></i> <?= __('nav_mega_footer_hint') ?>
                             </div>
-                            <a href="<?= BASE_URL ?>/index.php#services-section" class="btn btn-outline-info btn-sm rounded-pill px-3 py-1 close-mega-on-click">
+                            <a href="<?= BASE_URL ?>/index.php#services-section" class="btn mega-footer-btn btn-sm rounded-pill px-3 py-1 close-mega-on-click">
                                 <?= __('nav_view_all_services') ?> <i class="bi bi-arrow-right ms-1"></i>
                             </a>
                         </div>

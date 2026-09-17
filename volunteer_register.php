@@ -63,7 +63,7 @@ $portCities = is_english() ? [
                     <p class="text-secondary small mb-3" style="max-width: 600px; margin: 0 auto;">
                         <?= __('vol_hero_subtitle') ?>
                     </p>
-                    <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-warning bg-opacity-10 border border-warning border-opacity-30 text-warning small">
+                    <div class="service-dev-badge mb-3">
                         <i class="bi bi-heart-fill"></i>
                         <span><?= __('vol_badge_selfless') ?></span>
                     </div>
