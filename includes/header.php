@@ -18,11 +18,29 @@ $currentUrl = $currentUrl ?? ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !=
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($pageTitle) ?> — <?= SITE_NAME_EN ?></title>
 
+    <!-- Immediate Anti-Flicker Day/Night Theme Initialization (GMT+6 / LocalStorage) -->
+    <script>
+        (function() {
+            try {
+                var pref = localStorage.getItem('bmmc_theme_preference');
+                var theme = pref;
+                if (!theme || theme === 'auto') {
+                    var now = new Date();
+                    var utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+                    var bstHour = new Date(utc + (3600000 * 6)).getHours();
+                    theme = (bstHour >= 6 && bstHour < 18) ? 'light' : 'dark';
+                }
+                document.documentElement.setAttribute('data-theme', theme);
+                document.documentElement.setAttribute('data-bs-theme', theme);
+            } catch(e) {}
+        })();
+    </script>
+
     <!-- Primary SEO Meta Tags -->
     <meta name="title" content="<?= htmlspecialchars($ogTitle) ?>">
     <meta name="description" content="<?= htmlspecialchars($ogDescription) ?>">
     <meta name="author" content="Bangladesh Merchant Mariners Community (BMMC)">
-    <meta name="theme-color" content="#061426">
+    <meta name="theme-color" id="metaThemeColor" content="#061426">
 
     <!-- Open Graph / Facebook / WhatsApp / Messenger -->
     <meta property="og:type" content="website">

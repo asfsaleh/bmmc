@@ -21,10 +21,15 @@ $services = get_bmmc_services();
             </div>
         </a>
 
-        <!-- Custom Mobile Toggle Button -->
-        <button class="navbar-toggler border-0 shadow-none p-2 rounded-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2) !important;">
-            <i class="bi bi-list fs-2 text-white"></i>
-        </button>
+        <!-- Mobile Header Action Area (Day/Night switch & Hamburger toggler) -->
+        <div class="d-flex align-items-center gap-2 d-lg-none">
+            <button class="theme-toggle-btn js-theme-toggle" type="button" aria-label="Toggle Theme" title="দিন/রাত মোড পরিবর্তন করুন">
+                <i class="bi bi-sun-fill theme-toggle-icon"></i>
+            </button>
+            <button class="navbar-toggler border-0 shadow-none p-2 rounded-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2) !important;">
+                <i class="bi bi-list fs-2"></i>
+            </button>
+        </div>
 
         <!-- Navbar Links & Mobile Collapsible Drawer -->
         <div class="collapse navbar-collapse mobile-nav-collapse" id="navbarMain">
@@ -186,6 +191,11 @@ $services = get_bmmc_services();
             <!-- Mobile & Desktop Action Area (Right Side) -->
             <div class="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center gap-2 mt-3 mt-lg-0 pt-3 pt-lg-0 border-top border-lg-0 border-secondary border-opacity-25 flex-shrink-0">
                 
+                <!-- Day/Night Switch for Desktop -->
+                <button class="theme-toggle-btn js-theme-toggle d-none d-lg-inline-flex me-1" type="button" aria-label="Toggle Theme" title="দিন/রাত মোড পরিবর্তন করুন (GMT+6 স্বয়ংক্রিয়)">
+                    <i class="bi bi-sun-fill theme-toggle-icon"></i>
+                </button>
+
                 <!-- User Login / Profile Dropdown -->
                 <?php if ($currentUser): ?>
                     <div class="dropdown nav-action-btn flex-shrink-0">
@@ -273,5 +283,83 @@ document.addEventListener('DOMContentLoaded', function () {
             closeDesktopMega();
         }
     });
+
+    // ============================================================
+    // BMMC Universal Day / Night Theme Controller (GMT+6 Automatic)
+    // ============================================================
+    function getBstHour() {
+        var now = new Date();
+        var utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+        return new Date(utc + (3600000 * 6)).getHours();
+    }
+
+    function getBstAutoTheme() {
+        var hour = getBstHour();
+        // Day theme: 06:00 to 17:59 BST
+        return (hour >= 6 && hour < 18) ? 'light' : 'dark';
+    }
+
+    function applyTheme(theme, isManual) {
+        document.documentElement.setAttribute('data-theme', theme);
+        document.documentElement.setAttribute('data-bs-theme', theme);
+
+        var metaColor = document.getElementById('metaThemeColor');
+        if (metaColor) {
+            metaColor.setAttribute('content', theme === 'light' ? '#f0f7ff' : '#061426');
+        }
+
+        var toggleBtns = document.querySelectorAll('.js-theme-toggle');
+        toggleBtns.forEach(function(btn) {
+            var icon = btn.querySelector('.theme-toggle-icon');
+            if (icon) {
+                if (theme === 'light') {
+                    icon.className = 'bi bi-moon-stars-fill theme-toggle-icon';
+                    btn.setAttribute('title', 'রাত মোডে পরিবর্তন করুন (বর্তমানে: দিন)');
+                    btn.setAttribute('aria-label', 'Switch to Night mode');
+                } else {
+                    icon.className = 'bi bi-sun-fill theme-toggle-icon';
+                    btn.setAttribute('title', 'দিন মোডে পরিবর্তন করুন (বর্তমানে: রাত)');
+                    btn.setAttribute('aria-label', 'Switch to Day mode');
+                }
+            }
+        });
+
+        if (isManual) {
+            localStorage.setItem('bmmc_theme_preference', theme);
+        }
+    }
+
+    window.toggleBmmcTheme = function() {
+        var current = document.documentElement.getAttribute('data-theme') || 'dark';
+        var next = (current === 'light') ? 'dark' : 'light';
+        applyTheme(next, true);
+    };
+
+    // Attach click listeners to all theme toggle buttons
+    var toggleBtns = document.querySelectorAll('.js-theme-toggle');
+    toggleBtns.forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            window.toggleBmmcTheme();
+        });
+    });
+
+    // Apply current state to buttons
+    var savedPref = localStorage.getItem('bmmc_theme_preference');
+    var activeTheme = (savedPref === 'light' || savedPref === 'dark') ? savedPref : getBstAutoTheme();
+    applyTheme(activeTheme, false);
+
+    // Auto-update if no manual preference is saved and BST crosses day/night boundary
+    setInterval(function() {
+        var pref = localStorage.getItem('bmmc_theme_preference');
+        if (!pref || pref === 'auto') {
+            var autoTheme = getBstAutoTheme();
+            var current = document.documentElement.getAttribute('data-theme');
+            if (autoTheme !== current) {
+                applyTheme(autoTheme, false);
+            }
+        }
+    }, 60000);
 });
 </script>
