@@ -93,16 +93,23 @@ function require_admin(): void {
 }
 
 function to_bangla_number(int|string|null $number): string {
-    if ($number === null) return '০';
+    if ($number === null) return is_english() ? '0' : '০';
+    if (is_english()) {
+        return (string)$number;
+    }
     $bn = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
     $en = ['0','1','2','3','4','5','6','7','8','9'];
     return str_replace($en, $bn, (string)$number);
 }
 
 function format_date_bn(string|null $dateStr): string {
-    if (!$dateStr) return 'প্রযোজ্য নয়';
+    if (!$dateStr) return is_english() ? 'N/A' : 'প্রযোজ্য নয়';
     $time = strtotime($dateStr);
     if (!$time) return $dateStr;
+
+    if (is_english()) {
+        return date('d M, Y', $time);
+    }
 
     $months_en = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     $months_bn = ['জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন', 'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর'];
@@ -119,19 +126,21 @@ function get_blood_badge(string $group): string {
 }
 
 function get_urgency_badge(string $urgency): string {
+    $isEn = is_english();
     return match (strtolower($urgency)) {
-        'emergency' => '<span class="badge bg-danger text-white px-2 py-1"><i class="bi bi-exclamation-octagon-fill me-1"></i>অতি জরুরি (Emergency)</span>',
-        'urgent' => '<span class="badge bg-warning text-dark px-2 py-1"><i class="bi bi-exclamation-triangle-fill me-1"></i>জরুরি (Urgent)</span>',
-        default => '<span class="badge bg-info text-dark px-2 py-1"><i class="bi bi-info-circle-fill me-1"></i>সাধারণ (Normal)</span>',
+        'emergency' => '<span class="badge bg-danger text-white px-2 py-1"><i class="bi bi-exclamation-octagon-fill me-1"></i>' . ($isEn ? 'Emergency' : 'অতি জরুরি (Emergency)') . '</span>',
+        'urgent' => '<span class="badge bg-warning text-dark px-2 py-1"><i class="bi bi-exclamation-triangle-fill me-1"></i>' . ($isEn ? 'Urgent' : 'জরুরি (Urgent)') . '</span>',
+        default => '<span class="badge bg-info text-dark px-2 py-1"><i class="bi bi-info-circle-fill me-1"></i>' . ($isEn ? 'Normal' : 'সাধারণ (Normal)') . '</span>',
     };
 }
 
 function get_status_badge(string $status): string {
+    $isEn = is_english();
     return match (strtolower($status)) {
-        'open' => '<span class="badge bg-primary"><i class="bi bi-broadcast me-1"></i>চলমান (Open)</span>',
-        'matched' => '<span class="badge bg-info text-dark"><i class="bi bi-person-check me-1"></i>ডোনার ম্যাচড (Matched)</span>',
-        'fulfilled' => '<span class="badge bg-success"><i class="bi bi-check-circle-fill me-1"></i>সম্পন্ন (Fulfilled)</span>',
-        'cancelled' => '<span class="badge bg-secondary"><i class="bi bi-x-circle me-1"></i>বাতিল (Cancelled)</span>',
+        'open' => '<span class="badge bg-primary"><i class="bi bi-broadcast me-1"></i>' . ($isEn ? 'Open' : 'চলমান (Open)') . '</span>',
+        'matched' => '<span class="badge bg-info text-dark"><i class="bi bi-person-check me-1"></i>' . ($isEn ? 'Matched' : 'ডোনার ম্যাচড (Matched)') . '</span>',
+        'fulfilled' => '<span class="badge bg-success"><i class="bi bi-check-circle-fill me-1"></i>' . ($isEn ? 'Fulfilled' : 'সম্পন্ন (Fulfilled)') . '</span>',
+        'cancelled' => '<span class="badge bg-secondary"><i class="bi bi-x-circle me-1"></i>' . ($isEn ? 'Cancelled' : 'বাতিল (Cancelled)') . '</span>',
         default => htmlspecialchars($status),
     };
 }

@@ -14,6 +14,9 @@ if (session_status() === PHP_SESSION_NONE) {
 
 define('ROOT_PATH', dirname(__DIR__));
 
+// Load Internationalization Engine (Defaults to English 'en')
+require_once ROOT_PATH . '/includes/i18n.php';
+
 // 1. Check for dedicated database credentials file (e.g. created on cPanel or by setup wizard)
 if (file_exists(__DIR__ . '/database_credentials.php')) {
     require_once __DIR__ . '/database_credentials.php';

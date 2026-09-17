@@ -18,16 +18,16 @@ $service = get_service_by_slug($slug);
 $pillars = get_bmmc_pillars();
 
 if (!$service) {
-    $pageTitle = 'সেবা পাওয়া যায়নি — BMMC';
+    $pageTitle = __('service_not_found_title') . ' — ' . __('site_short_name');
     require_once __DIR__ . '/includes/header.php';
     ?>
     <div class="container py-5 text-center">
         <div class="glass-card p-5 my-5 mx-auto" style="max-width: 600px;">
             <i class="bi bi-exclamation-octagon text-warning fs-1 mb-3 d-block"></i>
-            <h3 class="text-white fw-bold mb-2">অনুরোধকৃত সেবাটি পাওয়া যায়নি</h3>
-            <p class="text-secondary mb-4">আপনি যে সেবাটি খুঁজছেন তা বর্তমানে আমাদের তালিকায় নেই অথবা এর ঠিকানা পরিবর্তিত হয়েছে।</p>
+            <h3 class="text-white fw-bold mb-2"><?= __('service_not_found_title') ?></h3>
+            <p class="text-secondary mb-4"><?= __('service_not_found_desc') ?></p>
             <a href="<?= BASE_URL ?>/index.php#services-section" class="btn btn-ocean rounded-pill px-4 py-2">
-                <i class="bi bi-grid-fill me-2"></i> সমস্ত সেবাসমূহ দেখুন
+                <i class="bi bi-grid-fill me-2"></i> <?= __('service_btn_back_list') ?>
             </a>
         </div>
     </div>
@@ -37,8 +37,8 @@ if (!$service) {
 }
 
 $currentPillar = $pillars[$service['pillar']] ?? null;
-$pageTitle = $service['title'] . ' — BMMC সেবাসমূহ';
-$ogTitle = $service['title'] . ' (' . $service['title_en'] . ') — BMMC';
+$pageTitle = $service['title'] . ' — ' . __('nav_our_services') . ' | ' . __('site_short_name');
+$ogTitle = $service['title'] . ' (' . $service['title_en'] . ') — ' . __('site_short_name');
 $ogDescription = $service['summary'];
 
 require_once __DIR__ . '/includes/header.php';
@@ -58,8 +58,8 @@ $relatedServices = array_filter(get_services_by_pillar($service['pillar']), func
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-4">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 small">
-                    <li class="breadcrumb-item"><a href="<?= BASE_URL ?>/index.php" class="text-info text-decoration-none"><i class="bi bi-house me-1"></i>হোম</a></li>
-                    <li class="breadcrumb-item"><a href="<?= BASE_URL ?>/index.php#services-section" class="text-secondary text-decoration-none">সেবাসমূহ</a></li>
+                    <li class="breadcrumb-item"><a href="<?= BASE_URL ?>/index.php" class="text-info text-decoration-none"><i class="bi bi-house me-1"></i><?= __('breadcrumb_home') ?></a></li>
+                    <li class="breadcrumb-item"><a href="<?= BASE_URL ?>/index.php#services-section" class="text-secondary text-decoration-none"><?= __('breadcrumb_services') ?></a></li>
                     <?php if ($currentPillar): ?>
                     <li class="breadcrumb-item text-secondary"><?= htmlspecialchars($currentPillar['title']) ?></li>
                     <?php endif; ?>
@@ -67,7 +67,7 @@ $relatedServices = array_filter(get_services_by_pillar($service['pillar']), func
                 </ol>
             </nav>
             <a href="<?= BASE_URL ?>/index.php#services-section" class="btn btn-outline-light btn-sm rounded-pill px-3 py-1">
-                <i class="bi bi-arrow-left me-1"></i> সকল সেবার তালিকা
+                <i class="bi bi-arrow-left me-1"></i> <?= __('service_btn_back_list') ?>
             </a>
         </div>
 
@@ -87,9 +87,11 @@ $relatedServices = array_filter(get_services_by_pillar($service['pillar']), func
                     <h1 class="display-5 fw-bold text-white mb-2">
                         <?= htmlspecialchars($service['title']) ?>
                     </h1>
+                    <?php if (!is_english() && !empty($service['title_en'])): ?>
                     <h5 class="text-info opacity-75 fw-normal mb-3" style="letter-spacing: 0.5px;">
                         <?= htmlspecialchars($service['title_en']) ?>
                     </h5>
+                    <?php endif; ?>
                     <p class="lead text-light mb-4" style="line-height: 1.7; font-size: 1.15rem;">
                         <?= htmlspecialchars($service['summary']) ?>
                     </p>
@@ -100,7 +102,7 @@ $relatedServices = array_filter(get_services_by_pillar($service['pillar']), func
                             <span class="visually-hidden">Loading...</span>
                         </div>
                         <div class="small fw-semibold">
-                            স্ট্যাটাস: <span class="text-white"><?= htmlspecialchars($service['badge']) ?></span>
+                            <?= __('blood_status_label') ?> <span class="text-white"><?= htmlspecialchars($service['badge']) ?></span>
                         </div>
                     </div>
                 </div>
@@ -111,11 +113,11 @@ $relatedServices = array_filter(get_services_by_pillar($service['pillar']), func
                         <div style="width: 80px; height: 80px; margin: 0 auto 16px; background: rgba(0, 210, 255, 0.15); border-radius: 20px; display: flex; align-items: center; justify-content: center; border: 2px solid #00d2ff; box-shadow: 0 0 25px rgba(0, 210, 255, 0.3);">
                             <i class="bi <?= htmlspecialchars($service['icon']) ?> fs-1 text-info"></i>
                         </div>
-                        <h6 class="text-white fw-bold mb-1">BMMC উইং সার্ভিস</h6>
-                        <small class="text-secondary d-block mb-3">বাংলাদেশি নাবিকদের সুরক্ষায় নিবেদিত</small>
+                        <h6 class="text-white fw-bold mb-1"><?= __('service_wing_title') ?></h6>
+                        <small class="text-secondary d-block mb-3"><?= __('service_wing_sub') ?></small>
                         
                         <a href="<?= BASE_URL ?>/volunteer_register.php?wing=<?= urlencode($service['title']) ?>" class="btn btn-ocean w-100 py-2 rounded-pill fw-semibold shadow-sm">
-                            <i class="bi bi-people-fill me-2"></i> এই উইংয়ে ভলান্টিয়ার হোন
+                            <i class="bi bi-people-fill me-2"></i> <?= __('service_btn_volunteer_wing') ?>
                         </a>
                     </div>
                 </div>
@@ -132,16 +134,16 @@ $relatedServices = array_filter(get_services_by_pillar($service['pillar']), func
                 </div>
                 <div class="col-md-7">
                     <div class="d-inline-block px-3 py-1 mb-2 rounded-pill bg-warning bg-opacity-20 text-warning border border-warning border-opacity-40 small fw-bold">
-                        <i class="bi bi-tools me-1"></i> THIS SERVICE IS UNDER DEVELOPMENT • খুব শীঘ্রই উন্মুক্ত হচ্ছে
+                        <i class="bi bi-tools me-1"></i> <?= __('service_under_dev_pill') ?>
                     </div>
-                    <h4 class="text-white fw-bold mb-2">সেবাটি বর্তমানে নির্মাণাধীন রয়েছে</h4>
+                    <h4 class="text-white fw-bold mb-2"><?= __('service_under_dev_title') ?></h4>
                     <p class="text-light opacity-75 mb-0" style="line-height: 1.6;">
-                        সম্মানিত মেরিনার ও ভিজিটরবৃন্দ, এই সেবাটির আর্কিটেকচার ডিজাইন, আইনি ডেটাবেস ও আন্তর্জাতিক এপিআই ইন্টিগ্রেশনের কাজ চলছে। সেবাটি লাইভ হওয়া মাত্র সবার আগে ব্যবহার করতে এখনই আপনার আগ্রহ প্রকাশ করে রাখুন।
+                        <?= __('service_under_dev_desc') ?>
                     </p>
                 </div>
                 <div class="col-md-3 text-center text-md-end">
-                    <button type="button" class="btn btn-outline-warning btn-lg rounded-pill px-4 py-2 w-100" onclick="alert('ধন্যবাদ! সেবাটি লাইভ হওয়ার সাথে সাথে BMMC নোটিফিকেশন সিস্টেমের মাধ্যমে আপনাকে অবগত করা হবে।')">
-                        <i class="bi bi-bell-fill me-2"></i> নোটিফিকেশন পান
+                    <button type="button" class="btn btn-outline-warning btn-lg rounded-pill px-4 py-2 w-100" onclick="alert(<?= json_encode(__('service_notified_alert')) ?>)">
+                        <i class="bi bi-bell-fill me-2"></i> <?= __('service_btn_get_notified') ?>
                     </button>
                 </div>
             </div>
@@ -156,10 +158,10 @@ $relatedServices = array_filter(get_services_by_pillar($service['pillar']), func
                         <div style="width: 44px; height: 44px; background: rgba(239, 35, 60, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(239, 35, 60, 0.4);">
                             <i class="bi bi-exclamation-circle-fill text-danger fs-4"></i>
                         </div>
-                        <h4 class="text-white fw-bold mb-0">বর্তমান সমস্যা ও পটভূমি</h4>
+                        <h4 class="text-white fw-bold mb-0"><?= __('service_problem_heading') ?></h4>
                     </div>
                     <p class="text-light" style="line-height: 1.8;">
-                        <?= htmlspecialchars($service['problem'] ?? 'বাংলাদেশের বহু মেরিনার ও ক্যাডেট যথাযথ দিকনির্দেশনা ও প্ল্যাটফর্মের অভাবে বিভিন্ন সমস্যায় পড়েন।') ?>
+                        <?= htmlspecialchars($service['problem'] ?? '') ?>
                     </p>
                 </div>
             </div>
@@ -171,7 +173,7 @@ $relatedServices = array_filter(get_services_by_pillar($service['pillar']), func
                         <div style="width: 44px; height: 44px; background: rgba(16, 185, 129, 0.15); border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(16, 185, 129, 0.4);">
                             <i class="bi bi-shield-fill-check text-success fs-4"></i>
                         </div>
-                        <h4 class="text-white fw-bold mb-0">BMMC-এর পরিকল্পিত সমাধান</h4>
+                        <h4 class="text-white fw-bold mb-0"><?= __('service_solution_heading') ?></h4>
                     </div>
                     <p class="text-light" style="line-height: 1.8;">
                         <?= htmlspecialchars($service['solution'] ?? $service['description']) ?>
@@ -186,10 +188,10 @@ $relatedServices = array_filter(get_services_by_pillar($service['pillar']), func
             <div class="text-center mb-4">
                 <div class="d-inline-flex align-items-center gap-2 px-3 py-1 mb-2 rounded-pill bg-primary bg-opacity-20 text-info border border-info border-opacity-30 small fw-bold">
                     <i class="bi bi-stars"></i>
-                    <span>ফিচার স্পেসিফিকেশন ও রোডম্যাপ</span>
+                    <span><?= __('service_roadmap_pill') ?></span>
                 </div>
-                <h3 class="text-white fw-bold">এই সেবায় যা যা অন্তর্ভুক্ত থাকবে</h3>
-                <p class="text-secondary small">আমাদের বিশেষজ্ঞ মেরিন টিম ও সফটওয়্যার ইঞ্জিনিয়ারদের পরিকল্পিত প্রধান বৈশিষ্ট্যসমূহ</p>
+                <h3 class="text-white fw-bold"><?= __('service_features_heading') ?></h3>
+                <p class="text-secondary small"><?= __('service_features_sub') ?></p>
             </div>
 
             <div class="row g-3">
@@ -215,7 +217,7 @@ $relatedServices = array_filter(get_services_by_pillar($service['pillar']), func
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h4 class="text-white fw-bold mb-0">
                     <i class="bi <?= htmlspecialchars($currentPillar['icon'] ?? 'bi-grid') ?> text-info me-2"></i>
-                    <?= htmlspecialchars($currentPillar['title'] ?? 'ক্যাটাগরি') ?>-এর অন্যান্য সেবাসমূহ
+                    <?= __('service_related_heading') ?> <?= htmlspecialchars($currentPillar['title'] ?? '') ?>
                 </h4>
             </div>
 
@@ -234,7 +236,7 @@ $relatedServices = array_filter(get_services_by_pillar($service['pillar']), func
                         </div>
                         <div>
                             <a href="<?= BASE_URL ?>/service.php?slug=<?= $rel['slug'] ?>" class="btn btn-outline-info btn-sm rounded-pill w-100">
-                                বিস্তারিত দেখুন <i class="bi bi-arrow-right ms-1"></i>
+                                <?= __('service_btn_view_detail') ?> <i class="bi bi-arrow-right ms-1"></i>
                             </a>
                         </div>
                     </div>
@@ -248,15 +250,15 @@ $relatedServices = array_filter(get_services_by_pillar($service['pillar']), func
         <div class="glass-blood-card p-4 rounded-4 text-center">
             <div class="d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
                 <div class="text-md-start">
-                    <h5 class="text-white fw-bold mb-1"><i class="bi bi-droplet-fill text-danger me-2"></i>জরুরি রক্তের সন্ধান করছেন?</h5>
-                    <p class="text-secondary small mb-0">আমাদের রক্তদান নেটওয়ার্ক ২৪ ঘণ্টা সক্রিয়ভাবে পরিচালিত হচ্ছে।</p>
+                    <h5 class="text-white fw-bold mb-1"><i class="bi bi-droplet-fill text-danger me-2"></i><?= __('service_urgent_blood_heading') ?></h5>
+                    <p class="text-secondary small mb-0"><?= __('service_urgent_blood_sub') ?></p>
                 </div>
                 <div class="d-flex gap-2">
                     <a href="<?= BASE_URL ?>/blood_request.php" class="btn btn-blood btn-sm rounded-pill px-4 py-2 emergency-pulse">
-                        <i class="bi bi-plus-circle me-1"></i> রক্তের আবেদন
+                        <i class="bi bi-plus-circle me-1"></i> <?= __('blood_btn_request') ?>
                     </a>
                     <a href="<?= BASE_URL ?>/blood.php" class="btn btn-outline-light btn-sm rounded-pill px-3 py-2">
-                        রক্তদান পোর্টাল <i class="bi bi-arrow-right ms-1"></i>
+                        <?= __('nav_blood_portal') ?> <i class="bi bi-arrow-right ms-1"></i>
                     </a>
                 </div>
             </div>

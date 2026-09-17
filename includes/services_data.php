@@ -2,9 +2,64 @@
 /**
  * Bangladesh Merchant Mariners Community (BMMC)
  * Master Services Registry & Organizational Wings Data
+ * Bilingual Support: English (Default) & Bengali
  */
 
+require_once __DIR__ . '/i18n.php';
+
 function get_bmmc_pillars(): array {
+    $isEn = is_english();
+
+    if ($isEn) {
+        return [
+            'emergency' => [
+                'id' => 'emergency',
+                'title' => 'Emergency Response & Seafarer Welfare',
+                'title_bn' => 'জরুরি সাড়া ও নাবিক কল্যাণ',
+                'icon' => 'bi-shield-exclamation',
+                'badge' => 'Emergency Wings',
+                'color' => '#ef233c',
+                'summary' => 'Immediate coordination for life safety, legal defense, and humanitarian welfare for seafarers in distress at sea or in foreign ports.'
+            ],
+            'career' => [
+                'id' => 'career',
+                'title' => 'Cadets, Training & Maritime Career',
+                'title_bn' => 'ক্যাডেট, প্রশিক্ষণ ও পেশাগত ক্যারিয়ার',
+                'icon' => 'bi-mortarboard-fill',
+                'badge' => 'Career & Training',
+                'color' => '#00d2ff',
+                'summary' => 'Fresh cadet grooming, genuine manning agency vetting, and honorable shore-based transition pathways.'
+            ],
+            'tools' => [
+                'id' => 'tools',
+                'title' => 'Seafarer Smart Tools & Digital Utilities',
+                'title_bn' => 'নাবিক স্মার্ট ইউটিলিটি টুলস',
+                'icon' => 'bi-cpu-fill',
+                'badge' => 'Digital Tools',
+                'color' => '#f59e0b',
+                'summary' => 'Automated sea-time calculators, certificate expiry tracking vaults, and one-click IMO-standard CV generators.'
+            ],
+            'health' => [
+                'id' => 'health',
+                'title' => 'Healthcare & Maritime Medical',
+                'title_bn' => 'মেরিন স্বাস্থ্য ও ডায়াগনস্টিক',
+                'icon' => 'bi-hospital-fill',
+                'badge' => 'Health & Medical',
+                'color' => '#10b981',
+                'summary' => 'Verified directory of DG Shipping-approved medical examiners, certified diagnostic clinics, and marine doctors.'
+            ],
+            'community' => [
+                'id' => 'community',
+                'title' => 'Community, Governance & Transparency',
+                'title_bn' => 'কমিউনিটি ঐক্য ও আর্থিক স্বচ্ছতা',
+                'icon' => 'bi-globe2',
+                'badge' => 'Community & Trust',
+                'color' => '#8b5cf6',
+                'summary' => 'Global seafarer interactive forum, batch brotherhood networks, 100% open financial ledger, and volunteer database.'
+            ]
+        ];
+    }
+
     return [
         'emergency' => [
             'id' => 'emergency',
@@ -55,6 +110,538 @@ function get_bmmc_pillars(): array {
 }
 
 function get_bmmc_services(): array {
+    $isEn = is_english();
+
+    if ($isEn) {
+        return [
+            // 1. Blood Donation Network (LIVE FLAGSHIP)
+            'blood-network' => [
+                'slug' => 'blood-network',
+                'pillar' => 'emergency',
+                'title' => 'Blood Donation Network',
+                'title_en' => 'Blood Donation Network',
+                'status' => 'live',
+                'badge' => 'Active Service (Live)',
+                'icon' => 'bi-droplet-fill',
+                'color' => '#ef233c',
+                'summary' => 'A unified emergency blood donation platform connecting seafarers and citizens, featuring a 4-month automated medical resting protocol and rapid donor matching.',
+                'description' => 'The premier fully active humanitarian wing of the Bangladesh Merchant Mariners Community (BMMC). A selfless, intermediary-free blood management network dedicated to hospital patients across Bangladesh and the families of seafarers serving abroad at sea.',
+                'problem' => 'Locating matching blood in critical emergencies is often agonizing for patient relatives. Donors are frequently called repeatedly without health buffers, causing donor fatigue and physical strain.',
+                'solution' => 'The BMMC automated engine dispatches immediate notifications based on exact blood groups and geographic districts. After donation, an automated 120-day medical resting lockout protects donor health.',
+                'features' => [
+                    'District and zone-level smart donor filtering',
+                    'Medically supervised 4-month (120-day) resting period automation',
+                    'One-click SMS/Email consent and direct contact bridging',
+                    '24/7 dedicated emergency blood helpline coordination',
+                    'Unified volunteer database combining mariner and civilian donors'
+                ],
+                'button_text' => 'Go to Blood Portal',
+                'link' => 'blood.php'
+            ],
+
+            // 2. Emergency Response Team
+            'emergency-team' => [
+                'slug' => 'emergency-team',
+                'pillar' => 'emergency',
+                'title' => 'Emergency Response Team',
+                'title_en' => 'Emergency Response Team',
+                'status' => 'coming_soon',
+                'badge' => 'Under Development (Coming Soon)',
+                'icon' => 'bi-telephone-plus-fill',
+                'color' => '#ef233c',
+                'summary' => '24/7 global rapid helpline and rescue desk for mariners facing sudden distress, piracy risk, abandonment, or medical crises abroad.',
+                'description' => 'A dedicated crisis intervention cell designed to coordinate urgent rescue and welfare operations whenever Bangladeshi mariners face vessel abandonment by shipowners, unfair detention, acute medical emergencies at sea, or sign-off crises.',
+                'problem' => 'In distant foreign ports or anchorages, unscrupulous shipowners or local agents sometimes withhold crew wages, deny medical disembarkation, or abandon crews without provisions, while mariners lack direct channels to embassies or international authorities.',
+                'solution' => 'The BMMC Emergency Response Team establishes direct rapid liaison with Bangladesh Consulates, DG Shipping, ITF Inspectors, and international seafarer welfare organizations to secure swift legal, medical, and repatriation support.',
+                'features' => [
+                    '24/7 global satellite and WhatsApp emergency hotline',
+                    'Urgent intervention for port abandonment and sign-off impasses',
+                    'Direct protocol liaison with Bangladesh Embassies and Department of Shipping',
+                    'Medical evacuation and airlift coordination for critically ill seafarers',
+                    'Online emergency case intake and resolution tracking dashboard'
+                ],
+                'button_text' => 'Explore Service Roadmap',
+                'link' => 'service.php?slug=emergency-team'
+            ],
+
+            // 3. Legal Support Cell
+            'legal-support' => [
+                'slug' => 'legal-support',
+                'pillar' => 'emergency',
+                'title' => 'Legal Support Cell & ITF Guidance',
+                'title_en' => 'Legal Support Cell & ITF Guidance',
+                'status' => 'coming_soon',
+                'badge' => 'Under Development (Coming Soon)',
+                'icon' => 'bi-hammer',
+                'color' => '#f59e0b',
+                'summary' => 'Advisory cell led by experienced Master Mariners and maritime lawyers protecting employment agreements (SEA), watch-keeping hours, and onboard rights.',
+                'description' => 'A specialized maritime legal wing operating under international maritime law conventions (MLC 2006, STCW, IMO) to protect seafarers\' contracts, fair wages, humane working conditions, and onboard human rights.',
+                'problem' => 'Unscrupulous recruiters frequently persuade inexperienced cadets and crew into signing one-sided, defective contracts, resulting in wage deductions, excessive hours, or lack of insurance coverage at sea.',
+                'solution' => 'Independent pre-joining contract vetting and free legal counsel under ITF standards to safeguard mariner rights and resolve maritime disputes.',
+                'features' => [
+                    'Complimentary pre-signing contract vetting (SEA validation)',
+                    'MLC 2006 and ILO Seafarers\' Bill of Rights compliance guidelines',
+                    'Overtime disputes and rest hour violation guidance',
+                    'Global ITF inspectorate and local maritime legal aid directory',
+                    'Strictly confidential one-to-one maritime legal consultations'
+                ],
+                'button_text' => 'Explore Service Roadmap',
+                'link' => 'service.php?slug=legal-support'
+            ],
+
+            // 4. Maritime Forum & Q/A Hub
+            'maritime-forum' => [
+                'slug' => 'maritime-forum',
+                'pillar' => 'community',
+                'title' => 'Maritime Forum & Q/A Hub',
+                'title_en' => 'Maritime Forum & Q/A Hub',
+                'status' => 'coming_soon',
+                'badge' => 'Under Development (Coming Soon)',
+                'icon' => 'bi-chat-square-quote-fill',
+                'color' => '#00d2ff',
+                'summary' => 'An interactive maritime knowledge repository where junior officers and cadets interact directly with veteran Captains and Chief Engineers.',
+                'description' => 'A rich knowledge platform for all Bangladeshi mariners, enabling knowledge sharing on complex nautical, engineering, and electro-technical topics, CoC oral exam preparation, and onboard troubleshooting.',
+                'problem' => 'Newly joined cadets and junior officers frequently lack reliable, verified mentoring when confronting unfamiliar machinery, bridge challenges, or oral exam questions.',
+                'solution' => 'Category-specific moderated forums archiving verified solutions from experienced nautical and engineering superintendents across Bangladesh and international fleets.',
+                'features' => [
+                    'Departmental discussion categories (Nautical, Engine, ETO, Catering)',
+                    'DG Shipping CoC oral & written examination experience archives',
+                    'Real-world machinery troubleshooting and incident case studies',
+                    'Verified Chief Engineer and Master Mariner badge endorsements',
+                    'Searchable, peer-reviewed maritime technical query database'
+                ],
+                'button_text' => 'Explore Service Roadmap',
+                'link' => 'service.php?slug=maritime-forum'
+            ],
+
+            // 5. Manning Agency Review / Rating
+            'agency-rating' => [
+                'slug' => 'agency-rating',
+                'pillar' => 'career',
+                'title' => 'Manning Agency & Training Review',
+                'title_en' => 'Manning Agency & Training Review',
+                'status' => 'coming_soon',
+                'badge' => 'Under Development (Coming Soon)',
+                'icon' => 'bi-star-half',
+                'color' => '#f59e0b',
+                'summary' => 'Official registry of authorized manning agents coupled with genuine seafarer ratings to dismantle fraudulent recruitment schemes.',
+                'description' => 'An independent review portal listing DG Shipping-licensed manning agents, their historical compliance track records, and authentic, unedited feedback from active mariners.',
+                'problem' => 'Unlicensed brokers and fraudulent agencies deceive aspiring cadets and crew members with fabricated offer letters, extracting exorbitant sums for non-existent voyages.',
+                'solution' => 'Official license verification tools and crowdsourced seafarer ratings that expose predatory recruiters and highlight reputable shipping principals.',
+                'features' => [
+                    'Up-to-date registry of DG Shipping-approved manning agencies',
+                    'Transparent seafarer rating metrics (onboard food, timely wages, sign-off compliance)',
+                    'Real-time blacklist alert registry of fraudulent entities',
+                    'Independent review of maritime training academies and simulator facilities',
+                    'Whistleblower portal to anonymously report recruitment malpractice'
+                ],
+                'button_text' => 'Explore Service Roadmap',
+                'link' => 'service.php?slug=agency-rating'
+            ],
+
+            // 6. Loss of Life / Pension Support Fund Info
+            'pension-fund' => [
+                'slug' => 'pension-fund',
+                'pillar' => 'emergency',
+                'title' => 'Loss of Life / Pension Support Fund',
+                'title_en' => 'Loss of Life / Pension Support Fund',
+                'status' => 'coming_soon',
+                'badge' => 'Under Development (Coming Soon)',
+                'icon' => 'bi-heartbreak-fill',
+                'color' => '#ef233c',
+                'summary' => 'Rapid community fund mobilization and pension claim advisory to stand beside bereaved families of fallen mariners.',
+                'description' => 'A dedicated brotherhood welfare desk ensuring that when a Bangladeshi mariner is lost at sea, suffers fatal accidents, or sustains permanent disability, their family is never left abandoned to economic despair.',
+                'problem' => 'When a seafarer loses their life on duty, lengthy insurance litigation and corporate bureaucracy can leave their grieving dependents without financial resources for survival.',
+                'solution' => 'Instant community-wide broadcast notification and transparent escrow-backed emergency disbursements directly into verified family bank accounts.',
+                'features' => [
+                    'Instant community broadcast notification during maritime fatalities',
+                    '100% public, audit-backed emergency aid disbursement dashboard',
+                    'Legal assistance for securing P&I Club and owner death compensation',
+                    'Educational scholarships for children of deceased mariners',
+                    'Direct bank wire transfers with published audit statements'
+                ],
+                'button_text' => 'Explore Service Roadmap',
+                'link' => 'service.php?slug=pension-fund'
+            ],
+
+            // 7. Fresh Cadet Training Programme
+            'cadet-programme' => [
+                'slug' => 'cadet-programme',
+                'pillar' => 'career',
+                'title' => 'Fresh Cadet Training Programme',
+                'title_en' => 'Fresh Cadet Training Programme',
+                'status' => 'coming_soon',
+                'badge' => 'Under Development (Coming Soon)',
+                'icon' => 'bi-compass-fill',
+                'color' => '#00d2ff',
+                'summary' => 'A comprehensive Do\'s and Don\'ts orientation guide and mentorship initiative for cadets embarking on their maiden deep-sea voyage.',
+                'description' => 'Bridging the critical gap between academic theory and deep-sea reality. Preparing deck and engine cadets for shipboard hierarchy, bridge watch-keeping, engine room safety, and Training Record Book (TRB) mastery.',
+                'problem' => 'New cadets frequently experience severe culture shock and operational uncertainty on their first voyage, risking poor appraisals or safety incidents.',
+                'solution' => 'Senior Master Mariners and Chief Engineers deliver practical multimedia guidance, TRB strategies, and personal mentorship to cultivate disciplined, competent maritime officers.',
+                'features' => [
+                    'Comprehensive Do\'s & Don\'ts handbook and code of conduct',
+                    'Practical checklists for navigational bridge and engine watch-keeping',
+                    'Systematic Training Record Book (TRB) daily completion roadmap',
+                    'Intercultural adaptation guidelines for multinational crew environments',
+                    'Direct mentoring and motivational workshops with senior officers'
+                ],
+                'button_text' => 'Explore Service Roadmap',
+                'link' => 'service.php?slug=cadet-programme'
+            ],
+
+            // 8. CDC Smart Profile & One-Click CV Builder
+            'cv-builder' => [
+                'slug' => 'cv-builder',
+                'pillar' => 'tools',
+                'title' => 'CDC Smart Profile & One-Click CV Builder',
+                'title_en' => 'CDC Smart Profile & One-Click CV Builder',
+                'status' => 'coming_soon',
+                'badge' => 'Under Development (Coming Soon)',
+                'icon' => 'bi-file-earmark-person-fill',
+                'color' => '#00d2ff',
+                'summary' => 'Automated professional PDF resume generator adhering strictly to international IMO standards and global crewing company formats.',
+                'description' => 'Eliminates repetitive manual CV reformatting. Mariners log their voyages, vessel parameters, and certificates once into a secure profile to generate tailored, publication-grade maritime resumes instantly.',
+                'problem' => 'International ship managers require precise IMO-compliant resume formats. Inconsistently formatted CVs often cause qualified mariners to be filtered out by recruitment algorithms.',
+                'solution' => 'A dynamic resume generator producing tailored layouts for Tankers, Bulk Carriers, Containers, and Offshore vessels with instant PDF export and verification QR codes.',
+                'features' => [
+                    'International IMO Seafarer CV format compliance',
+                    'Vessel-specific resume layouts (Tanker, Container, Bulk, Offshore)',
+                    'Automated sea-time aggregation and rank duration computations',
+                    'Instant PDF download equipped with tamper-evident QR verification',
+                    'Seamless automated updates whenever new voyages are logged'
+                ],
+                'button_text' => 'Explore Service Roadmap',
+                'link' => 'service.php?slug=cv-builder'
+            ],
+
+            // 9. Social Media & Batch Community Integration
+            'batch-community' => [
+                'slug' => 'batch-community',
+                'pillar' => 'community',
+                'title' => 'Social Media & Batch Network',
+                'title_en' => 'Social Media & Batch Network',
+                'status' => 'coming_soon',
+                'badge' => 'Under Development (Coming Soon)',
+                'icon' => 'bi-people-fill',
+                'color' => '#8b5cf6',
+                'summary' => 'Uniting alumni batch groups, maritime academy graduates, and global Facebook/WhatsApp seafarer communities under a single umbrella.',
+                'description' => 'An official partnership and broadcasting hub linking academy batch committees, professional forums, and overseas Bangladeshi seafarer associations into a unified network.',
+                'problem' => 'Fragmented social groups prevent emergency blood appeals, job circulars, and crisis alerts from reaching the broader maritime fraternity in time.',
+                'solution' => 'A centralized federation enabling verified batch representatives and community leaders to coordinate welfare, broadcasts, and mutual support efficiently.',
+                'features' => [
+                    'Comprehensive Bangladeshi mariner batch directory and point-of-contact system',
+                    'Verified community hubs across Facebook, Telegram, and WhatsApp',
+                    'Central welfare advisory panel formed by senior batch delegates',
+                    'Synchronized multi-channel broadcast for maritime emergency appeals',
+                    'Coordination of annual reunions to strengthen professional brotherhood'
+                ],
+                'button_text' => 'Explore Service Roadmap',
+                'link' => 'service.php?slug=batch-community'
+            ],
+
+            // 10. Sea-Time Calculator
+            'seatime-calculator' => [
+                'slug' => 'seatime-calculator',
+                'pillar' => 'tools',
+                'title' => 'Sea-Time & Watch-keeping Calculator',
+                'title_en' => 'Sea-Time & Watch-keeping Calculator',
+                'status' => 'coming_soon',
+                'badge' => 'Under Development (Coming Soon)',
+                'icon' => 'bi-calculator-fill',
+                'color' => '#f59e0b',
+                'summary' => 'Precision algorithm computing qualifying sea service, calendar days, and bridge/engine watch-keeping hours in strict compliance with STCW & DG Shipping.',
+                'description' => 'Accurate sea-time computation is essential for CoC examinations and certificate revalidation. This smart utility ensures error-free qualification reporting under STCW Manila Amendments.',
+                'problem' => 'Manual sea-time calculation across multiple ships with varied trading limits frequently leads to discrepancies and examination application delays.',
+                'solution' => 'Simply enter sign-on/sign-off dates, trading limits, and vessel tonnage/power to instantly generate an official qualifying sea-service statement.',
+                'features' => [
+                    'STCW 2010 Manila Amendments compliant mathematical formulas',
+                    'Automated classification of Foreign Going (FG) vs. Coastal voyages',
+                    'Real-time tracking of remaining sea-time required for next CoC tier',
+                    'Print-ready, downloadable Sea Service Statement summaries',
+                    'Multi-vessel entry reconciliation aligned with official CDC log pages'
+                ],
+                'button_text' => 'Explore Service Roadmap',
+                'link' => 'service.php?slug=seatime-calculator'
+            ],
+
+            // 11. Medical & Test Centre Directory
+            'medical-directory' => [
+                'slug' => 'medical-directory',
+                'pillar' => 'health',
+                'title' => 'Medical & Test Centre Directory',
+                'title_en' => 'Medical & Test Centre Directory',
+                'status' => 'coming_soon',
+                'badge' => 'Under Development (Coming Soon)',
+                'icon' => 'bi-hospital',
+                'color' => '#10b981',
+                'summary' => 'Trusted directory of maritime physicians, DG Shipping panel doctors, and certified pre-sea medical examination centers.',
+                'description' => 'A verified guide to authorized medical examiners, mandatory pre-boarding vaccinations (Yellow Fever, Polio), and diagnostic centers certified by global flag administrations.',
+                'problem' => 'Undergoing medical examinations at unapproved facilities results in rejection by shipping principals and port state authorities, squandering precious time and funds.',
+                'solution' => 'A curated directory detailing contact information, consultation fees, and flag approvals (Panama, Marshall Islands, Liberia, Singapore) for certified clinics.',
+                'features' => [
+                    'Official roster of DG Shipping-approved marine surgeons and panel clinics',
+                    'Flag-state filtering (Panama, Liberia, Singapore, Marshall Islands)',
+                    'Yellow Fever vaccination scheduling, locations, and certificate guidance',
+                    'Transparent baseline pricing and prerequisite documentation checklists',
+                    'Direct phone connectivity and GPS navigational mapping'
+                ],
+                'button_text' => 'Explore Service Roadmap',
+                'link' => 'service.php?slug=medical-directory'
+            ],
+
+            // 12. Tax, NRI Account & Financial Advisory
+            'financial-advisory' => [
+                'slug' => 'financial-advisory',
+                'pillar' => 'tools',
+                'title' => 'Tax, NRI Account & Financial Advisory',
+                'title_en' => 'Tax, NRI Account & Financial Advisory',
+                'status' => 'coming_soon',
+                'badge' => 'Under Development (Coming Soon)',
+                'icon' => 'bi-cash-coin',
+                'color' => '#10b981',
+                'summary' => 'Legal guidance on Non-Resident (NRB) status, 182-day sea service tax exemptions, offshore banking, and government remittance incentives.',
+                'description' => 'Navigating financial regulations for mariners. Assisting with National Board of Revenue (NBR) tax exemptions, NRB foreign currency bank accounts, and legitimate wealth protection.',
+                'problem' => 'Unfamiliarity with tax laws leads to erroneous tax assessments, while many mariners miss out on official government remittance bonuses and offshore investment vehicles.',
+                'solution' => 'Clear legal guidelines curated with marine finance experts and chartered accountants to optimize tax exemptions and legitimate wealth building.',
+                'features' => [
+                    'Step-by-step zero-tax filing guide based on 182 days qualifying sea service',
+                    'Streamlined NRB and offshore foreign currency bank account opening procedures',
+                    'Access to the official 2.5% government remittance incentive on earnings',
+                    'Retirement asset planning, mutual funds, and seafarer pension roadmap',
+                    'Direct consultations with experienced maritime tax attorneys'
+                ],
+                'button_text' => 'Explore Service Roadmap',
+                'link' => 'service.php?slug=financial-advisory'
+            ],
+
+            // 13. Digital Logbook & Document Expiry Tracker
+            'document-tracker' => [
+                'slug' => 'document-tracker',
+                'pillar' => 'tools',
+                'title' => 'Digital Logbook & Document Expiry Tracker',
+                'title_en' => 'Digital Logbook & Document Expiry Tracker',
+                'status' => 'coming_soon',
+                'badge' => 'Under Development (Coming Soon)',
+                'icon' => 'bi-journal-check',
+                'color' => '#00d2ff',
+                'summary' => 'Military-grade encrypted digital safety vault sending automated WhatsApp and Email notifications up to 12 months before certificate expiry.',
+                'description' => 'Never let an expired passport, CDC, CoC, STCW refresher, or yellow fever booklet jeopardize your career. A secure cloud vault with proactive renewal notifications.',
+                'problem' => 'Amid intense shipboard operations, mariners frequently overlook expiration dates, resulting in unexpected port visa penalties or sign-off delays.',
+                'solution' => 'Automated alerts delivered at 12 months, 6 months, and 90 days prior to expiry, providing ample lead time for course bookings and renewals.',
+                'features' => [
+                    'Central encrypted repository for Passport, CDC, CoC, Visas, and STCW certificates',
+                    'Tiered multi-stage alerts triggered 12, 6, and 3 months ahead of expiration',
+                    'Direct notifications dispatched via Email and WhatsApp',
+                    'Direct links to official renewal applications and requisite documentation guides',
+                    'AES-256 encrypted cloud backup accessible anywhere worldwide'
+                ],
+                'button_text' => 'Explore Service Roadmap',
+                'link' => 'service.php?slug=document-tracker'
+            ],
+
+            // 14. WhatsApp Single-Bot Notification
+            'whatsapp-bot' => [
+                'slug' => 'whatsapp-bot',
+                'pillar' => 'tools',
+                'title' => 'WhatsApp Single-Bot Notification',
+                'title_en' => 'WhatsApp Single-Bot Notification',
+                'status' => 'coming_soon',
+                'badge' => 'Under Development (Coming Soon)',
+                'icon' => 'bi-whatsapp',
+                'color' => '#10b981',
+                'summary' => 'Official WhatsApp bot delivering instant notifications for urgent blood appeals, job openings, and maritime safety alerts directly to your phone.',
+                'description' => 'Delivering mission-critical BMMC communications without requiring any app installations. Optimized for ultra-low satellite data usage at sea.',
+                'problem' => 'High-latency satellite connections on ocean voyages make browsing heavy websites impractical, causing mariners to miss urgent appeals.',
+                'solution' => 'Ultra-lightweight text alerts delivered straight into your personal WhatsApp messaging stream with zero data overhead.',
+                'features' => [
+                    'Instant localized blood emergency alerts pushed directly to available donors',
+                    'Verified marine vacancy announcements and certificate course updates',
+                    'Automated status queries for sea-time computations and donor eligibility',
+                    '100% spam-free, user-controlled subscription preferences',
+                    'Flawless performance over low-bandwidth maritime satellite internet'
+                ],
+                'button_text' => 'Explore Service Roadmap',
+                'link' => 'service.php?slug=whatsapp-bot'
+            ],
+
+            // 15. Seafarer Verification Badge
+            'verification-badge' => [
+                'slug' => 'verification-badge',
+                'pillar' => 'tools',
+                'title' => 'Seafarer Verification Badge (Verified Mariner)',
+                'title_en' => 'Seafarer Verification Badge (Verified Mariner)',
+                'status' => 'coming_soon',
+                'badge' => 'Under Development (Coming Soon)',
+                'icon' => 'bi-patch-check-fill',
+                'color' => '#00d2ff',
+                'summary' => 'Prestigious blue badge awarded upon rigorous verification of authentic CDC, SID, and government documentation.',
+                'description' => 'Safeguarding community trust and dignity. Authenticates practicing mariners to eliminate impostors, fake recruitment agents, and fraudulent accounts.',
+                'problem' => 'Impostors masquerading as mariners on social platforms mislead the public, orchestrate fraudulent visa operations, and solicit illicit donations.',
+                'solution' => 'A robust verification protocol conducted by the BMMC credentialing panel, awarding a distinct digital seal of authenticity to confirmed seafarers.',
+                'features' => [
+                    'Official CDC, SID, and identity document validation',
+                    'Distinctive blue Verified Mariner badge displayed across public profiles',
+                    'Priority access to internal maritime forums and verified career boards',
+                    'Enhanced community trust and professional authenticity',
+                    'Strict zero-tolerance policy against forged documents and credentials'
+                ],
+                'button_text' => 'Explore Service Roadmap',
+                'link' => 'service.php?slug=verification-badge'
+            ],
+
+            // 16. BMMC Member Digital ID Card
+            'digital-id' => [
+                'slug' => 'digital-id',
+                'pillar' => 'tools',
+                'title' => 'BMMC Member Digital ID Card',
+                'title_en' => 'BMMC Member Digital ID Card',
+                'status' => 'coming_soon',
+                'badge' => 'Under Development (Coming Soon)',
+                'icon' => 'bi-qr-code-scan',
+                'color' => '#f59e0b',
+                'summary' => 'Dynamic QR-coded smart identity card for seamless proof of membership, emergency contacts, and blood group verification.',
+                'description' => 'A modern digital credentials card for registered BMMC members. Scanning the dynamic QR code instantly authenticates active membership, blood group, and emergency contact records.',
+                'problem' => 'In emergency scenarios or hospital admissions, quick proof of maritime affiliation and blood group was previously hindered by paper documents.',
+                'solution' => 'A tamper-proof digital card compatible with Apple/Google Wallets, also exportable as a high-resolution printable document.',
+                'features' => [
+                    'Dynamic secure QR code scanning technology',
+                    'Instant verification of blood group, maritime rank, and emergency contacts',
+                    'Exportable to smartphone mobile wallets (Apple Wallet & Google Pay)',
+                    'Special privileges and discounts at affiliated hospitals and diagnostic labs',
+                    'Print-ready high-resolution PNG and PDF credentials export'
+                ],
+                'button_text' => 'Explore Service Roadmap',
+                'link' => 'service.php?slug=digital-id'
+            ],
+
+            // 17. Transparent Donation & Expense Dashboard
+            'financial-dashboard' => [
+                'slug' => 'financial-dashboard',
+                'pillar' => 'community',
+                'title' => 'Transparent Donation & Expense Dashboard',
+                'title_en' => 'Transparent Donation & Expense Dashboard',
+                'status' => 'coming_soon',
+                'badge' => 'Under Development (Coming Soon)',
+                'icon' => 'bi-graph-up-arrow',
+                'color' => '#10b981',
+                'summary' => 'A 100% open public ledger publishing every taka received and spent on servers, emergency relief, and welfare operations.',
+                'description' => 'Since BMMC operates on pure voluntary goodwill, financial integrity is paramount. This open dashboard provides real-time visibility into all organizational income and expenditures.',
+                'problem' => 'Lack of financial transparency in non-profit initiatives frequently breeds skepticism and erodes public trust.',
+                'solution' => 'Every single contribution and expense voucher is published directly on the platform for public audit by all community members.',
+                'features' => [
+                    'Real-time public ledger tracking all donations and operational costs',
+                    'Monthly downloadable financial audit statements and scanned receipt vouchers',
+                    'Detailed cost allocations (server infrastructure, welfare funds, emergency aid)',
+                    'Independent audit reviews certified by a revolving committee of Master Mariners',
+                    'Strict compliance with 100% non-profit, non-commercial bylaws'
+                ],
+                'button_text' => 'Explore Service Roadmap',
+                'link' => 'service.php?slug=financial-dashboard'
+            ],
+
+            // 18. Privacy & Data Security Policy
+            'privacy-policy' => [
+                'slug' => 'privacy-policy',
+                'pillar' => 'community',
+                'title' => 'Privacy & Military-Grade Data Security Policy',
+                'title_en' => 'Privacy & Military-Grade Data Security Policy',
+                'status' => 'coming_soon',
+                'badge' => 'Under Development (Coming Soon)',
+                'icon' => 'bi-shield-lock-fill',
+                'color' => '#8b5cf6',
+                'summary' => 'Bank-grade AES-256 encryption ensuring seafarer CDC, passport, and CV data remains strictly private and protected.',
+                'description' => 'Protecting mariners\' sensitive identity and career records with high-grade cybersecurity protocols. Zero third-party data monetization or unauthorized sharing.',
+                'problem' => 'Predatory platforms scrape mariners\' passport and CDC records for identity theft, document forgery, or fraudulent crewing schemes.',
+                'solution' => 'AES-256 database encryption, anti-bot firewalls, and strict GDPR-aligned data protection principles to ensure full data sovereignty.',
+                'features' => [
+                    'AES-256 bit encrypted database architecture',
+                    'Automated anti-scraping and cloud firewall safeguards',
+                    'Strict prohibition against third-party data transfer without explicit consent',
+                    'Full right to permanent data deletion upon user request (GDPR standard)',
+                    'Continuous vulnerability testing and third-party security audits'
+                ],
+                'button_text' => 'Explore Service Roadmap',
+                'link' => 'service.php?slug=privacy-policy'
+            ],
+
+            // 19. Shore-Based Career Guidance Cell
+            'shore-career' => [
+                'slug' => 'shore-career',
+                'pillar' => 'career',
+                'title' => 'Shore-Based Career Guidance Cell',
+                'title_en' => 'Shore-Based Career Guidance Cell',
+                'status' => 'coming_soon',
+                'badge' => 'Under Development (Coming Soon)',
+                'icon' => 'bi-building-fill',
+                'color' => '#00d2ff',
+                'summary' => 'Specialized transition guidance, CV adaptation, and networking for senior seafarers seeking honorable shore-based careers.',
+                'description' => 'Assisting mariners in making a smooth, rewarding transition from deep-sea life to shore-based positions in marine surveying, shipyard management, port operations, and classification societies.',
+                'problem' => 'After years at sea, senior mariners wishing to return home often struggle to navigate the civilian maritime job market or tailor their executive resumes.',
+                'solution' => 'Mentorship from veteran ex-mariners holding executive shore roles, coupled with direct employer introductions across ports and shipping management.',
+                'features' => [
+                    'Mapping of civilian maritime career pathways in Bangladesh and abroad',
+                    'Entry requirements for Marine Surveying, Classification Societies, and P&I Clubs',
+                    'Shipyard superintendent, drydocking, and port logistics transition roadmaps',
+                    'Confidential one-to-one executive mentoring with senior ex-mariners',
+                    'Annual Maritime Professionals Shore Career Fair and Industry Networking Meet'
+                ],
+                'button_text' => 'Explore Service Roadmap',
+                'link' => 'service.php?slug=shore-career'
+            ],
+
+            // 20. Verification & Anti-Fraud Alert
+            'anti-fraud' => [
+                'slug' => 'anti-fraud',
+                'pillar' => 'emergency',
+                'title' => 'Verification & Anti-Fraud Alert Board',
+                'title_en' => 'Verification & Anti-Fraud Alert Board',
+                'status' => 'coming_soon',
+                'badge' => 'Under Development (Coming Soon)',
+                'icon' => 'bi-exclamation-triangle-fill',
+                'color' => '#ef233c',
+                'summary' => 'Live community-reported blacklist and vigilance board dismantling fake crewing agencies and maritime visa scams.',
+                'description' => 'A real-time community intelligence and awareness hub designed to neutralize fraudulent recruiters, bogus offer letters, and international visa rackets targeting mariners.',
+                'problem' => 'Every year, dozens of young sailors fall victim to counterfeit contracts, losing substantial sums to unauthorized brokers who disappear overnight.',
+                'solution' => 'A free verification service where suspicious offer letters are authenticated, and proven scams are publicly exposed on our vigilance board.',
+                'features' => [
+                    'Crowdsourced, verified blacklist of scam recruiters and bogus agencies',
+                    'Free community helpdesk to authenticate offer letters and visa credentials',
+                    'Red-flag indicators checklist educating cadets on deceptive recruitment practices',
+                    'Direct legal referral for victims seeking statutory law enforcement action',
+                    'Periodic intelligence reports shared with DG Shipping and law enforcement agencies'
+                ],
+                'button_text' => 'Explore Service Roadmap',
+                'link' => 'service.php?slug=anti-fraud'
+            ],
+
+            // 21. Become a BMMC Volunteer Database
+            'volunteer-network' => [
+                'slug' => 'volunteer-network',
+                'pillar' => 'community',
+                'title' => 'BMMC Volunteer Network & Database',
+                'title_en' => 'BMMC Volunteer Network & Database',
+                'status' => 'coming_soon',
+                'badge' => 'Open Registration',
+                'icon' => 'bi-person-heart',
+                'color' => '#00d2ff',
+                'summary' => 'A nationwide humanitarian corps across Chattogram, Dhaka, Khulna, and ships worldwide, standing ready to serve seafarers and citizens.',
+                'description' => 'The selfless lifeblood of BMMC. Uniting active mariners, cadets, and empathetic citizens into organized local squads dedicated to rescue coordination, cadet mentorship, and blood donation.',
+                'problem' => 'When crises strike mariners or their families, coordinated boots-on-the-ground support was previously lacking across port cities and regional hubs.',
+                'solution' => 'A nationwide volunteer mobilization network categorized by port and district hubs, seamlessly integrated with the Blood Donation Portal in a single form.',
+                'features' => [
+                    'Regional volunteer squads stationed in Chattogram, Dhaka, Khulna, and Payra',
+                    'Seamless automated integration with the Blood Donor Registry via single-click opt-in',
+                    'Active volunteer roles across Emergency Rescue, Cadet Mentorship, and IT utilities',
+                    'Annual volunteer appreciation awards, certificates, and recognition ceremonies',
+                    '100% apolitical, non-commercial humanitarian brotherhood'
+                ],
+                'button_text' => 'Fill Volunteer Form',
+                'link' => 'volunteer_register.php'
+            ]
+        ];
+    }
+
+    // Bengali Default Array
     return [
         // 1. Blood Donation Network (LIVE FLAGSHIP)
         'blood-network' => [

@@ -3,21 +3,33 @@
  * Bangladesh Merchant Mariners Community (BMMC)
  * Volunteer Registration with Integrated Blood Donation Opt-in
  */
-$pageTitle = 'BMMC ভলান্টিয়ার আবেদন ও যোগ দিন';
-$ogTitle = 'Become a BMMC Volunteer — মানবতার সেবায় যোগ দিন';
-$ogDescription = 'বাংলাদেশ মার্চেন্ট মেরিনার্স কমিউনিটি (BMMC)-এর বিভিন্ন সেবা উইংয়ে ভলান্টিয়ার হিসেবে যোগ দিন এবং রক্তদান নেটওয়ার্কের অংশ হোন।';
-
-require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/includes/districts.php';
 require_once __DIR__ . '/includes/functions.php';
 require_once __DIR__ . '/includes/services_data.php';
+
+$pageTitle = __('vol_page_title');
+$ogTitle = __('vol_page_title');
+$ogDescription = __('vol_hero_subtitle');
+
+require_once __DIR__ . '/includes/header.php';
 
 $marinerRanks = getMarinerRanks();
 $currentUser = current_user();
 $bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
 $preselectedWing = $_GET['wing'] ?? '';
 
-$portCities = [
+$portCities = is_english() ? [
+    'Chattogram Port & Patenga Area',
+    'Chattogram City & Agrabad',
+    'Dhaka Division & Metros',
+    'Mongla Port & Khulna',
+    'Payra Port & Barishal',
+    'Sylhet Division',
+    'Rajshahi & North Bengal',
+    'Stationed Abroad / At Sea on Board',
+    'Other Locations / Districts'
+] : [
     'চট্টগ্রাম বন্দর ও পতেঙ্গা এলাকা (Chattogram Port)',
     'চট্টগ্রাম মহানগর ও আগ্রাবাদ (Chattogram City)',
     'ঢাকা বিভাগ (Dhaka Division)',
@@ -38,7 +50,7 @@ $portCities = [
                 <!-- Back Navigation -->
                 <div class="mb-3">
                     <a href="<?= BASE_URL ?>/index.php" class="btn btn-outline-light btn-sm rounded-pill px-3 py-1">
-                        <i class="bi bi-arrow-left me-1"></i> হোমে ফিরুন
+                        <i class="bi bi-arrow-left me-1"></i> <?= __('breadcrumb_home') ?>
                     </a>
                 </div>
 
@@ -47,13 +59,13 @@ $portCities = [
                     <div style="width: 70px; height: 70px; margin: 0 auto 16px; background: linear-gradient(135deg, rgba(0, 210, 255, 0.2), rgba(2, 132, 199, 0.3)); border-radius: 20px; display: flex; align-items: center; justify-content: center; border: 2px solid #00d2ff; box-shadow: 0 0 25px rgba(0, 210, 255, 0.35);">
                         <i class="bi bi-people-fill text-info fs-1"></i>
                     </div>
-                    <h2 class="fw-bold text-white mb-2">BMMC ভলান্টিয়ার টিমে যুক্ত হোন</h2>
+                    <h2 class="fw-bold text-white mb-2"><?= __('vol_hero_title') ?></h2>
                     <p class="text-secondary small mb-3" style="max-width: 600px; margin: 0 auto;">
-                        মেরিন কমিউনিটির অধিকার রক্ষা, জরুরি উদ্ধার, ক্যাডেটদের ক্যারিয়ার গাইডেন্স ও দেশব্যাপী রক্তদানের যৌথ নেটওয়ার্ক।
+                        <?= __('vol_hero_subtitle') ?>
                     </p>
                     <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-warning bg-opacity-10 border border-warning border-opacity-30 text-warning small">
                         <i class="bi bi-heart-fill"></i>
-                        <span>দুনিয়াবি কোনো বিনিময় বা বেতনাদি নেই — পুরোটাই শতভাগ স্বেচ্ছাসেবা!</span>
+                        <span><?= __('vol_badge_selfless') ?></span>
                     </div>
                 </div>
 
@@ -63,15 +75,15 @@ $portCities = [
                     <!-- Identity Section -->
                     <div class="p-4 mb-4 rounded-3 border border-info border-opacity-30" style="background: rgba(0, 210, 255, 0.05);">
                         <label class="form-label d-block text-info fw-bold mb-3">
-                            <i class="bi bi-person-badge me-2"></i> ১. আপনার প্রাথমিক পরিচয় <span class="text-danger">*</span>
+                            <i class="bi bi-person-badge me-2"></i> <?= __('vol_sec1_title') ?> <span class="text-danger">*</span>
                         </label>
                         <div class="row g-3">
                             <div class="col-sm-6">
                                 <div class="form-check p-3 rounded-3 border border-secondary border-opacity-30 h-100" style="background: rgba(255, 255, 255, 0.02);">
                                     <input class="form-check-input ms-0 me-2" type="radio" name="user_type" id="v_type_mariner" value="mariner" checked onchange="toggleMarinerFields(true)">
                                     <label class="form-check-label text-white fw-semibold" for="v_type_mariner">
-                                        ⚓ মার্চেন্ট মেরিনার (Merchant Mariner)
-                                        <small class="text-secondary d-block mt-1">সিডিসি বা এসআইডি ধারী নাবিক</small>
+                                        ⚓ <?= __('vol_type_mariner') ?>
+                                        <small class="text-secondary d-block mt-1"><?= __('vol_type_mariner_sub') ?></small>
                                     </label>
                                 </div>
                             </div>
@@ -79,8 +91,8 @@ $portCities = [
                                 <div class="form-check p-3 rounded-3 border border-secondary border-opacity-30 h-100" style="background: rgba(255, 255, 255, 0.02);">
                                     <input class="form-check-input ms-0 me-2" type="radio" name="user_type" id="v_type_general" value="general" onchange="toggleMarinerFields(false)">
                                     <label class="form-check-label text-white fw-semibold" for="v_type_general">
-                                        👥 সাধারণ নাগরিক / শুভানুধ্যায়ী
-                                        <small class="text-secondary d-block mt-1">মেরিন ও মানবসেবায় আগ্রহী ভলান্টিয়ার</small>
+                                        👥 <?= __('vol_type_general') ?>
+                                        <small class="text-secondary d-block mt-1"><?= __('vol_type_general_sub') ?></small>
                                     </label>
                                 </div>
                             </div>
@@ -91,15 +103,15 @@ $portCities = [
                     <div id="mariner-fields" class="p-4 mb-4 rounded-3 border border-primary border-opacity-30" style="background: rgba(30, 58, 138, 0.25);">
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label for="cdc_sid_no" class="form-label text-light">CDC / SID নম্বর <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control glass-input" id="cdc_sid_no" name="cdc_sid_no" placeholder="যেমন: C/O/12345 বা SID No." value="<?= htmlspecialchars($currentUser['cdc_sid'] ?? '') ?>">
+                                <label for="cdc_sid_no" class="form-label text-light"><?= __('vol_cdc_sid_label') ?> <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control glass-input" id="cdc_sid_no" name="cdc_sid_no" placeholder="<?= __('vol_cdc_sid_placeholder') ?>" value="<?= htmlspecialchars($currentUser['cdc_sid'] ?? '') ?>">
                             </div>
                             <div class="col-md-6">
-                                <label for="mariner_rank" class="form-label text-light">র‍্যাংক / পদবী</label>
+                                <label for="mariner_rank" class="form-label text-light"><?= __('vol_rank_label') ?></label>
                                 <select class="form-select glass-input" id="mariner_rank" name="mariner_rank">
-                                    <option value="">-- পদবী নির্বাচন করুন --</option>
+                                    <option value=""><?= __('vol_rank_select') ?></option>
                                     <?php foreach ($marinerRanks as $title => $val): ?>
-                                        <option value="<?= htmlspecialchars($val) ?>"><?= htmlspecialchars($title) ?></option>
+                                        <option value="<?= htmlspecialchars($val) ?>"><?= htmlspecialchars(is_english() ? $val : $title) ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -109,25 +121,25 @@ $portCities = [
                     <!-- Personal & Contact Information -->
                     <div class="p-4 mb-4 rounded-3 border border-secondary border-opacity-25" style="background: rgba(255, 255, 255, 0.02);">
                         <label class="form-label d-block text-white fw-bold mb-3">
-                            <i class="bi bi-card-heading me-2 text-info"></i> ২. যোগাযোগের তথ্য
+                            <i class="bi bi-card-heading me-2 text-info"></i> <?= __('vol_sec2_title') ?>
                         </label>
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label for="name" class="form-label text-light">পূর্ণ নাম <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control glass-input" id="name" name="name" value="<?= htmlspecialchars($currentUser['name'] ?? '') ?>" placeholder="আপনার পূর্ণ নাম লিখুন" required>
+                                <label for="name" class="form-label text-light"><?= __('vol_name_label') ?> <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control glass-input" id="name" name="name" value="<?= htmlspecialchars($currentUser['name'] ?? '') ?>" placeholder="<?= __('vol_name_placeholder') ?>" required>
                             </div>
                             <div class="col-md-6">
-                                <label for="phone" class="form-label text-light">সচল মোবাইল নম্বর <span class="text-danger">*</span></label>
-                                <input type="tel" class="form-control glass-input" id="phone" name="phone" value="<?= htmlspecialchars($currentUser['phone'] ?? '') ?>" placeholder="017XXXXXXXX" required>
+                                <label for="phone" class="form-label text-light"><?= __('vol_phone_label') ?> <span class="text-danger">*</span></label>
+                                <input type="tel" class="form-control glass-input" id="phone" name="phone" value="<?= htmlspecialchars($currentUser['phone'] ?? '') ?>" placeholder="<?= __('vol_phone_placeholder') ?>" required>
                             </div>
                             <div class="col-md-6">
-                                <label for="email" class="form-label text-light">ইমেইল ঠিকানা <span class="text-danger">*</span></label>
-                                <input type="email" class="form-control glass-input" id="email" name="email" value="<?= htmlspecialchars($currentUser['email'] ?? '') ?>" placeholder="name@example.com" required>
+                                <label for="email" class="form-label text-light"><?= __('vol_email_label') ?> <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control glass-input" id="email" name="email" value="<?= htmlspecialchars($currentUser['email'] ?? '') ?>" placeholder="<?= __('vol_email_placeholder') ?>" required>
                             </div>
                             <div class="col-md-6">
-                                <label for="port_city" class="form-label text-light">আপনার অবস্থান / বন্দর এলাকা <span class="text-danger">*</span></label>
+                                <label for="port_city" class="form-label text-light"><?= __('vol_location_label') ?> <span class="text-danger">*</span></label>
                                 <select class="form-select glass-input" id="port_city" name="port_city" required>
-                                    <option value="">-- অবস্থান নির্বাচন করুন --</option>
+                                    <option value=""><?= __('vol_location_select') ?></option>
                                     <?php foreach ($portCities as $pCity): ?>
                                         <option value="<?= htmlspecialchars($pCity) ?>"><?= htmlspecialchars($pCity) ?></option>
                                     <?php endforeach; ?>
@@ -139,16 +151,16 @@ $portCities = [
                     <!-- Preferred Service Wings -->
                     <div class="p-4 mb-4 rounded-3 border border-secondary border-opacity-25" style="background: rgba(255, 255, 255, 0.02);">
                         <label class="form-label d-block text-white fw-bold mb-2">
-                            <i class="bi bi-grid-3x3-gap-fill me-2 text-info"></i> ৩. কোন কোন সেবায় ভূমিকা রাখতে চান?
+                            <i class="bi bi-grid-3x3-gap-fill me-2 text-info"></i> <?= __('vol_sec3_title') ?>
                         </label>
-                        <small class="text-secondary d-block mb-3">একাধিক ক্ষেত্রে টিক দিতে পারেন:</small>
+                        <small class="text-secondary d-block mb-3"><?= __('vol_sec3_sub') ?></small>
                         
                         <div class="row g-3">
                             <div class="col-sm-6">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="interest[]" value="Blood Donation Coordination" id="w_blood" checked>
                                     <label class="form-check-label text-light small" for="w_blood">
-                                        🩸 রক্তদান কার্যক্রম সমন্বয় (Blood Coordination)
+                                        <?= __('vol_wing_blood') ?>
                                     </label>
                                 </div>
                             </div>
@@ -156,7 +168,7 @@ $portCities = [
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="interest[]" value="Emergency Response Team" id="w_emergency" <?= ($preselectedWing === 'ইমার্জেন্সি রেসপন্স টিম' ? 'checked' : '') ?>>
                                     <label class="form-check-label text-light small" for="w_emergency">
-                                        🆘 জরুরি সাড়া ও উদ্ধার টিম (Emergency Response)
+                                        <?= __('vol_wing_emergency') ?>
                                     </label>
                                 </div>
                             </div>
@@ -164,7 +176,7 @@ $portCities = [
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="interest[]" value="Legal Support & ITF Info" id="w_legal" <?= ($preselectedWing === 'আইনি সহায়তা সেল' ? 'checked' : '') ?>>
                                     <label class="form-check-label text-light small" for="w_legal">
-                                        ⚖️ আইনি সহায়তা ও চুক্তিপত্র যাচাই (Legal Cell)
+                                        <?= __('vol_wing_legal') ?>
                                     </label>
                                 </div>
                             </div>
@@ -172,7 +184,7 @@ $portCities = [
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="interest[]" value="Fresh Cadet Training" id="w_cadet" <?= ($preselectedWing === 'ফ্রেশ ক্যাডেট ট্রেইনিং প্রোগ্রাম' ? 'checked' : '') ?>>
                                     <label class="form-check-label text-light small" for="w_cadet">
-                                        🎓 ফ্রেশ ক্যাডেট মেন্টরিং ও ট্রেইনিং গাইড
+                                        <?= __('vol_wing_cadet') ?>
                                     </label>
                                 </div>
                             </div>
@@ -180,7 +192,7 @@ $portCities = [
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="interest[]" value="Manning Agency Review & Anti-Fraud" id="w_agency" <?= ($preselectedWing === 'ম্যানিং এজেন্সি ও ট্রেনিং রিভিউ' ? 'checked' : '') ?>>
                                     <label class="form-check-label text-light small" for="w_agency">
-                                        🏢 এজেন্সি রিভিউ ও স্ক্যাম প্রতিরোধ (Anti-Fraud)
+                                        <?= __('vol_wing_agency') ?>
                                     </label>
                                 </div>
                             </div>
@@ -188,7 +200,7 @@ $portCities = [
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="interest[]" value="IT, Web & Digital Tools" id="w_it" <?= ($preselectedWing === 'ডিজিটাল লগবুক ও ডকুমেন্ট ট্র্যাকার' ? 'checked' : '') ?>>
                                     <label class="form-check-label text-light small" for="w_it">
-                                        💻 আইটি, ওয়েব ও ডিজিটাল ইউটিলিটি ডেভেলপমেন্ট
+                                        <?= __('vol_wing_it') ?>
                                     </label>
                                 </div>
                             </div>
@@ -196,7 +208,7 @@ $portCities = [
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="interest[]" value="Medical & Test Centre Liaison" id="w_medical" <?= ($preselectedWing === 'মেডিকেল ও টেস্ট সেন্টার ডিরেক্টরি' ? 'checked' : '') ?>>
                                     <label class="form-check-label text-light small" for="w_medical">
-                                        🏥 মেডিকেল ও টেস্ট সেন্টার যোগাযোগ
+                                        <?= __('vol_wing_medical') ?>
                                     </label>
                                 </div>
                             </div>
@@ -204,7 +216,7 @@ $portCities = [
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="interest[]" value="Welfare & Loss of Life Fund" id="w_fund" <?= ($preselectedWing === 'জীবনহানি ও পেনশন সহায়তা তহবিল' ? 'checked' : '') ?>>
                                     <label class="form-check-label text-light small" for="w_fund">
-                                        🕊️ মৃত সহকর্মীর পরিবার ও ওয়েলফেয়ার সহায়তা
+                                        <?= __('vol_wing_welfare') ?>
                                     </label>
                                 </div>
                             </div>
@@ -221,10 +233,10 @@ $portCities = [
                             </div>
                             <div class="flex-grow-1">
                                 <label class="form-check-label text-white fw-bold fs-6 d-block mb-1" for="agree_blood_donation">
-                                    ❤️ Agree to Donate Blood (রক্তদানে সম্মতি)
+                                    <?= __('vol_blood_optin_label') ?>
                                 </label>
                                 <p class="text-light opacity-75 small mb-3">
-                                    আপনি কি রক্তদানে আগ্রহী? এই অপশনটি চালু রাখলে আপনার অ্যাকাউন্টটি স্বয়ংক্রিয়ভাবে <strong>BMMC ব্লাড ডোনার নেটওয়ার্কেও</strong> নিবন্ধিত হয়ে যাবে। আপনার এলাকায় কোনো মুমূর্ষু রোগীর জরুরি রক্তের প্রয়োজন হলে আপনি নোটিফিকেশন পাবেন।
+                                    <?= __('vol_blood_optin_desc') ?>
                                 </p>
 
                                 <!-- Collapsible Blood Group & Donation Fields -->
@@ -232,10 +244,10 @@ $portCities = [
                                     <div class="row g-3">
                                         <div class="col-md-6">
                                             <label for="blood_group" class="form-label text-white fw-semibold small">
-                                                আপনার রক্তের গ্রুপ <span class="text-danger">*</span>
+                                                <?= __('vol_blood_group_label') ?> <span class="text-danger">*</span>
                                             </label>
                                             <select class="form-select glass-input border-danger border-opacity-50" id="blood_group" name="blood_group">
-                                                <option value="">-- রক্তের গ্রুপ নির্বাচন করুন --</option>
+                                                <option value=""><?= __('vol_blood_group_select') ?></option>
                                                 <?php foreach ($bloodGroups as $bg): ?>
                                                     <option value="<?= $bg ?>"><?= $bg ?></option>
                                                 <?php endforeach; ?>
@@ -243,13 +255,13 @@ $portCities = [
                                         </div>
                                         <div class="col-md-6">
                                             <label for="last_donation_date" class="form-label text-white fw-semibold small">
-                                                সর্বশেষ রক্তদানের আনুমানিক তারিখ (যদি থাকে)
+                                                <?= __('vol_last_donation_label') ?>
                                             </label>
                                             <input type="date" class="form-control glass-input" id="last_donation_date" name="last_donation_date" max="<?= date('Y-m-d') ?>">
                                         </div>
                                     </div>
                                     <div class="mt-2 text-info small">
-                                        <i class="bi bi-shield-check me-1"></i> BMMC চিকিৎসাবিজ্ঞানসম্মত ৪ মাসের রেস্টিং প্রোটোকল মেনে চলে। রক্তদানের পর ৪ মাস আপনার কাছে কোনো নতুন কল যাবে না।
+                                        <i class="bi bi-shield-check me-1"></i> <?= __('vol_blood_resting_note') ?>
                                     </div>
                                 </div>
                             </div>
@@ -258,13 +270,13 @@ $portCities = [
 
                     <!-- Personal Note / Message -->
                     <div class="mb-4">
-                        <label for="message" class="form-label text-light">আপনার কোনো বিশেষ দক্ষতা বা পূর্ব অভিজ্ঞতা (ঐচ্ছিক)</label>
-                        <textarea class="form-control glass-input" id="message" name="message" rows="3" placeholder="অতীতে কোনো সমাজসেবা, চিকিৎসাসেবা বা মেরিটাইম ওয়েলফেয়ারে কাজের অভিজ্ঞতা থাকলে সংক্ষেপে লিখুন..."></textarea>
+                        <label for="message" class="form-label text-light"><?= __('vol_note_label') ?></label>
+                        <textarea class="form-control glass-input" id="message" name="message" rows="3" placeholder="<?= __('vol_note_placeholder') ?>"></textarea>
                     </div>
 
                     <!-- Submit Button -->
                     <button type="submit" class="btn btn-ocean btn-lg w-100 rounded-pill py-3 fw-bold shadow-lg">
-                        <i class="bi bi-check-circle-fill me-2"></i> BMMC ভলান্টিয়ার আবেদন জমা দিন
+                        <i class="bi bi-check-circle-fill me-2"></i> <?= __('vol_btn_submit') ?>
                     </button>
                 </form>
             </div>

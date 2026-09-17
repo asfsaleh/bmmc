@@ -2,17 +2,19 @@
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/functions.php';
 
-$pageTitle = $pageTitle ?? SITE_NAME;
+$pageTitle = $pageTitle ?? (is_english() ? SITE_NAME_EN : SITE_NAME);
 $flash = get_flash();
 
 // OpenGraph & Meta Configuration for Facebook, WhatsApp, Messenger
 $ogTitle = $ogTitle ?? ($pageTitle . ' — ' . SITE_NAME_EN);
-$ogDescription = $ogDescription ?? 'বাংলাদেশ মার্চেন্ট মেরিনার্স কমিউনিটি (BMMC) — মেরিনার ও সাধারণ নাগরিকদের জন্য জরুরি রক্তদান ও স্বেচ্ছাসেবী সহায়তা পোর্টাল। ৪ মাসের বিশ্রাম বিরতি সুরক্ষা ও স্বয়ংক্রিয় ম্যাচিং।';
+$ogDescription = $ogDescription ?? (is_english() 
+    ? 'Bangladesh Merchant Mariners Community (BMMC) — Dedicated seafarer welfare, emergency response, cadet development, and humanitarian blood donation platform.' 
+    : 'বাংলাদেশ মার্চেন্ট মেরিনার্স কমিউনিটি (BMMC) — মেরিনার ও সাধারণ নাগরিকদের জন্য জরুরি রক্তদান ও স্বেচ্ছাসেবী সহায়তা পোর্টাল। ৪ মাসের বিশ্রাম বিরতি সুরক্ষা ও স্বয়ংক্রিয় ম্যাচিং।');
 $ogImage = $ogImage ?? (rtrim(BASE_URL, '/') . '/assets/images/og-image.jpg');
 $currentUrl = $currentUrl ?? ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? "https" : "http") . "://" . ($_SERVER['HTTP_HOST'] ?? 'bmmc.skillsetup.org') . ($_SERVER['REQUEST_URI'] ?? ''));
 ?>
 <!DOCTYPE html>
-<html lang="bn" prefix="og: https://ogp.me/ns#">
+<html lang="<?= current_lang() ?>" prefix="og: https://ogp.me/ns#">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -54,7 +56,7 @@ $currentUrl = $currentUrl ?? ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !=
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="BMMC Blood & Seafarers Welfare Network">
     <meta property="og:url" content="<?= htmlspecialchars($currentUrl) ?>">
-    <meta property="og:locale" content="bn_BD">
+    <meta property="og:locale" content="<?= is_english() ? 'en_US' : 'bn_BD' ?>">
 
     <!-- Twitter / X Card -->
     <meta name="twitter:card" content="summary_large_image">

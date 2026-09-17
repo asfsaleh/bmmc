@@ -17,7 +17,7 @@ $services = get_bmmc_services();
             </div>
             <div>
                 <span class="fw-bold fs-5 text-white d-block" style="line-height: 1.1; letter-spacing: 0.5px;">BMMC</span>
-                <small class="text-info" style="font-size: 0.70rem; letter-spacing: 0.3px;">বাংলাদেশ মার্চেন্ট মেরিনার্স</small>
+                <small class="text-info" style="font-size: 0.70rem; letter-spacing: 0.3px;"><?= __('nav_brand_sub', 'Bangladesh Merchant Mariners') ?></small>
             </div>
         </a>
 
@@ -33,19 +33,34 @@ $services = get_bmmc_services();
 
         <!-- Navbar Links & Mobile Collapsible Drawer -->
         <div class="collapse navbar-collapse mobile-nav-collapse" id="navbarMain">
+            <!-- Mobile Language Switcher (Prominently placed at top of Hamburger Menu) -->
+            <div class="d-lg-none d-flex align-items-center justify-content-between p-2 mb-3 mt-2 rounded-3 bmmc-mobile-lang-bar" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12);">
+                <span class="small text-secondary ps-1 fw-semibold d-flex align-items-center gap-1">
+                    <i class="bi bi-translate text-info"></i> <?= __('lang_switch_title', 'Language') ?>
+                </span>
+                <div class="btn-group btn-group-sm rounded-pill p-1" style="background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.1);">
+                    <a href="<?= lang_url('en') ?>" class="btn btn-sm rounded-pill px-3 py-1 <?= is_english() ? 'fw-bold shadow-sm' : 'text-light' ?>" style="<?= is_english() ? 'background: #00d2ff; color: #061426; font-weight: 700;' : 'color: rgba(255,255,255,0.7);' ?>">
+                        English
+                    </a>
+                    <a href="<?= lang_url('bn') ?>" class="btn btn-sm rounded-pill px-3 py-1 <?= !is_english() ? 'fw-bold shadow-sm' : 'text-light' ?>" style="<?= !is_english() ? 'background: #00d2ff; color: #061426; font-weight: 700;' : 'color: rgba(255,255,255,0.7);' ?>">
+                        বাংলা
+                    </a>
+                </div>
+            </div>
+
             <!-- Centered Nav Links: Home, Our Services, Blood Portal -->
             <ul class="navbar-nav mx-lg-auto mb-2 mb-lg-0 pt-3 pt-lg-0 align-items-lg-center gap-1 gap-lg-2">
                 <!-- Home -->
                 <li class="nav-item">
                     <a class="nav-link text-white py-2 px-3 rounded-pill nav-link-mobile nav-pill-btn" href="<?= BASE_URL ?>/index.php">
-                        <i class="bi bi-house-door me-1 text-info"></i> হোম
+                        <i class="bi bi-house-door me-1 text-info"></i> <?= __('nav_home', 'Home') ?>
                     </a>
                 </li>
 
                 <!-- Desktop "Our Services" Mega Dropdown (Visible on Desktop: d-none d-lg-block) -->
                 <li class="nav-item dropdown dropdown-mega d-none d-lg-block">
                     <a class="nav-link dropdown-toggle text-white py-2 px-3 rounded-pill nav-link-mobile nav-pill-btn" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
-                        <i class="bi bi-grid-fill me-1 text-info"></i> আমাদের সেবাসমূহ
+                        <i class="bi bi-grid-fill me-1 text-info"></i> <?= __('nav_our_services', 'Our Services') ?>
                     </a>
 
                     <!-- Desktop Mega Menu -->
@@ -54,13 +69,13 @@ $services = get_bmmc_services();
                             <div>
                                 <h6 class="text-white fw-bold mb-0 d-flex align-items-center gap-2">
                                     <i class="bi bi-compass text-info fs-5"></i>
-                                    <span>BMMC সার্বজনীন মেরিটাইম সেবা উইং</span>
+                                    <span><?= __('nav_mega_title') ?></span>
                                 </h6>
-                                <small class="text-secondary" style="font-size: 0.78rem;">সমগ্র বিশ্বের বাংলাদেশি নাবিক ও পরিবারের কল্যাণ ও অধিকার সুরক্ষায় নিবেদিত ২১টি সেবা</small>
+                                <small class="text-secondary" style="font-size: 0.78rem;"><?= __('nav_mega_subtitle') ?></small>
                             </div>
                             <div class="d-flex align-items-center gap-2">
                                 <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 px-3 py-1 rounded-pill small">
-                                    <i class="bi bi-check-circle-fill me-1"></i> ১টি সেবা সক্রিয় (Live) • ২০টি নির্মাণাধীন
+                                    <i class="bi bi-check-circle-fill me-1"></i> <?= __('nav_mega_status') ?>
                                 </span>
                                 <button type="button" class="btn btn-outline-secondary btn-sm rounded-circle p-0 text-white-50 border-0" id="closeMegaMenuBtn" title="মেনু বন্ধ করুন" style="width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.08); cursor: pointer;">
                                     <i class="bi bi-x-lg text-white" style="font-size: 0.85rem;"></i>
@@ -104,10 +119,10 @@ $services = get_bmmc_services();
 
                         <div class="mt-3 pt-3 border-top border-secondary border-opacity-25 d-flex justify-content-between align-items-center">
                             <div class="small text-secondary">
-                                <i class="bi bi-info-circle me-1 text-info"></i> প্রতিটি সেবার বিস্তারিত ও রোডম্যাপ দেখতে যেকোনো সেবায় ক্লিক করুন।
+                                <i class="bi bi-info-circle me-1 text-info"></i> <?= __('nav_mega_footer_hint') ?>
                             </div>
                             <a href="<?= BASE_URL ?>/index.php#services-section" class="btn btn-outline-info btn-sm rounded-pill px-3 py-1 close-mega-on-click">
-                                সমস্ত সেবার গ্রিড ভিউ <i class="bi bi-arrow-right ms-1"></i>
+                                <?= __('nav_view_all_services') ?> <i class="bi bi-arrow-right ms-1"></i>
                             </a>
                         </div>
                     </div>
@@ -116,7 +131,7 @@ $services = get_bmmc_services();
                 <!-- Mobile Multi-Level Services Accordion (Visible on Mobile only: d-lg-none) -->
                 <li class="nav-item d-lg-none w-100">
                     <a class="nav-link text-white py-2 px-3 rounded-3 nav-pill-btn d-flex align-items-center justify-content-between" data-bs-toggle="collapse" href="#mobileServicesCollapse" role="button" aria-expanded="false" aria-controls="mobileServicesCollapse" id="mobileServicesToggle" style="background: rgba(255, 255, 255, 0.04);">
-                        <span><i class="bi bi-grid-fill me-2 text-info"></i>আমাদের সেবাসমূহ</span>
+                        <span><i class="bi bi-grid-fill me-2 text-info"></i><?= __('nav_our_services') ?></span>
                         <i class="bi bi-chevron-down toggle-icon transition-transform"></i>
                     </a>
 
@@ -131,7 +146,7 @@ $services = get_bmmc_services();
                                     <button class="accordion-button collapsed py-2 px-3 text-white d-flex align-items-center gap-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_mob_<?= $pId ?>" aria-expanded="false" aria-controls="collapse_mob_<?= $pId ?>" style="background: rgba(255, 255, 255, 0.03); font-size: 0.88rem; font-weight: 600;">
                                         <i class="bi <?= htmlspecialchars($pillar['icon']) ?>" style="color: <?= htmlspecialchars($pillar['color']) ?>; font-size: 1rem;"></i>
                                         <span class="flex-grow-1 text-truncate"><?= htmlspecialchars($pillar['title']) ?></span>
-                                        <span class="badge bg-secondary bg-opacity-50 text-white-50 rounded-pill px-2 py-0" style="font-size: 0.65rem;"><?= count($pServices) ?>টি</span>
+                                        <span class="badge bg-secondary bg-opacity-50 text-white-50 rounded-pill px-2 py-0" style="font-size: 0.65rem;"><?= count($pServices) ?> <?= is_english() ? 'Services' : 'টি' ?></span>
                                     </button>
                                 </h2>
                                 <!-- Level 2 Submenu: সেবা গুলো (Services list under this pillar) -->
@@ -149,9 +164,9 @@ $services = get_bmmc_services();
                                                 </div>
                                             </div>
                                             <?php if ($s['status'] === 'live'): ?>
-                                                <span class="badge-live-pulse flex-shrink-0 ms-2">LIVE</span>
+                                                <span class="badge-live-pulse flex-shrink-0 ms-2"><?= __('nav_live_badge') ?></span>
                                             <?php else: ?>
-                                                <span class="badge-soon flex-shrink-0 ms-2">Soon</span>
+                                                <span class="badge-soon flex-shrink-0 ms-2"><?= __('nav_soon_badge') ?></span>
                                             <?php endif; ?>
                                         </a>
                                         <?php endforeach; ?>
@@ -163,7 +178,7 @@ $services = get_bmmc_services();
 
                         <div class="p-2 border-top border-secondary border-opacity-25 mt-2 text-center">
                             <a href="<?= BASE_URL ?>/index.php#services-section" class="btn btn-outline-info btn-sm rounded-pill w-100 py-1" style="font-size: 0.82rem;">
-                                <i class="bi bi-grid-fill me-1"></i> সমস্ত সেবাসমূহ দেখুন
+                                <i class="bi bi-grid-fill me-1"></i> <?= __('nav_all_services_list') ?>
                             </a>
                         </div>
                     </div>
@@ -173,8 +188,8 @@ $services = get_bmmc_services();
                 <li class="nav-item">
                     <a class="nav-link text-white py-2 px-3 rounded-pill nav-link-mobile nav-pill-btn d-flex align-items-center gap-1" href="<?= BASE_URL ?>/blood.php">
                         <i class="bi bi-droplet-fill text-danger"></i>
-                        <span>রক্তদান পোর্টাল</span>
-                        <span class="badge-live-pulse ms-1">LIVE</span>
+                        <span><?= __('nav_blood_portal') ?></span>
+                        <span class="badge-live-pulse ms-1"><?= __('nav_live_badge') ?></span>
                     </a>
                 </li>
 
@@ -182,7 +197,7 @@ $services = get_bmmc_services();
                 <?php if ($isAdmin): ?>
                 <li class="nav-item">
                     <a class="nav-link text-warning fw-bold py-2 px-3 rounded-pill nav-link-mobile nav-pill-btn" href="<?= BASE_URL ?>/admin/dashboard.php">
-                        <i class="bi bi-shield-lock-fill me-1"></i> অ্যাডমিন
+                        <i class="bi bi-shield-lock-fill me-1"></i> <?= __('nav_admin') ?>
                     </a>
                 </li>
                 <?php endif; ?>
@@ -202,28 +217,28 @@ $services = get_bmmc_services();
                         <button class="btn btn-outline-info dropdown-toggle rounded-pill px-3 py-2 py-lg-1 btn-sm w-100 text-center text-nowrap" type="button" data-bs-toggle="dropdown">
                             <i class="bi bi-person-circle me-1"></i> <?= htmlspecialchars($currentUser['name']) ?>
                             <?php if ($currentUser['user_type'] === 'mariner'): ?>
-                                <span class="badge bg-primary ms-1">মেরিনার</span>
+                                <span class="badge bg-primary ms-1"><?= is_english() ? 'Mariner' : 'মেরিনার' ?></span>
                             <?php endif; ?>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark glass-card border-secondary w-100 mt-2">
-                            <li><a class="dropdown-item text-white py-2" href="<?= BASE_URL ?>/donor_dashboard.php"><i class="bi bi-speedometer2 me-2 text-info"></i>ড্যাশবোর্ড</a></li>
+                            <li><a class="dropdown-item text-white py-2" href="<?= BASE_URL ?>/donor_dashboard.php"><i class="bi bi-speedometer2 me-2 text-info"></i><?= __('nav_donor_dashboard') ?></a></li>
                             <?php if ($isAdmin): ?>
-                            <li><a class="dropdown-item text-warning py-2" href="<?= BASE_URL ?>/admin/dashboard.php"><i class="bi bi-shield-lock me-2"></i>অ্যাডমিন ড্যাশবোর্ড</a></li>
+                            <li><a class="dropdown-item text-warning py-2" href="<?= BASE_URL ?>/admin/dashboard.php"><i class="bi bi-shield-lock me-2"></i><?= __('nav_admin_dashboard') ?></a></li>
                             <?php endif; ?>
                             <li><hr class="dropdown-divider border-secondary"></li>
-                            <li><a class="dropdown-item text-danger py-2" href="<?= BASE_URL ?>/logout.php"><i class="bi bi-box-arrow-right me-2"></i>লগআউট</a></li>
+                            <li><a class="dropdown-item text-danger py-2" href="<?= BASE_URL ?>/logout.php"><i class="bi bi-box-arrow-right me-2"></i><?= __('nav_logout') ?></a></li>
                         </ul>
                     </div>
                 <?php else: ?>
                     <a href="<?= BASE_URL ?>/login.php" class="btn btn-outline-light btn-sm rounded-pill px-3 py-2 py-lg-1 text-center text-nowrap flex-shrink-0 nav-action-btn">
-                        <i class="bi bi-box-arrow-in-right me-1"></i> লগইন
+                        <i class="bi bi-box-arrow-in-right me-1"></i> <?= __('nav_login') ?>
                     </a>
                 <?php endif; ?>
 
                 <!-- ==============================================================
                      HIGHLIGHTED FAR-RIGHT BUTTON: "BECOME A BMMC VOLUNTEER"
                 =============================================================== -->
-                <a href="<?= BASE_URL ?>/volunteer_register.php" class="btn-volunteer-highlight text-nowrap flex-shrink-0 nav-action-btn" title="বিএমএমসি ভলান্টিয়ার টিমে যুক্ত হোন">
+                <a href="<?= BASE_URL ?>/volunteer_register.php" class="btn-volunteer-highlight text-nowrap flex-shrink-0 nav-action-btn" title="Become a BMMC Volunteer">
                     <i class="bi bi-person-heart"></i>
                     <span>Become a BMMC Volunteer</span>
                 </a>
