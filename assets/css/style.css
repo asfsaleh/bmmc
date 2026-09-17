@@ -1364,6 +1364,72 @@ footer {
     border-color: rgba(203, 213, 225, 0.75) !important;
 }
 
+/* =============================================================
+   Dedicated Section Badges & Mobile Service Counter Pill
+============================================================= */
+.service-counter-badge {
+    background: rgba(0, 210, 255, 0.12) !important;
+    border: 1px solid rgba(0, 210, 255, 0.35) !important;
+    color: #38bdf8 !important;
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
+    padding: 4px 10px !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 0 10px rgba(0, 210, 255, 0.1);
+}
+
+[data-theme="light"] .service-counter-badge {
+    background: rgba(2, 132, 199, 0.12) !important;
+    border: 1px solid rgba(2, 132, 199, 0.35) !important;
+    color: #0284c7 !important;
+    box-shadow: 0 2px 8px rgba(2, 132, 199, 0.08) !important;
+}
+
+.section-feature-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border-radius: 50rem;
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    margin-bottom: 1rem;
+    background: rgba(2, 132, 199, 0.2);
+    border: 1.5px solid rgba(0, 210, 255, 0.45);
+    color: #38bdf8;
+    box-shadow: 0 0 16px rgba(0, 210, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.section-feature-badge i {
+    font-size: 1.05rem;
+    color: #00d2ff;
+}
+
+[data-theme="light"] .section-feature-badge {
+    background: linear-gradient(135deg, rgba(2, 132, 199, 0.12) 0%, rgba(14, 165, 233, 0.18) 100%) !important;
+    border: 1.5px solid rgba(2, 132, 199, 0.4) !important;
+    color: #0369a1 !important;
+    box-shadow: 0 2px 12px rgba(2, 132, 199, 0.12) !important;
+}
+
+[data-theme="light"] .section-feature-badge i {
+    color: #0284c7 !important;
+}
+
+[data-theme="light"] .text-info {
+    color: #0284c7 !important;
+}
+
+[data-theme="light"] .bg-info.bg-opacity-10,
+[data-theme="light"] .bg-info.bg-opacity-15 {
+    background-color: rgba(2, 132, 199, 0.12) !important;
+    border-color: rgba(2, 132, 199, 0.35) !important;
+}
+
+
 
 
 

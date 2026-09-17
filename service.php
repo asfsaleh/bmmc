@@ -79,9 +79,9 @@ $relatedServices = array_filter(get_services_by_pillar($service['pillar']), func
             <div class="row align-items-center g-4">
                 <div class="col-lg-8">
                     <!-- Pillar Badge -->
-                    <div class="d-inline-flex align-items-center gap-2 px-3 py-1 mb-3 rounded-pill bg-info bg-opacity-15 text-info border border-info border-opacity-30">
+                    <div class="section-feature-badge">
                         <i class="bi <?= htmlspecialchars($currentPillar['icon'] ?? 'bi-compass') ?>"></i>
-                        <span class="fw-bold small"><?= htmlspecialchars($currentPillar['title'] ?? 'BMMC Service') ?></span>
+                        <span><?= htmlspecialchars($currentPillar['title'] ?? 'BMMC Service') ?></span>
                     </div>
 
                     <h1 class="display-5 fw-bold text-white mb-2">

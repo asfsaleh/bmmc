@@ -180,9 +180,9 @@ $recentRequests = $reqStmt->fetchAll();
 <section class="py-5" style="background: rgba(0, 0, 0, 0.2);">
     <div class="container">
         <div class="text-center mb-5">
-            <div class="d-inline-flex align-items-center gap-2 px-3 py-1 mb-3 rounded-pill bg-info bg-opacity-10 border border-info border-opacity-25 text-info">
+            <div class="section-feature-badge">
                 <i class="bi bi-gear-wide-connected"></i>
-                <small class="fw-bold">৪-ধাপের স্মার্ট স্বাস্থ্য সুরক্ষা অটোমেশন</small>
+                <span>৪-ধাপের স্মার্ট স্বাস্থ্য সুরক্ষা অটোমেশন</span>
             </div>
             <h3 class="fw-bold text-white mb-2">স্বয়ংক্রিয় রক্তদান ব্যবস্থাপনা কীভাবে কাজ করে?</h3>
             <p class="text-secondary">কোনো মধ্যস্থতাকারী ছাড়া প্রযুক্তি ও সহমর্মিতার দ্রুততম সমন্বয়</p>

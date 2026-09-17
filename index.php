@@ -55,9 +55,9 @@ $services = get_bmmc_services();
     <div class="container position-relative" style="z-index: 2;">
         
         <!-- Organization Pill Badge -->
-        <div class="d-inline-flex align-items-center gap-2 px-3 py-1 mb-3 rounded-pill border border-info border-opacity-30 bg-info bg-opacity-10 text-info">
+        <div class="section-feature-badge">
             <i class="bi bi-compass-fill"></i>
-            <small class="fw-bold">বাংলাদেশ মার্চেন্ট মেরিনার্স কমিউনিটি (BMMC) • বিশ্বজুড়ে বাংলাদেশি নাবিকদের ঐক্য</small>
+            <span>বাংলাদেশ মার্চেন্ট মেরিনার্স কমিউনিটি (BMMC) • বিশ্বজুড়ে বাংলাদেশি নাবিকদের ঐক্য</span>
         </div>
 
         <!-- Main Headline -->
@@ -209,7 +209,7 @@ $services = get_bmmc_services();
         
         <!-- Section Header -->
         <div class="text-center mb-4">
-            <div class="d-inline-flex align-items-center gap-2 px-3 py-1 mb-3 rounded-pill bg-info bg-opacity-10 border border-info border-opacity-25 text-info small fw-bold">
+            <div class="section-feature-badge">
                 <i class="bi bi-grid-fill"></i>
                 <span>BMMC মাল্টি-ডিসিপ্লিনারি মেরিটাইম সেবা হাব</span>
             </div>
@@ -246,7 +246,7 @@ $services = get_bmmc_services();
             <span class="d-inline-flex align-items-center gap-1 text-info fw-semibold">
                 <i class="bi bi-arrow-left-right"></i> ডানে-বামে সোয়াইপ করুন
             </span>
-            <span class="badge bg-dark bg-opacity-75 border border-secondary border-opacity-40 text-secondary rounded-pill px-2 py-1" id="serviceFilterCountBadge">
+            <span class="badge rounded-pill service-counter-badge" id="serviceFilterCountBadge">
                 ২১টি সেবা
             </span>
         </div>
@@ -312,7 +312,7 @@ $services = get_bmmc_services();
         <div class="glass-card p-4 p-md-5 rounded-4 border-info border-opacity-30 position-relative">
             <div class="row align-items-center g-4">
                 <div class="col-lg-8">
-                    <div class="d-inline-flex align-items-center gap-2 px-3 py-1 mb-3 rounded-pill bg-info bg-opacity-15 border border-info border-opacity-30 text-info small fw-bold">
+                    <div class="section-feature-badge">
                         <i class="bi bi-person-heart"></i>
                         <span>বিএমএমসি সেচ্ছাসেবী নেটওয়ার্ক</span>
                     </div>
