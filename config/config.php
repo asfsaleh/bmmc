@@ -68,6 +68,9 @@ if (!empty($_ENV['APP_URL'])) {
     $scriptDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? ''));
     $scriptDir = rtrim($scriptDir, '/');
     $scriptDir = preg_replace('/(\/admin|\/controllers|\/cron|\/templates|\/tests).*$/', '', $scriptDir);
+    if ($scriptDir === '.' || $scriptDir === '/') {
+        $scriptDir = '';
+    }
     define('BASE_URL', $protocol . $host . $scriptDir);
 }
 

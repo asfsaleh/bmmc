@@ -53,8 +53,12 @@ $currentUrl = $currentUrl ?? ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !=
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <!-- Custom Glassmorphism Stylesheet -->
-    <link href="<?= BASE_URL ?>/assets/css/style.css" rel="stylesheet">
+    <!-- Custom Glassmorphism Stylesheet (with auto-cache busting) -->
+    <?php 
+    $cssPath = dirname(__DIR__) . '/assets/css/style.css';
+    $cssVer = file_exists($cssPath) ? filemtime($cssPath) : time();
+    ?>
+    <link href="<?= BASE_URL ?>/assets/css/style.css?v=<?= $cssVer ?>" rel="stylesheet">
 </head>
 <body>
 

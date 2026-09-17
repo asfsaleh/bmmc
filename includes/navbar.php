@@ -38,16 +38,19 @@ $services = get_bmmc_services();
 
                 <!-- Our Services (Mega Dropdown on Desktop, Collapsible on Mobile) -->
                 <li class="nav-item dropdown dropdown-mega">
-                    <a class="nav-link dropdown-toggle text-white py-2 px-3 rounded-2 nav-link-mobile" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle text-white py-2 px-3 rounded-2 nav-link-mobile" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown" data-bs-display="static" data-bs-auto-close="outside" aria-expanded="false">
                         <i class="bi bi-grid-fill me-1 text-info"></i> আমাদের সেবাসমূহ
                     </a>
 
                     <!-- Desktop Mega Menu -->
-                    <div class="dropdown-menu dropdown-mega-menu d-none d-lg-block border-0 shadow-lg" aria-labelledby="servicesDropdown">
+                    <div class="dropdown-menu dropdown-menu-dark dropdown-mega-menu d-none d-lg-block border-0 shadow-lg" aria-labelledby="servicesDropdown" style="background: rgba(6, 18, 36, 0.98) !important; background-color: #061426 !important; color: #ffffff !important;">
                         <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary border-opacity-25">
                             <div>
-                                <h6 class="text-white fw-bold mb-0"><i class="bi bi-compass text-info me-2"></i>BMMC সার্বজনীন মেরিটাইম সেবা উইং</h6>
-                                <small class="text-secondary">সমগ্র বিশ্বের বাংলাদেশি নাবিক ও পরিবারের কল্যাণ ও অধিকার সুরক্ষায় নিবেদিত ২১টি সেবা</small>
+                                <h6 class="text-white fw-bold mb-0 d-flex align-items-center gap-2">
+                                    <i class="bi bi-compass text-info fs-5"></i>
+                                    <span>BMMC সার্বজনীন মেরিটাইম সেবা উইং</span>
+                                </h6>
+                                <small class="text-secondary" style="font-size: 0.78rem;">সমগ্র বিশ্বের বাংলাদেশি নাবিক ও পরিবারের কল্যাণ ও অধিকার সুরক্ষায় নিবেদিত ২১টি সেবা</small>
                             </div>
                             <div>
                                 <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 px-3 py-1 rounded-pill small">
@@ -56,29 +59,32 @@ $services = get_bmmc_services();
                             </div>
                         </div>
 
-                        <div class="row g-3">
+                        <!-- 5 Pillars Grid -->
+                        <div class="mega-pillars-grid">
                             <?php foreach ($pillars as $pId => $pillar): 
                                 $pServices = get_services_by_pillar($pId);
                             ?>
-                            <div class="col-lg">
-                                <div class="mega-pillar-title">
+                            <div class="mega-pillar-col">
+                                <div class="mega-pillar-title" title="<?= htmlspecialchars($pillar['title']) ?>">
                                     <i class="bi <?= htmlspecialchars($pillar['icon']) ?>" style="color: <?= htmlspecialchars($pillar['color']) ?>;"></i>
                                     <span><?= htmlspecialchars($pillar['title']) ?></span>
                                 </div>
                                 <div class="mega-service-list">
                                     <?php foreach ($pServices as $s): ?>
-                                    <a href="<?= BASE_URL ?>/<?= htmlspecialchars($s['link']) ?>" class="mega-service-link">
+                                    <a href="<?= BASE_URL ?>/<?= htmlspecialchars($s['link']) ?>" class="mega-service-link" title="<?= htmlspecialchars($s['title']) ?> — <?= htmlspecialchars($s['title_en']) ?>">
                                         <div class="mega-service-icon" style="color: <?= htmlspecialchars($s['color']) ?>;">
                                             <i class="bi <?= htmlspecialchars($s['icon']) ?>"></i>
                                         </div>
                                         <div class="flex-grow-1" style="min-width: 0;">
                                             <div class="d-flex align-items-center justify-content-between gap-1">
-                                                <span class="fw-semibold text-truncate small text-light"><?= htmlspecialchars($s['title']) ?></span>
+                                                <span class="mega-service-title"><?= htmlspecialchars($s['title']) ?></span>
                                                 <?php if ($s['status'] === 'live'): ?>
-                                                    <span class="badge-live-pulse">LIVE</span>
+                                                    <span class="badge-live-pulse flex-shrink-0">LIVE</span>
+                                                <?php else: ?>
+                                                    <span class="badge-soon flex-shrink-0">Soon</span>
                                                 <?php endif; ?>
                                             </div>
-                                            <small class="text-secondary d-block text-truncate" style="font-size: 0.72rem;"><?= htmlspecialchars($s['title_en']) ?></small>
+                                            <small class="mega-service-sub text-truncate"><?= htmlspecialchars($s['title_en']) ?></small>
                                         </div>
                                     </a>
                                     <?php endforeach; ?>
@@ -158,12 +164,12 @@ $services = get_bmmc_services();
             </ul>
 
             <!-- Mobile & Desktop Action Area -->
-            <div class="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center gap-2 mt-3 mt-lg-0 pt-3 pt-lg-0 border-top border-lg-0 border-secondary border-opacity-25">
+            <div class="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center gap-2 mt-3 mt-lg-0 pt-3 pt-lg-0 border-top border-lg-0 border-secondary border-opacity-25 ms-lg-auto">
                 
                 <!-- User Login / Profile Dropdown -->
                 <?php if ($currentUser): ?>
                     <div class="dropdown w-100 w-lg-auto">
-                        <button class="btn btn-outline-info dropdown-toggle rounded-pill px-3 py-2 py-lg-1 btn-sm w-100 text-center" type="button" data-bs-toggle="dropdown">
+                        <button class="btn btn-outline-info dropdown-toggle rounded-pill px-3 py-2 py-lg-1 btn-sm w-100 text-center text-nowrap" type="button" data-bs-toggle="dropdown">
                             <i class="bi bi-person-circle me-1"></i> <?= htmlspecialchars($currentUser['name']) ?>
                             <?php if ($currentUser['user_type'] === 'mariner'): ?>
                                 <span class="badge bg-primary ms-1">মেরিনার</span>
@@ -179,7 +185,7 @@ $services = get_bmmc_services();
                         </ul>
                     </div>
                 <?php else: ?>
-                    <a href="<?= BASE_URL ?>/login.php" class="btn btn-outline-light btn-sm rounded-pill px-3 py-2 py-lg-1 text-center w-100 w-lg-auto">
+                    <a href="<?= BASE_URL ?>/login.php" class="btn btn-outline-light btn-sm rounded-pill px-3 py-2 py-lg-1 text-center w-100 w-lg-auto text-nowrap flex-shrink-0">
                         <i class="bi bi-box-arrow-in-right me-1"></i> লগইন
                     </a>
                 <?php endif; ?>
@@ -187,8 +193,8 @@ $services = get_bmmc_services();
                 <!-- ==============================================================
                      HIGHLIGHTED FAR-RIGHT BUTTON: "BECOME A BMMC VOLUNTEER"
                 =============================================================== -->
-                <a href="<?= BASE_URL ?>/volunteer_register.php" class="btn-volunteer-highlight w-100 w-lg-auto text-center" title="বিএমএমসি ভলান্টিয়ার টিমে যুক্ত হোন">
-                    <i class="bi bi-person-heart fs-5"></i>
+                <a href="<?= BASE_URL ?>/volunteer_register.php" class="btn-volunteer-highlight text-nowrap flex-shrink-0" title="বিএমএমসি ভলান্টিয়ার টিমে যুক্ত হোন">
+                    <i class="bi bi-person-heart"></i>
                     <span>Become a BMMC Volunteer</span>
                 </a>
 
